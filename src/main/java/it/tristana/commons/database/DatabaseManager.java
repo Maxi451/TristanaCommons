@@ -13,7 +13,7 @@ public abstract class DatabaseManager<U extends User> extends BasicDatabase impl
 	}
 
 	protected static String getUuid(OfflinePlayer player) {
-		return player.getUniqueId().toString().replaceAll("-", "");
+		return player.getUniqueId().toString();
 	}
 	
 	@SuppressWarnings("deprecation")
