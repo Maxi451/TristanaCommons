@@ -39,7 +39,7 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length == 0) {
-			help(sender);
+			onEmptyCommand(sender);
 			return true;
 		}
 		SubCommand subCommand = commands.get(args[0].toLowerCase());
@@ -76,6 +76,10 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 			canExecute = perms == null || sender.hasPermission(perms);
 		}
 		return canExecute;
+	}
+	
+	protected void onEmptyCommand(CommandSender sender) {
+		help(sender);
 	}
 	
 	protected String getAdminPerms() {
