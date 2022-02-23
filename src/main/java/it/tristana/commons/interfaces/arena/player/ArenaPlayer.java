@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import it.tristana.commons.interfaces.arena.Arena;
 
 /**
- * An ArenaPlayer represent a player that can join and play in an arena
+ * An ArenaPlayer represents a player that can join and play in an arena
  * @param <A> The {@link Arena} subclass that is used in this class
  */
 public interface ArenaPlayer<A extends Arena<?>> {

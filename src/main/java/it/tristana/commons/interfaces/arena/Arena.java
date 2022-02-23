@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import it.tristana.commons.interfaces.Tickable;
 import it.tristana.commons.interfaces.arena.player.ArenaPlayer;
-import it.tristana.commons.interfaces.util.Status;
 
 /**
  * <p>An Arena is the representation of a playable multiplayer map in which the<br>

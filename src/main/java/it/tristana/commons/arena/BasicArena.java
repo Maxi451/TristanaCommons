@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
 
 import it.tristana.commons.helper.TeamsBuilder;
 import it.tristana.commons.interfaces.arena.Arena;
+import it.tristana.commons.interfaces.arena.Status;
 import it.tristana.commons.interfaces.arena.player.PartiesManager;
 import it.tristana.commons.interfaces.arena.player.Team;
 import it.tristana.commons.interfaces.arena.player.Teamable;
 import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
-import it.tristana.commons.interfaces.util.Status;
 
 public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> implements Arena<P>, Teamable<T, P> {
 	
@@ -67,7 +67,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public Collection<T> getTeams() {
-		return teams;
+		return new ArrayList<>(teams);
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public Collection<P> getPlayers() {
-		return players;
+		return new ArrayList<>(players);
 	}
 
 	@Override

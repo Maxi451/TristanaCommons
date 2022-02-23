@@ -1,5 +1,6 @@
 package it.tristana.commons.arena;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 	
 	@Override
 	public Collection<A> getArenas() {
-		return arenas;
+		return new ArrayList<>(arenas);
 	}
 
 	@Override
