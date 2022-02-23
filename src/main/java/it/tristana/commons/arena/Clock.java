@@ -2,7 +2,6 @@ package it.tristana.commons.arena;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -10,6 +9,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import it.tristana.commons.interfaces.Tickable;
 
+/**
+ * A Clock manages a collection of {@link Tickable}s<br>
+ * that will be executed all together each X server ticks
+ */
 public final class Clock implements Runnable {
 
 	private static final BukkitScheduler scheduler = Bukkit.getScheduler();
@@ -19,7 +22,7 @@ public final class Clock implements Runnable {
 	private int task;
 
 	public Clock() {
-		tickables = Collections.synchronizedList(new ArrayList<Tickable>());
+		tickables = new ArrayList<Tickable>();
 		task = NOT_SCHEDULED;
 	}
 
@@ -54,9 +57,7 @@ public final class Clock implements Runnable {
 	
 	@Override
 	public void run() {
-		synchronized (tickables) {
-			tickables.forEach(tickable -> tickable.runTick());
-		}
+		tickables.forEach(tickable -> tickable.runTick());
 	}
 	
 	public Collection<Tickable> getTickables() {

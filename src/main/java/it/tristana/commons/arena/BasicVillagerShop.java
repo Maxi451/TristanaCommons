@@ -28,15 +28,13 @@ public abstract class BasicVillagerShop implements VillagerShop {
 		if (!spawned) {
 			villager = location.getWorld().spawn(location, Villager.class);
 			villager.setCanPickupItems(false);
-			/*
-			CommonsHelper.removeAi(villager);
-			 */
 			removeAi();
 			villager.setProfession(Profession.LIBRARIAN);
 			villager.setNoDamageTicks(999999);
 			villager.setCustomName(name);
 			villager.setCustomNameVisible(true);
 			/*
+			// Only for 1.8.x
 			EntityVillager nmsVillager = ((CraftVillager) villager).getHandle();
 			float yaw = location.getYaw();
 			nmsVillager.aK = yaw;
