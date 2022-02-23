@@ -217,6 +217,16 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		return (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
 	}
 	
+	@Override
+	public Collection<Player> getSpectators() {
+		return new ArrayList<>(spectators);
+	}
+	
+	@Override
+	public List<Location> getSpawnpoints() {
+		return new ArrayList<>(spawnpoints);
+	}
+	
 	protected int getTeamsForNumPlayers(int players) {
 		return spawnpoints.size();
 	}
