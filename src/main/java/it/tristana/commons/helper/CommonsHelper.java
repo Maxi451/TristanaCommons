@@ -37,6 +37,11 @@ public class CommonsHelper {
 	public static void consoleInfo(String msg) {
 		info(console, msg);
 	}
+	
+	public static void broadcast(String msg) {
+		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
+		consoleInfo(msg);
+	}
 
 	public static String replaceFirst(String line, String lookingFor, String replacement) {
 		int index = line.indexOf(lookingFor);
@@ -47,7 +52,7 @@ public class CommonsHelper {
 	}
 
 	public static String replaceAll(String line, String lookingFor, String replacement) {
-		StringBuilder result = new StringBuilder("");
+		StringBuilder result = new StringBuilder();
 		int theLookingForLength = lookingFor.length();
 		if (line.length() >= theLookingForLength) {
 			for (int i = 0; i < line.length(); i ++) {
@@ -117,7 +122,7 @@ public class CommonsHelper {
 	}
 
 	public static String parseUnicode(final String line) {
-		final StringBuilder builder = new StringBuilder("");
+		final StringBuilder builder = new StringBuilder();
 		int i;
 		for (i = 0; i < line.length() - CHARS_AFTER_UNICODE_ESCAPE; i ++) {
 			if (line.charAt(i) == '\\' && line.charAt(i + 1) == 'u' && (i == 0 || line.charAt(i - 1) != '\\') && isXDigit(line.charAt(i + 2)) && isXDigit(line.charAt(i + 3)) && isXDigit(line.charAt(i + 4)) && isXDigit(line.charAt(i + 5))) {
@@ -215,7 +220,7 @@ public class CommonsHelper {
 
 	public static void writeLinesOnFile(final List<String> lines, final String filePath) {
 		final File file = new File(filePath);
-		final StringBuilder names = new StringBuilder("");
+		final StringBuilder names = new StringBuilder();
 		final String newLine = System.getProperty("line.separator");
 		try {
 			final int size = lines.size();
@@ -235,7 +240,7 @@ public class CommonsHelper {
 	}
 
 	public static String getFormattedTime(long time) {
-		StringBuilder formattedTime = new StringBuilder("");
+		StringBuilder formattedTime = new StringBuilder();
 		time /= 1000;
 		int days = (int)time / 86400;
 		time %= 86400;
@@ -417,8 +422,7 @@ public class CommonsHelper {
 				playerList.append(players.get(size - 2)).append(' ').append(andWord).append(' ');
 			}
 			playerList.append(players.get(size - 1));
-		}
-		else {
+		} else {
 			playerList.append(nobody);
 		}
 		return playerList.toString();
