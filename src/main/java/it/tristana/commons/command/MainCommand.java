@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.Reloadable;
@@ -21,18 +22,18 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 	private Map<String, SubCommand> commands;
 	private String help;
 
-	public MainCommand(P plugin, String command) {
+	public MainCommand(P plugin, SettingsDefaultCommands settings, String command) {
 		this.plugin = plugin;
 		this.command = command;
 		commands = new HashMap<String, SubCommand>();
-		help = CommonsHelper.toChatColors(String.format("Digita '&b/%s %s&f' per una lista di comandi", command, CommandHelp.COMMAND));
-		registerSubCommand(new CommandHelp(this));
-		registerSubCommand(new CommandVersion<P>(this, plugin, "version"));
+		help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
+		registerSubCommand(new CommandHelp(this, settings));
+		registerSubCommand(new CommandVersion<P>(this, plugin, "version", settings));
 		if (plugin instanceof Reloadable) {
-			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", getAdminPerms()));
+			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", getAdminPerms(), settings));
 		}
 		if (plugin instanceof DatabaseHolder) {
-			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", getAdminPerms()));
+			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", getAdminPerms(), settings));
 		}
 	}
 

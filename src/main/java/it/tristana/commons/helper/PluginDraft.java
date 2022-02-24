@@ -15,7 +15,7 @@ public class PluginDraft extends JavaPlugin {
 
 	protected static final String ERRORS_FILE = "errors.txt";
 	
-	protected File getFolder() {
+	public File getFolder() {
 		File folder = getDataFolder();
 		if (!folder.exists()) {
 			folder.mkdirs();

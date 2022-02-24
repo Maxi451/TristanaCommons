@@ -6,16 +6,18 @@ import java.sql.SQLException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
+import it.tristana.commons.helper.PluginDraft;
 import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.database.Database;
 
-public class CommandDatabase extends SubCommand {
+public class CommandDatabase extends DefaultSubCommand {
 
 	private DatabaseHolder databaseHolder;
 	
-	public CommandDatabase(MainCommand<? extends Plugin> main, DatabaseHolder databaseHolder, String name, String permission) {
-		super(main, name, permission);
+	public CommandDatabase(MainCommand<? extends Plugin> main, DatabaseHolder databaseHolder, String name, String permission, SettingsDefaultCommands settings) {
+		super(main, name, permission, settings);
 		this.databaseHolder = databaseHolder;
 	}
 
@@ -29,12 +31,17 @@ public class CommandDatabase extends SubCommand {
 		try {
 			ResultSet resultSet = databaseHolder.getStorage().executeSomething(sql.toString());
 			if (resultSet == null) {
-				CommonsHelper.info(sender, "Query eseguita");
+				CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 			} else {
 				Database.showResults(sender, resultSet);
 			}
 		} catch (SQLException e) {
-			CommonsHelper.info(sender, "&cErrore " + e.getErrorCode() + " eseguendo la query!");
+			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), e.getErrorCode()));
+			Plugin plugin = main.getPlugin();
+			if (plugin instanceof PluginDraft) {
+				((PluginDraft) plugin).writeThrowableOnErrorsFile(e);
+			}
+			e.printStackTrace();
 		}
 	}
 	
@@ -45,7 +52,7 @@ public class CommandDatabase extends SubCommand {
 
 	@Override
 	protected String getHelp() {
-		return "Esegue query SQL sul database (occhio a quello che fai!)";
+		return settings.getCommandQueryHelp();
 	}
 	
 	@Override

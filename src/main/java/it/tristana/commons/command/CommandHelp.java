@@ -4,16 +4,17 @@ import java.util.Collection;
 
 import org.bukkit.command.CommandSender;
 
+import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 
-public class CommandHelp extends SubCommand {
+public class CommandHelp extends DefaultSubCommand {
 
 	public static final String COMMAND = "help";
 
 	private final Collection<SubCommand> commands;
 	
-	public CommandHelp(MainCommand<?> main) {
-		super(main, COMMAND, null);
+	public CommandHelp(MainCommand<?> main, SettingsDefaultCommands settings) {
+		super(main, COMMAND, null, settings);
 		commands = main.getCommands().values();
 	}
 
@@ -28,7 +29,7 @@ public class CommandHelp extends SubCommand {
 	
 	@Override
 	public String getHelp() {
-		return "Visualizza questa guida";
+		return settings.getCommandHelpHelp();
 	}
 
 	@Override
