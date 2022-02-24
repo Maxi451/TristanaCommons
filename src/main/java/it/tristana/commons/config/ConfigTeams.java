@@ -18,10 +18,10 @@ public class ConfigTeams extends Config {
 				"Blue",
 				"Green",
 				"Yellow",
+				"Aqua",
 				"White",
-				"Grey",
 				"Fuchsia",
-				"Aqua"
+				"Grey"
 		));
 	}
 }
