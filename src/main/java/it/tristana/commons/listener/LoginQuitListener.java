@@ -1,5 +1,7 @@
 package it.tristana.commons.listener;
 
+import java.util.function.BiConsumer;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -9,21 +11,31 @@ import it.tristana.commons.interfaces.database.User;
 import it.tristana.commons.interfaces.database.UserRetriever;
 import it.tristana.commons.interfaces.database.UsersManager;
 
-public class LoginQuitListener<U extends User> implements Listener {
+public final class LoginQuitListener<U extends User> implements Listener {
 
-	protected UsersManager<U> usersManager;
-	protected UserRetriever<U> userRetriever;
+	private UsersManager<U> usersManager;
+	private UserRetriever<U> userRetriever;
+	private BiConsumer<PlayerJoinEvent, U> joinConsumer;
+	private BiConsumer<PlayerQuitEvent, U> quitConsumer;
 	
 	public LoginQuitListener(UsersManager<U> usersManager, UserRetriever<U> userRetriever) {
+		this(usersManager, userRetriever, null, null);
+	}
+	
+	public LoginQuitListener(UsersManager<U> usersManager, UserRetriever<U> userRetriever, BiConsumer<PlayerJoinEvent, U> joinConsumer, BiConsumer<PlayerQuitEvent, U> quitConsumer) {
 		this.usersManager = usersManager;
 		this.userRetriever = userRetriever;
+		this.joinConsumer = joinConsumer;
+		this.quitConsumer = quitConsumer;
 	}
 	
 	@EventHandler
 	public void on(PlayerJoinEvent event) {
 		U user = userRetriever.getUser(event.getPlayer());
 		usersManager.addUser(user);
-		onPlayerJoin(event, user);
+		if (joinConsumer != null) {
+			joinConsumer.accept(event, user);
+		}
 	}
 	
 	@EventHandler
@@ -33,10 +45,8 @@ public class LoginQuitListener<U extends User> implements Listener {
 			return;
 		}
 		userRetriever.saveUser(user);
-		onPlayerQuit(event, user);
+		if (quitConsumer != null) {
+			quitConsumer.accept(event, user);
+		}
 	}
-
-	protected void onPlayerJoin(PlayerJoinEvent event, U user) {}
-	
-	protected void onPlayerQuit(PlayerQuitEvent event, U user) {}
 }
