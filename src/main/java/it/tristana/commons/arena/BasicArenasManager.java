@@ -53,4 +53,14 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 		}
 		return null;
 	}
+
+	@Override
+	public A getArenaWithPlayer(Player player) {
+		for (A arena : arenas) {
+			if (arena.hasPlayer(player)) {
+				return arena;
+			}
+		}
+		return null;
+	}
 }
