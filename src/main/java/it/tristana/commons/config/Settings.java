@@ -8,10 +8,10 @@ public abstract class Settings<C extends Config> implements Reloadable {
 	
 	public Settings(C config) {
 		setConfig(config);
-		reload();
 	}
 	
 	public final void setConfig(C config) {
 		this.config = config;
+		reload();
 	}
 }
