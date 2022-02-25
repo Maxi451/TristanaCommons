@@ -60,4 +60,12 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * returned true on its call, {@code null} otherwise
 	 */
 	A getFirstArenaAvailable(Player player);
+	
+	/**
+	 * Retrieves the (unique) arena that contains the given player
+	 * @param player The player to look for
+	 * @return The first (and unique) arena that contains him,<br>
+	 * or {@code null} if no registered arena contains him
+	 */
+	A getArenaWithPlayer(Player player);
 }
