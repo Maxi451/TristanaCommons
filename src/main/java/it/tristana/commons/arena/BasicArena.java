@@ -43,7 +43,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		this.name = name;
 		this.partiesManager = partiesManager;
 		spawnpoints = new ArrayList<Location>();
-		players = new ArrayList<P>();
+		players = new ArrayList<>();
 		spectators = new ArrayList<Player>();
 		status = Status.WAITING;
 		minPlayersToStart = 2;

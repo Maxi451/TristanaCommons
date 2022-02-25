@@ -1,10 +1,6 @@
 package it.tristana.commons.config;
 
-import it.tristana.commons.interfaces.Reloadable;
-
-public class SettingsDefaultCommands implements Reloadable {
-
-	private ConfigDefaultCommands config;
+public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	
 	private String generalHelp;
 	
@@ -21,8 +17,7 @@ public class SettingsDefaultCommands implements Reloadable {
 	private String commandVersionHelp;
 	
 	public SettingsDefaultCommands(ConfigDefaultCommands config) {
-		setConfig(config);
-		reload();
+		super(config);
 	}
 	
 	@Override
@@ -40,10 +35,6 @@ public class SettingsDefaultCommands implements Reloadable {
 
 		commandVersionMessage = config.getString(ConfigDefaultCommands.COMMAND_VERSION_MESSAGE);
 		commandVersionHelp = config.getString(ConfigDefaultCommands.COMMAND_VERSION_HELP);
-	}
-	
-	public void setConfig(ConfigDefaultCommands config) {
-		this.config = config;
 	}
 
 	public String getGeneralHelp() {
