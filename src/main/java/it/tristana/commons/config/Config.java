@@ -16,7 +16,7 @@ public abstract class Config {
 	protected FileConfiguration fileConfiguration;
 	private final File file;
 
-	protected Config(final File file) {
+	public Config(final File file) {
 		this.file = file;
 		if (!file.exists()) {
 			try {
