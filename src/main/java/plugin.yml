@@ -1,5 +1,6 @@
 name: TristanaCommons
-version: 7.3.1
+version: 7.4.4
 main: it.tristana.commons.Main
 author: Massimiliano Micol
+api-version: 1.18
 description: Commons API for Tristana plugins

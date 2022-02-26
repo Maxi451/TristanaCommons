@@ -25,6 +25,12 @@ public interface Gui {
 	void open(Player player);
 	
 	/**
+	 * Closes this gui for the given player
+	 * @param player The player whose gui will be closed
+	 */
+	void close(Player player);
+	
+	/**
 	 * Updates the gui for the given player
 	 * @param player THe player that will see this gui
 	 */

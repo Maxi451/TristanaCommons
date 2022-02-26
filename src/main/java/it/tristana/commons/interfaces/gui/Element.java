@@ -22,4 +22,11 @@ public interface Element {
 	 * @param player The player who clicked
 	 */
 	void onClick(Player player);
+	
+	/**
+	 * If this returns true, then the parent gui is closed when this element is clicked
+	 * @param player The player who clicked
+	 * @return True if this element should close the gui, false otherwise
+	 */
+	boolean closesInventory(Player player);
 }

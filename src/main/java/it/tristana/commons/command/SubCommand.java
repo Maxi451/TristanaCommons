@@ -8,14 +8,12 @@ public abstract class SubCommand {
 	protected MainCommand<? extends Plugin> main;
 	
 	private final String name;
-	private final String helpMessage;
 	private final String permission;
+	private String helpMessage;
 	
 	public SubCommand(MainCommand<? extends Plugin> main, String name, String permission) {
 		this.main = main;
 		this.name = name.toLowerCase();
-		String params = getAdditionalHelpParameters();
-		helpMessage = "&f\"&b/" + main.getCommand() + " " + this.name + (params.length() > 0 ? " " + params : "") + "&f\": " + getHelp();
 		this.permission = permission;
 	}
 	
@@ -28,6 +26,10 @@ public abstract class SubCommand {
 	}
 	
 	protected String getHelpMessage() {
+		if (helpMessage == null) {
+			String params = getAdditionalHelpParameters();
+			helpMessage = "&f\"&b/" + main.getCommand() + " " + this.name + (params.length() > 0 ? " " + params : "") + "&f\": " + getHelp();
+		}
 		return helpMessage;
 	}
 	
