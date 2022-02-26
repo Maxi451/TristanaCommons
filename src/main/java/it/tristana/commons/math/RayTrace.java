@@ -42,7 +42,11 @@ public class RayTrace {
 	}
 
 	public static boolean canHit(Player player, Player target, double max, double hitboxOffset) {
-		AABB aabb = AABB.from(target, hitboxOffset);
+		return canHit(player, target, max, 0, false);
+	}
+
+	public static boolean canHit(Player player, Player target, double max, double hitboxOffset, boolean useElytraHitboxes) {
+		AABB aabb = AABB.from(target, hitboxOffset, useElytraHitboxes);
 		return aabb.collides(Ray.from(player), 0, max) || aabb.collides(Ray.from2(player), 0, max);
 	}
 
