@@ -21,22 +21,26 @@ public class AABB {
 		this.max = new Vector(Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
 	}
 
-	private AABB(Player player) {
-		this.min = getMin(player);
-		this.max = getMax(player);
+	private AABB(Player player, double hitboxOffset) {
+		this.min = getMin(player, hitboxOffset);
+		this.max = getMax(player, hitboxOffset);
 	}
 
-	private Vector getMin(Player player) {
-		return player.getLocation().toVector().add(new Vector(-0.3, 0, -0.3));
+	private Vector getMin(Player player, double hitboxOffset) {
+		return player.getLocation().toVector().add(new Vector(-0.3 - hitboxOffset, -hitboxOffset, -0.3 - hitboxOffset));
 	}
 
-	private Vector getMax(Player player) {
-		return player.getLocation().toVector().add(new Vector(0.3, 1.8, 0.3));
+	private Vector getMax(Player player, double hitboxOffset) {
+		return player.getLocation().toVector().add(new Vector(0.3 + hitboxOffset, 1.8 + hitboxOffset, 0.3 + hitboxOffset));
 	}
 
 	// Create an AABB based on a player's hitbox
 	public static AABB from(Player player) {
-		return new AABB(player);
+		return from(player, 0);
+	}
+	
+	public static AABB from(Player player, double hitboxOffset) {
+		return new AABB(player, hitboxOffset);
 	}
 
 	public Vector getMin() {

@@ -15,7 +15,8 @@ public class RayTrace {
 
 	//origin = start position
 	//direction = direction in which the raytrace will go
-	private Vector origin, direction;
+	private Vector origin;
+	private Vector direction;
 
 	public RayTrace(Vector origin, Vector direction) {
 		this.origin = origin;
@@ -58,11 +59,10 @@ public class RayTrace {
 	}
 	
 	public static Location firstCollisionPoint(Location start, Location end, Set<Material> transparent, double precision) {
-		return firstCollisionPoint(start.getWorld(), transparent, traverse(start.toVector(), end.toVector(), precision), precision);
+		return firstCollisionPoint(start.getWorld(), transparent, traverse(start.toVector(), end.toVector(), precision));
 	}
 	
-	public static Location firstCollisionPoint(World world, Set<Material> transparent, List<Vector> steps, double precision) {
-		Location collisionPoint = null;
+	public static Location firstCollisionPoint(World world, Set<Material> transparent, List<Vector> steps) {
 		int x, y, z, oldX, oldY, oldZ;
 		oldX = oldY = oldZ = Integer.MIN_VALUE;
 		for (Vector step : steps) {
@@ -72,15 +72,14 @@ public class RayTrace {
 			if (x != oldX || y != oldY || z != oldZ) {
 				Block block = world.getBlockAt(x, y, z);
 				if (!transparent.contains(block.getType())) {
-					collisionPoint = new Location(world, step.getX(), step.getY(), step.getZ());
-					break;
+					return new Location(world, step.getX(), step.getY(), step.getZ());
 				}
 				oldX = x;
 				oldY = y;
 				oldZ = z;
 			}
 		}
-		return collisionPoint;
+		return null;
 	}
 	
 	public static List<Vector> traverse(Vector v1, Vector v2, double precision) {
