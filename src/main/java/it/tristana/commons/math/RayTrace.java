@@ -38,7 +38,11 @@ public class RayTrace {
 	}
 
 	public static boolean canHit(Player player, Player target, double max) {
-		AABB aabb = AABB.from(target);
+		return canHit(player, target, max, 0);
+	}
+
+	public static boolean canHit(Player player, Player target, double max, double hitboxOffset) {
+		AABB aabb = AABB.from(target, hitboxOffset);
 		return aabb.collides(Ray.from(player), 0, max) || aabb.collides(Ray.from2(player), 0, max);
 	}
 

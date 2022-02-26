@@ -8,6 +8,11 @@ import org.bukkit.util.Vector;
 
 public class AABB {
 
+	private static final double PLAYER_HEIGHT = 1.8;
+	private static final double HALF_PLAYER_HEIGHT = PLAYER_HEIGHT / 2;
+	private static final double EYES_HEIGHT = 1.62;
+	private static final double HALF_HITBOX_WIDTH = 0.3;
+	
 	private Vector min, max; // min/max locations
 
 	// Create Bounding Box from min/max locations.
@@ -21,26 +26,59 @@ public class AABB {
 		this.max = new Vector(Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
 	}
 
-	private AABB(Player player, double hitboxOffset) {
-		this.min = getMin(player, hitboxOffset);
-		this.max = getMax(player, hitboxOffset);
+	private AABB(Player player, double hitboxOffset, boolean useElytraHitboxes) {
+		this.min = getMin(player, hitboxOffset, useElytraHitboxes);
+		this.max = getMax(player, hitboxOffset, useElytraHitboxes);
 	}
 
-	private Vector getMin(Player player, double hitboxOffset) {
-		return player.getLocation().toVector().add(new Vector(-0.3 - hitboxOffset, -hitboxOffset, -0.3 - hitboxOffset));
+	private Vector getMin(Player player, double hitboxOffset, boolean useElytraHitboxes) {
+		double offset = -HALF_HITBOX_WIDTH - hitboxOffset;
+		Vector playerPos;
+		double height;
+		if (useElytraHitboxes) {
+			playerPos = getElytraCenterPlayerPos(player);
+			height = offset;
+		} else {
+			playerPos = player.getLocation().toVector();
+			height = -hitboxOffset;
+		}
+		return playerPos.add(new Vector(offset, height, offset));
 	}
 
-	private Vector getMax(Player player, double hitboxOffset) {
-		return player.getLocation().toVector().add(new Vector(0.3 + hitboxOffset, 1.8 + hitboxOffset, 0.3 + hitboxOffset));
+	private Vector getMax(Player player, double hitboxOffset, boolean useElytraHitboxes) {
+		double offset = HALF_HITBOX_WIDTH + hitboxOffset;
+		Vector playerPos;
+		double height;
+		if (useElytraHitboxes) {
+			playerPos = getElytraCenterPlayerPos(player);
+			height = offset;
+		} else {
+			playerPos = player.getLocation().toVector();
+			height = PLAYER_HEIGHT + hitboxOffset;
+		}
+		return playerPos.add(new Vector(offset, height, offset));
 	}
 
+	private static Vector getElytraCenterPlayerPos(Player player) {
+		Location pos = player.getLocation();
+		return pos.toVector().add(pos.getDirection().multiply(HALF_PLAYER_HEIGHT));
+	}
+
+	public static Location getElytraPlayerEyesPos(Player player) {
+		return player.getLocation().getDirection().multiply(EYES_HEIGHT).toLocation(player.getWorld());
+	}
+	
 	// Create an AABB based on a player's hitbox
 	public static AABB from(Player player) {
 		return from(player, 0);
 	}
 	
 	public static AABB from(Player player, double hitboxOffset) {
-		return new AABB(player, hitboxOffset);
+		return from(player, hitboxOffset, false);
+	}
+	
+	public static AABB from(Player player, double hitboxOffset, boolean useElytraHitboxes) {
+		return new AABB(player, hitboxOffset, useElytraHitboxes);
 	}
 
 	public Vector getMin() {
