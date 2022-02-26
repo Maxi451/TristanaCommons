@@ -45,7 +45,7 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		}
 		SubCommand subCommand = commands.get(args[0].toLowerCase());
 		if (subCommand != null && canExecute(sender, subCommand)) {
-			if (args.length - 1 > subCommand.getMinRequiredParameters()) {
+			if (args.length - 1 >= subCommand.getMinRequiredParameters()) {
 				subCommand.execute(sender, args);
 			} else {
 				CommonsHelper.info(sender, subCommand.getHelpMessage());
