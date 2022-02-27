@@ -35,6 +35,14 @@ public interface ClickedGuiManager {
 	void clearGuis();
 	
 	/**
+	 * Gets the Gui that has the same instance class as the given one
+	 * @param <G> The Gui class type
+	 * @param clazz The Gui class
+	 * @return The Gui that has this class, or {@code null} if no gui was found
+	 */
+	<G extends Gui> G getGui(Class<G> clazz);
+	
+	/**
 	 * Called when a player clicks on an inventory and some action has to be performed.<br>
 	 * If the method returns true the event is marked as cancelled
 	 * @param event The fired event

@@ -44,6 +44,17 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 	public void clearGuis() {
 		registeredGuis.clear();
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <G extends Gui> G getGui(Class<G> clazz) {
+		for (Gui gui : registeredGuis.values()) {
+			if (gui.getClass() == clazz) {
+				return (G) gui;
+			}
+		}
+		return null;
+	}
 	
 	@Override
 	public boolean processClick(InventoryClickEvent event) {
