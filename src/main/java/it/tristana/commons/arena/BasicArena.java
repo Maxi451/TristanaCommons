@@ -42,12 +42,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		this.world = world;
 		this.name = name;
 		this.partiesManager = partiesManager;
-		spawnpoints = new ArrayList<Location>();
-		players = new ArrayList<>();
-		spectators = new ArrayList<Player>();
-		status = Status.WAITING;
-		minPlayersToStart = 2;
-		maxPerTeam = 4;
+		baseReset();
 	}
 
 	@Override
@@ -295,6 +290,15 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		if (ticksToEnd -- <= 0) {
 			closeArena();
 		}
+	}
+	
+	protected void baseReset() {
+		spawnpoints = new ArrayList<Location>();
+		players = new ArrayList<>();
+		spectators = new ArrayList<Player>();
+		status = Status.WAITING;
+		minPlayersToStart = 2;
+		maxPerTeam = 4;
 	}
 
 	protected abstract P createArenaPlayer(Player player);
