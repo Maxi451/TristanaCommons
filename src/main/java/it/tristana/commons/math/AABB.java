@@ -31,6 +31,10 @@ public class AABB {
 		this.max = getMax(player, hitboxOffset, useElytraHitboxes);
 	}
 
+	public Vector getMin() {
+		return min;
+	}
+	
 	private Vector getMin(Player player, double hitboxOffset, boolean useElytraHitboxes) {
 		double offset = -HALF_HITBOX_WIDTH - hitboxOffset;
 		Vector playerPos;
@@ -43,6 +47,10 @@ public class AABB {
 			height = -hitboxOffset;
 		}
 		return playerPos.add(new Vector(offset, height, offset));
+	}
+
+	public Vector getMax() {
+		return max;
 	}
 
 	private Vector getMax(Player player, double hitboxOffset, boolean useElytraHitboxes) {
@@ -79,14 +87,6 @@ public class AABB {
 	
 	public static AABB from(Player player, double hitboxOffset, boolean useElytraHitboxes) {
 		return new AABB(player, hitboxOffset, useElytraHitboxes);
-	}
-
-	public Vector getMin() {
-		return min;
-	}
-
-	public Vector getMax() {
-		return max;
 	}
 
 	// Returns minimum x, y, or z point from inputs 0, 1, or 2.

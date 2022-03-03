@@ -119,9 +119,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public void closeArena() {
-		teams = new ArrayList<T>();
-		players = new ArrayList<P>();
-		spectators = new ArrayList<Player>();
+		baseReset();
 	}
 
 	@Override
@@ -283,8 +281,6 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		setStatus(Status.PLAYING);
 		startGame();
 	}
-	
-	protected void playingPhase() {}
 
 	protected void endingPhase() {
 		if (ticksToEnd -- <= 0) {
@@ -301,6 +297,8 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		maxPerTeam = 4;
 	}
 
+	protected abstract void playingPhase();
+	
 	protected abstract P createArenaPlayer(Player player);
 	
 	protected abstract T createTeam(int index);

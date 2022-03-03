@@ -61,10 +61,6 @@ public class RayTrace {
 		}
 		return true;
 	}
-
-	public List<Vector> traverse(double precision) {
-		return traverse(origin, direction, precision);
-	}
 	
 	public static Location firstCollisionPoint(Location start, Location end, Set<Material> transparent, double precision) {
 		return firstCollisionPoint(start.getWorld(), transparent, traverse(start.toVector(), end.toVector(), precision));
@@ -88,6 +84,10 @@ public class RayTrace {
 			}
 		}
 		return null;
+	}
+
+	public List<Vector> traverse(double precision) {
+		return traverse(origin, direction, precision);
 	}
 	
 	public static List<Vector> traverse(Vector v1, Vector v2, double precision) {

@@ -11,16 +11,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class CommonsHelper {
 
@@ -37,7 +34,7 @@ public class CommonsHelper {
 	public static void consoleInfo(String msg) {
 		info(console, msg);
 	}
-	
+
 	public static void broadcast(String msg) {
 		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
 		consoleInfo(msg);
@@ -54,27 +51,23 @@ public class CommonsHelper {
 	public static String replaceAll(String line, String lookingFor, String replacement) {
 		StringBuilder result = new StringBuilder();
 		int theLookingForLength = lookingFor.length();
-		if (line.length() >= theLookingForLength) {
-			for (int i = 0; i < line.length(); i ++) {
-				int inc = 0;
-				boolean found = false;
-				while (inc != theLookingForLength && lookingFor.charAt(inc) == line.charAt(i + inc)) {
-					inc ++;
-					if (inc == theLookingForLength) {
-						found = true;
-					}
-				}
-				if (found) {
-					i += inc - 1;
-					result.append(replacement);
-				}
-				else {
-					result.append(line.charAt(i));
+		if (line.length() < theLookingForLength) {
+			return line;
+		}
+		for (int i = 0; i < line.length(); i ++) {
+			int inc = 0;
+			boolean found = false;
+			while (inc != theLookingForLength && lookingFor.charAt(inc) == line.charAt(i + inc)) {
+				if (++ inc == theLookingForLength) {
+					found = true;
 				}
 			}
-		}
-		else {
-			result.append(line);
+			if (found) {
+				i += inc - 1;
+				result.append(replacement);
+			} else {
+				result.append(line.charAt(i));
+			}
 		}
 		return result.toString();
 	}
@@ -97,24 +90,7 @@ public class CommonsHelper {
 	}
 
 	public static String toChatColors(String line) {
-		char[] array = line.toString().toCharArray();
-		char c;
-		for (int i = 0; i < array.length - 1; i ++) {
-			if (array[i] == '&') {
-				c = array[i + 1];
-				if (c >= 'A' && c <= 'Z') {
-					c -= 0x20;
-				}
-				if (c >= '0' && c <= '9' ||
-						c >= 'a' && c <= 'f' ||
-						c >= 'k' && c <= 'o' ||
-						c == 'r') {
-					array[i] = '\u00a7';
-					i ++;
-				}
-			}
-		}
-		return new String(array);
+		return ChatColor.translateAlternateColorCodes('&', line);
 	}
 
 	public static int getGuiSizeFromNumOfElements(Object[] objects) {
@@ -126,10 +102,9 @@ public class CommonsHelper {
 		int i;
 		for (i = 0; i < line.length() - CHARS_AFTER_UNICODE_ESCAPE; i ++) {
 			if (line.charAt(i) == '\\' && line.charAt(i + 1) == 'u' && (i == 0 || line.charAt(i - 1) != '\\') && isXDigit(line.charAt(i + 2)) && isXDigit(line.charAt(i + 3)) && isXDigit(line.charAt(i + 4)) && isXDigit(line.charAt(i + 5))) {
-				builder.append((char)Integer.parseInt(line.substring(i + 2, i + CHARS_AFTER_UNICODE_ESCAPE + 1), 16));
+				builder.append((char) Integer.parseInt(line.substring(i + 2, i + CHARS_AFTER_UNICODE_ESCAPE + 1), 16));
 				i += CHARS_AFTER_UNICODE_ESCAPE;
-			}
-			else {
+			} else {
 				builder.append(line.charAt(i));
 			}
 		}
@@ -242,12 +217,12 @@ public class CommonsHelper {
 	public static String getFormattedTime(long time) {
 		StringBuilder formattedTime = new StringBuilder();
 		time /= 1000;
-		int days = (int)time / 86400;
+		int days = (int) time / 86400;
 		time %= 86400;
-		int hours = (int)time / 3600;
+		int hours = (int) time / 3600;
 		time %= 3600;
-		int minutes = (int)time / 60;
-		int seconds = (int)time % 60;
+		int minutes = (int) time / 60;
+		int seconds = (int) time % 60;
 		if (days != 0) {
 			formattedTime.append(days).append("d ");
 		}
@@ -260,22 +235,15 @@ public class CommonsHelper {
 		formattedTime.append(seconds).append("s");
 		return formattedTime.toString();
 	}
-	/*
-	public static String getFormattedPlayedTimeFor(Player player) {
-		return getFormattedTime(player.getStatistic(Statistic.PLAY_ONE_TICK) / 20 * 1000);
-	}
-	*/
+
 	public static String getFormattedDate(long time) {
-		String dataStringa = null;
+		String formattedDate = null;
 		try {
-			Date data = new Date(time);
-			Locale.setDefault(Locale.ITALIAN);
-			SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss"); 
-			dataStringa = sdf.format(data);
+			formattedDate = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss").format(new Date(time));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return dataStringa;
+		return formattedDate;
 	}
 
 	public static boolean samePosInt(Location pos1, Location pos2) {
@@ -286,6 +254,10 @@ public class CommonsHelper {
 		return pos1.getWorld() == pos2.getWorld();
 	}
 
+	public static boolean parseBoolean(String value) {
+		return value.equalsIgnoreCase("true");
+	}
+	
 	public static int parseIntOrGetDefault(String value, int defaultValue) {
 		int result;
 		try {
@@ -304,10 +276,6 @@ public class CommonsHelper {
 			result = defaultValue;
 		}
 		return result;
-	}
-
-	public static void clearSlot(Inventory inventory, int slot) {
-		inventory.setItem(slot, new ItemStack(Material.AIR));
 	}
 
 	public static Location centerLocation(Location location) {
@@ -351,80 +319,59 @@ public class CommonsHelper {
 	}
 
 	public static char getChatColorFromBlockData(byte data) {
-		char c;
 		switch (data) {
 		case 0:
-			c = 'f';
-			break;
+			return 'f';
 		case 1:
-			c = '6';
-			break;
+			return '6';
 		case 2:
-			c = '5';
-			break;
+			return '5';
 		case 3:
-			c = 'b';
-			break;
+			return 'b';
 		case 4:
-			c = 'e';
-			break;
+			return 'e';
 		case 5:
-			c = 'a';
-			break;
+			return 'a';
 		case 6:
-			c = 'd';
-			break;
+			return 'd';
 		case 7:
-			c = '8';
-			break;
+			return '8';
 		case 8:
-			c = '7';
-			break;
+			return '7';
 		case 9:
-			c = '3';
-			break;
+			return '3';
 		case 10:
-			c = '3';
-			break;
+			return '3';
 		case 13:
-			c = '2';
-			break;
+			return '2';
 		case 14:
-			c = '4';
-			break;
+			return '4';
 		case 11:
 		case 12:
 		case 15:
-			c = '0';
-			break;
+			return '0';
 		default:
 			throw new IllegalArgumentException("Block data color must be between 0 and 15 inclusive, but here arrived " + data);
 		}
-		return c;
 	}
 
 	public static <T> List<T> copyList(List<? extends T> list) {
-		List<T> newList = new ArrayList<T>(list.size());
-		for (T element : list) {
-			newList.add(element);
-		}
-		return newList;
+		return new ArrayList<>(list);
 	}
 
 	public static String playerListToString(List<String> players, String nobody, String andWord) {
 		int size = players.size();
-		StringBuilder playerList = new StringBuilder("");
-		if (size > 0) {
-			if (size > 1) {
-				for (int i = 0; i < size - 2; i ++) {
-					playerList.append(players.get(i)).append(", ");
-				}
-				playerList.append(players.get(size - 2)).append(' ').append(andWord).append(' ');
-			}
-			playerList.append(players.get(size - 1));
-		} else {
-			playerList.append(nobody);
+		if (size == 0) {
+			return nobody;
 		}
+		StringBuilder playerList = new StringBuilder();
+		if (size > 1) {
+			for (int i = 0; i < size - 2; i ++) {
+				playerList.append(players.get(i)).append(", ");
+			}
+			playerList.append(players.get(size - 2)).append(' ').append(andWord).append(' ');
+		}
+		playerList.append(players.get(size - 1));
 		return playerList.toString();
 	}
 
@@ -437,20 +384,9 @@ public class CommonsHelper {
 	}
 
 	public static <T> void shuffle(List<T> list) {
-		/*
-		int size = list.size();
-		int swapIndex;
-		for (int i = size - 1; i > 0; i --) {
-			swapIndex = (int) Math.floor(Math.random() * (i + 1));
-			T first = list.get(i);
-			T second = list.get(swapIndex);
-			list.set(i, second);
-			list.set(swapIndex, first);
-		}
-		*/
 		Collections.shuffle(list);
 	}
-	
+
 	public static String locationToString(Location location) {
 		return String.format("x = %.2f y = %.2f z = %.2f yaw = %.2f pitch = %.2f @ %s", location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), location.getWorld().getName());
 	}
@@ -462,5 +398,5 @@ public class CommonsHelper {
 	public static void removeGravity(Entity entity) {
 		((CraftEntity) entity).getHandle().getDataWatcher().watch(10, (byte) 2);
 	}
-	*/
+	 */
 }

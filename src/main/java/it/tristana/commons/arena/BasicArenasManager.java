@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import it.tristana.commons.helper.BasicTickablesManager;
@@ -36,6 +37,9 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 
 	@Override
 	public boolean addArena(A arena) {
+		if (getArenaInWorld(arena.getWorld()) != null) {
+			return false;
+		}
 		return arenas.add(arena);
 	}
 
@@ -58,6 +62,16 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 	public A getArenaWithPlayer(Player player) {
 		for (A arena : arenas) {
 			if (arena.hasPlayer(player)) {
+				return arena;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public A getArenaInWorld(World world) {
+		for (A arena : arenas) {
+			if (arena.getWorld() == world) {
 				return arena;
 			}
 		}

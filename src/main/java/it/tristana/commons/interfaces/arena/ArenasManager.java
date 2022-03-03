@@ -2,6 +2,7 @@ package it.tristana.commons.interfaces.arena;
 
 import java.util.Collection;
 
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import it.tristana.commons.interfaces.util.TickablesManager;
@@ -68,4 +69,11 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * or {@code null} if no registered arena contains him
 	 */
 	A getArenaWithPlayer(Player player);
+	
+	/**
+	 * Retrieves the (unique) arena that is located in the given world
+	 * @param world The world that may contain an arena
+	 * @return The arena located in this world, or {@code null} if no arena is located this world
+	 */
+	A getArenaInWorld(World world);
 }
