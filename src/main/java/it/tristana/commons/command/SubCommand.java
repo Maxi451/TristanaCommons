@@ -7,7 +7,7 @@ public abstract class SubCommand {
 
 	protected MainCommand<? extends Plugin> main;
 	
-	private final String name;
+	protected final String name;
 	private final String permission;
 	private String helpMessage;
 	

@@ -16,6 +16,9 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	private String commandVersionMessage;
 	private String commandVersionHelp;
 	
+	private String commandPartyHelp;
+	private String commandPartyCantInviteOffline;
+	
 	public SettingsDefaultCommands(ConfigDefaultCommands config) {
 		super(config);
 	}
@@ -35,6 +38,17 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 
 		commandVersionMessage = config.getString(ConfigDefaultCommands.COMMAND_VERSION_MESSAGE);
 		commandVersionHelp = config.getString(ConfigDefaultCommands.COMMAND_VERSION_HELP);
+		
+		commandPartyHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_HELP);
+		commandPartyCantInviteOffline = config.getString(ConfigDefaultCommands.COMMAND_PARTY_CANT_INVITE_OFFLINE);
+	}
+
+	public String getCommandPartyCantInviteOffline() {
+		return commandPartyCantInviteOffline;
+	}
+
+	public String getCommandPartyHelp() {
+		return commandPartyHelp;
 	}
 
 	public String getGeneralHelp() {

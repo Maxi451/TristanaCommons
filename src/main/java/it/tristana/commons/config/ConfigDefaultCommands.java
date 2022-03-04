@@ -29,6 +29,10 @@ public class ConfigDefaultCommands extends Config {
 	public static final String COMMAND_VERSION_MESSAGE = COMMAND_VERSION + "message";
 	public static final String COMMAND_VERSION_HELP = COMMAND_VERSION + HELP;
 	
+	private static final String COMMAND_PARTY = COMMANDS + "party.";
+	public static final String COMMAND_PARTY_HELP = COMMAND_PARTY + HELP;
+	public static final String COMMAND_PARTY_CANT_INVITE_OFFLINE = COMMAND_PARTY + "cant-invite-offline";
+	
 	public ConfigDefaultCommands() {
 		super(new File(JavaPlugin.getPlugin(Main.class).getFolder(), "commands-language.yml"));
 	}
@@ -48,5 +52,8 @@ public class ConfigDefaultCommands extends Config {
 		
 		set(COMMAND_VERSION_MESSAGE, "Using version: &e%s");
 		set(COMMAND_VERSION_HELP, "Displays the current version of this plugin");
+		
+		set(COMMAND_PARTY_HELP, "Displays the available options");
+		set(COMMAND_PARTY_CANT_INVITE_OFFLINE, "&cThe player {player} is not online!");
 	}
 }
