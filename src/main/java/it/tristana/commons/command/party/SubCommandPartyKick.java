@@ -11,9 +11,9 @@ import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.arena.player.PartiesManager;
 import it.tristana.commons.interfaces.arena.player.Party;
 
-public class SubCommandPartyJoin extends SubCommandParty {
+public class SubCommandPartyKick extends SubCommandParty {
 
-	public SubCommandPartyJoin(MainCommand<? extends Plugin> main, String name, String permission, CommandParty superCommand, SettingsDefaultCommands settings, PartiesManager partiesManager) {
+	public SubCommandPartyKick(MainCommand<? extends Plugin> main, String name, String permission, CommandParty superCommand, SettingsDefaultCommands settings, PartiesManager partiesManager) {
 		super(main, name, permission, superCommand, settings, partiesManager);
 	}
 
@@ -24,22 +24,27 @@ public class SubCommandPartyJoin extends SubCommandParty {
 			return;
 		}
 		Party party = partiesManager.getPartyFromPlayer(player);
-		if (party != null) {
-			CommonsHelper.info(player, settings.getCommandPartyAlreadyInAParty());
+		if (party == null) {
+			CommonsHelper.info(player, settings.getCommandPartyNotInAParty());
+			return;
+		}
+		if (party.getLeader() != player) {
+			CommonsHelper.info(player, settings.getCommandPartyNotLeader());
 			return;
 		}
 		Player target = Bukkit.getPlayerExact(args[2]);
-		if (target == null) {
+		if (target == null || target == player) {
 			CommonsHelper.info(player, CommonsHelper.replaceAll(settings.getCommandPartyNotOnline(), "{player}", args[2]));
 			return;
 		}
 		Party other = partiesManager.getPartyFromPlayer(target);
-		if (other == null || !other.tryToJoin(player)) {
-			CommonsHelper.info(player, settings.getCommandPartyNotInvited());
+		if (other != party) {
+			CommonsHelper.info(player, settings.getCommandPartyInviteTargetInOtherParty());
 			return;
 		}
-		String message = CommonsHelper.replaceAll(settings.getCommandPartyPlayerJoined(), "{player}", player.getName());
-		other.getPlayers().forEach(member -> CommonsHelper.info(member, message));
+		String message = CommonsHelper.replaceAll(settings.getCommandPartyMemberKicked(), "{target}", target.getName());
+		party.getPlayers().forEach(member -> CommonsHelper.info(member, message));
+		party.removePlayer(target);
 	}
 	
 	@Override
@@ -49,6 +54,7 @@ public class SubCommandPartyJoin extends SubCommandParty {
 
 	@Override
 	protected String getHelp() {
-		return settings.getCommandPartyJoinHelp();
+		return settings.getCommandPartyKickHelp();
 	}
+
 }

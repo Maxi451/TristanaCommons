@@ -7,7 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import it.tristana.commons.command.party.SubCommandParty;
+import it.tristana.commons.command.party.SubCommandPartyInvite;
 import it.tristana.commons.command.party.SubCommandPartyJoin;
+import it.tristana.commons.command.party.SubCommandPartyKick;
+import it.tristana.commons.command.party.SubCommandPartyLeave;
+import it.tristana.commons.command.party.SubCommandPartyList;
 import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.PartiesHolder;
@@ -22,7 +26,11 @@ public class CommandParty extends DefaultSubCommand {
 		super(main, name, permission, settings);
 		partiesManager = partiesHolder.getPartiesManager();
 		commands = new HashMap<>();
-		registerSubCommand(new SubCommandPartyJoin(main, "join", permission, settings, partiesManager));
+		registerSubCommand(new SubCommandPartyInvite(main, "invite", permission, this, settings, partiesManager));
+		registerSubCommand(new SubCommandPartyJoin(main, "join", permission, this, settings, partiesManager));
+		registerSubCommand(new SubCommandPartyKick(main, "kick", permission, this, settings, partiesManager));
+		registerSubCommand(new SubCommandPartyLeave(main, "leave", permission, this, settings, partiesManager));
+		registerSubCommand(new SubCommandPartyList(main, "list", permission, this, settings, partiesManager));
 	}
 
 	@Override
@@ -49,11 +57,15 @@ public class CommandParty extends DefaultSubCommand {
 		return true;
 	}
 	
+	public String getCommandFor(SubCommand command) {
+		return "&f\"&b/" + main.getCommand() + " " + name + " " + command.getName().toLowerCase() + command.formatAdditionalParameters() + "&f\"";
+	}
+	
 	private void registerSubCommand(SubCommandParty command) {
 		commands.put(command.getName().toLowerCase(), command);
 	}
 	
 	private void showHelp(CommandSender sender) {
-		commands.entrySet().forEach(entry -> CommonsHelper.info(sender, "&f\"&b/" + main.getCommand() + " " + name + " " + entry.getKey() + "&f\": " + entry.getValue().getHelp()));
+		commands.entrySet().forEach(entry -> CommonsHelper.info(sender, getCommandFor(entry.getValue()) + ": " + entry.getValue().getHelp()));
 	}
 }

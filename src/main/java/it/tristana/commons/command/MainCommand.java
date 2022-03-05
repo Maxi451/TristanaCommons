@@ -12,12 +12,13 @@ import org.bukkit.plugin.Plugin;
 import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.DatabaseHolder;
+import it.tristana.commons.interfaces.PartiesHolder;
 import it.tristana.commons.interfaces.Reloadable;
 
 public class MainCommand<P extends Plugin> implements CommandExecutor {
 
 	protected P plugin;
-	
+
 	private String command;
 	private Map<String, SubCommand> commands;
 	private String help;
@@ -35,6 +36,9 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		if (plugin instanceof DatabaseHolder) {
 			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", getAdminPerms(), settings));
 		}
+		if (plugin instanceof PartiesHolder) {
+			registerSubCommand(new CommandParty(this, (PartiesHolder) plugin, "party", null, settings));
+		}
 	}
 
 	@Override
@@ -44,15 +48,15 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 			return true;
 		}
 		SubCommand subCommand = commands.get(args[0].toLowerCase());
-		if (subCommand != null && canExecute(sender, subCommand)) {
-			if (args.length - 1 >= subCommand.getMinRequiredParameters()) {
-				subCommand.execute(sender, args);
-			} else {
-				CommonsHelper.info(sender, subCommand.getHelpMessage());
-			}
-		} else {
+		if (subCommand == null || !canExecute(sender, subCommand)) {
 			help(sender);
+			return true;
 		}
+		if (args.length - 1 < subCommand.getMinRequiredParameters()) {
+			CommonsHelper.info(sender, subCommand.getHelpMessage());
+			return true;
+		}
+		subCommand.execute(sender, args);
 		return true;
 	}
 
@@ -65,7 +69,7 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		}
 		return sender instanceof Player;
 	}
-	
+
 	protected boolean hasPermission(CommandSender sender, SubCommand command) {
 		boolean canExecute = false;
 		String perms = getAdminPerms();
@@ -78,35 +82,35 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		}
 		return canExecute;
 	}
-	
+
 	protected void onEmptyCommand(CommandSender sender) {
 		help(sender);
 	}
-	
+
 	protected String getAdminPerms() {
 		return null;
 	}
-	
+
 	private void help(CommandSender sender) {
 		CommonsHelper.info(sender, help);
 	}
-	
+
 	public void registerSubCommand(SubCommand command) {
 		registerSubCommand(command.getName(), command);
 	}
-	
+
 	public void registerSubCommand(String name, SubCommand command) {
 		commands.put(name.toLowerCase(), command);
 	}
-	
+
 	public String getCommand() {
 		return command;
 	}
-	
+
 	public Map<String, SubCommand> getCommands() {
 		return commands;
 	}
-	
+
 	public P getPlugin() {
 		return plugin;
 	}

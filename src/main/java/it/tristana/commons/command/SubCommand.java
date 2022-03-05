@@ -27,14 +27,18 @@ public abstract class SubCommand {
 	
 	protected String getHelpMessage() {
 		if (helpMessage == null) {
-			String params = getAdditionalHelpParameters();
-			helpMessage = "&f\"&b/" + main.getCommand() + " " + this.name + (params.length() > 0 ? " " + params : "") + "&f\": " + getHelp();
+			helpMessage = "&f\"&b/" + main.getCommand() + " " + this.name + formatAdditionalParameters() + "&f\": " + getHelp();
 		}
 		return helpMessage;
 	}
 	
 	protected String getPermission() {
 		return permission;
+	}
+	
+	protected String formatAdditionalParameters() {
+		String params = getAdditionalHelpParameters();
+		return (params.length() > 0 ? " " + params : "");
 	}
 	
 	protected int getMinRequiredParameters() {
