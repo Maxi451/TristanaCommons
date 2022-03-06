@@ -174,4 +174,10 @@ public interface Arena<P extends ArenaPlayer<?>> extends Tickable {
 	 * @return The world associated to this arena
 	 */
 	World getWorld();
+	
+	/**
+	 * Checks if the game is ready to start
+	 * @return True if the game can start, false otherwise
+	 */
+	boolean checkStartingConditions();
 }

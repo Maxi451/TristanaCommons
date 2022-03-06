@@ -47,7 +47,15 @@ public class RayTrace {
 
 	public static boolean canHit(Player player, Player target, double max, double hitboxOffset, boolean useElytraHitboxes) {
 		AABB aabb = AABB.from(target, hitboxOffset, useElytraHitboxes);
-		return aabb.collides(Ray.from(player), 0, max) || aabb.collides(Ray.from2(player), 0, max);
+		return canHit(aabb, Ray.from(player), max) || canHit(aabb, Ray.from2(player), max);
+	}
+	
+	public static boolean canHit(Player player, double hitboxOffset, boolean useElytraHitboxes, Ray ray, double max) {
+		return canHit(AABB.from(player, hitboxOffset, useElytraHitboxes), ray, max);
+	}
+	
+	public static boolean canHit(AABB aabb, Ray ray, double max) {
+		return aabb.collides(ray, 0, max);
 	}
 
 	//general intersection detection

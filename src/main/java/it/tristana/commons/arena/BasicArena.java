@@ -19,12 +19,12 @@ import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
 public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> implements Arena<P>, Teamable<T, P> {
 	
 	protected String name;
-	protected World world;
+	protected final World world;
 	protected Location lobby;
 	
-	protected PartiesManager partiesManager;
+	protected final PartiesManager partiesManager;
 	protected List<T> teams;
-	protected List<Location> spawnpoints;
+	protected final List<Location> spawnpoints;
 	protected List<P> players;
 	protected List<Player> spectators;
 
@@ -42,7 +42,11 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		this.world = world;
 		this.name = name;
 		this.partiesManager = partiesManager;
-		baseReset();
+		spawnpoints = new ArrayList<Location>();
+		spectators = new ArrayList<Player>();
+		minPlayersToStart = 2;
+		maxPerTeam = 4;
+		reset();
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public void closeArena() {
-		baseReset();
+		reset();
 	}
 
 	@Override
@@ -200,6 +204,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 	public boolean onPlayerJoin(Player player) {
 		boolean result = testPlayerJoin(player);
 		if (result) {
+			player.teleport(lobby);
 			players.add(createArenaPlayer(player));
 		}
 		return result;
@@ -207,7 +212,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 	
 	@Override
 	public boolean testPlayerJoin(Player player) {
-		return (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
+		return lobby != null && (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
 	}
 	
 	@Override
@@ -218,6 +223,11 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 	@Override
 	public List<Location> getSpawnpoints() {
 		return new ArrayList<>(spawnpoints);
+	}
+	
+	@Override
+	public boolean checkStartingConditions() {
+		return players.size() >= getMinPlayersToStart();
 	}
 	
 	protected int getTeamsForNumPlayers(int players) {
@@ -260,7 +270,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 	}
 
 	protected void waitingPhase() {
-		if (players.size() >= getMinPlayersToStart()) {
+		if (checkStartingConditions()) {
 			setStatus(Status.STARTING);
 		}
 	}
@@ -288,15 +298,11 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		}
 	}
 	
-	protected void baseReset() {
-		spawnpoints = new ArrayList<Location>();
+	protected void reset() {
 		players = new ArrayList<>();
-		spectators = new ArrayList<Player>();
 		status = Status.WAITING;
-		minPlayersToStart = 2;
-		maxPerTeam = 4;
 	}
-
+	
 	protected abstract void playingPhase();
 	
 	protected abstract P createArenaPlayer(Player player);

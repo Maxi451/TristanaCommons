@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -66,6 +67,29 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 	@Override
 	public String getRoot(String name) {
 		return ARENAS + "." + name + ".";
+	}
+	
+	@Override
+	public void saveMainLobby(Location mainLobby) {
+		if (mainLobby == null) {
+			return;
+		}
+		setLocation(MAIN_LOBBY, mainLobby);
+		fileConfiguration.set(MAIN_LOBBY + "." + WORLD, mainLobby.getWorld().getName());
+	}
+	
+	@Override
+	public Location getMainLobby() {
+		String worldName = fileConfiguration.getString(MAIN_LOBBY + "." + WORLD);
+		if (worldName == null) {
+			return null;
+		}
+		World world = Bukkit.getWorld(worldName);
+		if (world == null) {
+			CommonsHelper.consoleInfo("&cThere is no world maching " + worldName + " for the main lobby!");
+			return null;
+		}
+		return getLocation(MAIN_LOBBY, world);
 	}
 	
 	protected Location getLocation(String root, World world) {

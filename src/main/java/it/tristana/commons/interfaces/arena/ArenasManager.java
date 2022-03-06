@@ -76,4 +76,12 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * @return The arena located in this world, or {@code null} if no arena is located this world
 	 */
 	A getArenaInWorld(World world);
+	
+	/**
+	 * Moves this arena to the end of the underlying
+	 * <br>collection, so that {@link #getFirstArenaAvailable(Player)}
+	 * <br>will check all the other arenas first
+	 * @param arena The arena to move to the end of the underlying collection
+	 */
+	void cycleArena(A arena);
 }

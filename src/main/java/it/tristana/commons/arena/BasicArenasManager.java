@@ -2,8 +2,7 @@ package it.tristana.commons.arena;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -14,10 +13,10 @@ import it.tristana.commons.interfaces.arena.ArenasManager;
 
 public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManager implements ArenasManager<A> {
 
-	protected Set<A> arenas;
+	protected List<A> arenas;
 	
 	public BasicArenasManager() {
-		arenas = new HashSet<>();
+		arenas = new ArrayList<>();
 	}
 	
 	@Override
@@ -40,11 +39,13 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 		if (getArenaInWorld(arena.getWorld()) != null) {
 			return false;
 		}
+		registerTickable(arena);
 		return arenas.add(arena);
 	}
 
 	@Override
 	public boolean removeArena(A arena) {
+		removeTickable(arena);
 		return arenas.remove(arena);
 	}
 
@@ -76,5 +77,21 @@ public class BasicArenasManager<A extends Arena<?>> extends BasicTickablesManage
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void cycleArena(A arena) {
+		int size = arenas.size();
+		int counter = 0;
+		for (A test : arenas) {
+			if (test == arena) {
+				break;
+			}
+			counter ++;
+		}
+		if (counter == size) {
+			return;
+		}
+		arenas.set(counter, arenas.set(size - 1, arena));
 	}
 }

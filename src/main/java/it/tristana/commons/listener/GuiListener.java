@@ -16,6 +16,9 @@ public class GuiListener implements Listener {
 	
 	@EventHandler
 	public void on(InventoryClickEvent event) {
+		if (event.getClickedInventory() == null) {
+			return;
+		}
 		clickedGuiManager.processClick(event);
 	}
 }

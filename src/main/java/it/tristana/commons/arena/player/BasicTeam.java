@@ -18,11 +18,12 @@ public class BasicTeam<P extends TeamingPlayer<? extends Team<P, A>, A>, A exten
 	protected String colorCode;
 	protected Location spawnPoint;
 
-	public BasicTeam(A arena, String name, String colorCode) {
+	public BasicTeam(A arena, Location spawnpoint, String name, String colorCode) {
 		this.arena = arena;
 		this.name = name;
 		this.colorCode = colorCode;
 		this.players = new ArrayList<>();
+		this.spawnPoint = spawnpoint;
 	}
 
 	@Override
