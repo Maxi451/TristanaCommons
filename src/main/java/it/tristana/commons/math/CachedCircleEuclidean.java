@@ -25,7 +25,8 @@ public final class CachedCircleEuclidean {
 		this.radius = center.toVector().distance(points[0]);
 		rays = new Ray[points.length / (POINTS_MULTIPLIER * 2)];
 		for (int i = 0; i < rays.length; i ++) {
-			rays[i] = new Ray(points[i * POINTS_MULTIPLIER], points[i * POINTS_MULTIPLIER].clone().subtract(points[((i * POINTS_MULTIPLIER) + points.length / 2) % points.length]).normalize());
+			int pointIndex = i * POINTS_MULTIPLIER;
+			rays[i] = new Ray(points[pointIndex], points[(pointIndex + points.length / 2) % points.length].clone().subtract(points[pointIndex]).normalize());
 		}
 	}
 
