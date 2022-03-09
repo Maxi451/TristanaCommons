@@ -1,5 +1,8 @@
 package it.tristana.commons.command.party;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -35,5 +38,10 @@ public class SubCommandPartyLeave extends SubCommandParty {
 	@Override
 	protected String getHelp() {
 		return settings.getCommandPartyLeaveHelp();
+	}
+	
+	@Override
+	protected List<String> tab(Player player, String[] args) {
+		return new ArrayList<>();
 	}
 }

@@ -8,12 +8,13 @@ import org.bukkit.util.Vector;
 
 public class Ray {
 
-	private Vector origin, direction;
+	private Vector origin;
+	private Vector direction;
 
 	// Create a ray at the origin pointing in a direction.
 	public Ray(Vector origin, Vector direction) {
-		this.origin = origin;
-		this.direction = direction;
+		this.origin = origin.clone();
+		this.direction = direction.clone();
 	}
 
 	// Create a ray based on where the player is looking.
@@ -22,18 +23,16 @@ public class Ray {
 	public static Ray from(Player player) {
 		return new Ray(player.getEyeLocation().toVector(), player.getLocation().getDirection());
 	}
-	
+
 	public static Ray from2(Player player) {
 		return new Ray(player.getLocation().toVector(), player.getLocation().getDirection());
 	}
-	
+
 	// (Used for rotating vectors) Creates a vector in the horizontal plane (y=0) perpendicular to a vector.
 	public static Vector right(Vector vector) {
-		Vector n = vector.clone();
-		n = n.setY(0).normalize();
-		double x = n.getX();
+		Vector n = vector.clone().setY(0).normalize();
 		n.setX(n.getZ());
-		n.setZ(-x);
+		n.setZ(-n.getX());
 		return n;
 	}
 

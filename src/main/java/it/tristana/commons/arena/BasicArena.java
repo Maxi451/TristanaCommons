@@ -17,14 +17,14 @@ import it.tristana.commons.interfaces.arena.player.Teamable;
 import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
 
 public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> implements Arena<P>, Teamable<T, P> {
-	
-	protected String name;
+
 	protected final World world;
+	protected String name;
 	protected Location lobby;
 	
 	protected final PartiesManager partiesManager;
-	protected List<T> teams;
 	protected final List<Location> spawnpoints;
+	protected List<T> teams;
 	protected List<P> players;
 	protected List<Player> spectators;
 
@@ -42,8 +42,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 		this.world = world;
 		this.name = name;
 		this.partiesManager = partiesManager;
-		spawnpoints = new ArrayList<Location>();
-		spectators = new ArrayList<Player>();
+		spawnpoints = new ArrayList<>();
 		minPlayersToStart = 2;
 		maxPerTeam = 4;
 		reset();
@@ -66,7 +65,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public Collection<T> getTeams() {
-		return new ArrayList<>(teams);
+		return teams == null ? null : new ArrayList<>(teams);
 	}
 
 	@Override
@@ -300,6 +299,7 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 	
 	protected void reset() {
 		players = new ArrayList<>();
+		spectators = new ArrayList<>();
 		status = Status.WAITING;
 	}
 	

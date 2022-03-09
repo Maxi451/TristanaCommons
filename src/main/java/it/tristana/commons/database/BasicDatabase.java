@@ -31,7 +31,7 @@ public abstract class BasicDatabase implements Database {
 		if (connection != null && !connection.isClosed()) {
 			return;
 		}
-		String url = "jdbc:mysql://"+ host + ":" + port + "?autoReconnect=true&useSSL=false&useJDBCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+		String url = "jdbc:mysql://"+ host + ":" + port + "?tcpKeepAlive=true&autoReconnect=true&useSSL=false&useJDBCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 		Class.forName("com.mysql.jdbc.Driver");
 		connection = DriverManager.getConnection(url, username, password);
 		connection.setCatalog(database);

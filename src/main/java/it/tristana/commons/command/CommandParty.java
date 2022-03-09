@@ -1,10 +1,13 @@
 package it.tristana.commons.command;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.StringUtil;
 
 import it.tristana.commons.command.party.SubCommandParty;
 import it.tristana.commons.command.party.SubCommandPartyInvite;
@@ -39,12 +42,28 @@ public class CommandParty extends DefaultSubCommand {
 			showHelp(sender);
 			return;
 		}
-		SubCommandParty subCommand = commands.get(args[1].toLowerCase());
+		SubCommandParty subCommand = getSubCommand(args[1]);
 		if (subCommand == null) {
 			showHelp(sender);
 			return;
 		}
 		subCommand.execute(sender, args);
+	}
+	
+	@Override
+	protected List<String> onTab(CommandSender sender, String[] args) {
+		if (args.length == 1) {
+			List<String> results = new ArrayList<>();
+			commands.forEach((name, command) -> {
+				results.add(name);
+			});
+			return results;
+		}
+		SubCommandParty subCommand = getSubCommand(args[1]);
+		if (subCommand != null) {
+			return subCommand.onTab(sender, args);
+		}
+		return StringUtil.copyPartialMatches(args[1], commands.keySet(), new ArrayList<>());
 	}
 
 	@Override
@@ -59,6 +78,10 @@ public class CommandParty extends DefaultSubCommand {
 	
 	public String getCommandFor(SubCommand command) {
 		return "&f\"&b/" + main.getCommand() + " " + name + " " + command.getName().toLowerCase() + command.formatAdditionalParameters() + "&f\"";
+	}
+	
+	private SubCommandParty getSubCommand(String name) {
+		return commands.get(name.toLowerCase());
 	}
 	
 	private void registerSubCommand(SubCommandParty command) {

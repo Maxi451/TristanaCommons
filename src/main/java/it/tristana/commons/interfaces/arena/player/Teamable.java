@@ -17,7 +17,9 @@ public interface Teamable<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> {
 	/**
 	 * The returned collection is a copy of the internal one,<br>
 	 * so it is safe for modification and iteration
-	 * @return A copy of the underlying collection of teams
+	 * @return A copy of the underlying collection of teams.<br>
+	 * May return {@code null} if the arena does NOT have<br>
+	 * the status of {@link it.tristana.commons.interfaces.arena.Status#PLAYING PLAYING} or {@link it.tristana.commons.interfaces.arena.Status#PLAYING ENDING}
 	 */
 	Collection<T> getTeams();
 	

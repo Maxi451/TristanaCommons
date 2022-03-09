@@ -2,6 +2,8 @@ package it.tristana.commons.command;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -43,6 +45,11 @@ public class CommandDatabase extends DefaultSubCommand {
 			}
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected List<String> onTab(CommandSender sender, String[] args) {
+		return new ArrayList<>();
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package it.tristana.commons.command;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -43,6 +45,10 @@ public abstract class SubCommand {
 	
 	protected int getMinRequiredParameters() {
 		return 0;
+	}
+	
+	protected List<String> onTab(CommandSender sender, String[] args) {
+		return null;
 	}
 	
 	public abstract void execute(CommandSender sender, String[] args);

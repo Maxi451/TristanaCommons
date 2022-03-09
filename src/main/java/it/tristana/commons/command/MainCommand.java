@@ -1,11 +1,13 @@
 package it.tristana.commons.command;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -15,7 +17,7 @@ import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.PartiesHolder;
 import it.tristana.commons.interfaces.Reloadable;
 
-public class MainCommand<P extends Plugin> implements CommandExecutor {
+public class MainCommand<P extends Plugin> implements TabExecutor {
 
 	protected P plugin;
 
@@ -47,7 +49,7 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 			onEmptyCommand(sender);
 			return true;
 		}
-		SubCommand subCommand = commands.get(args[0].toLowerCase());
+		SubCommand subCommand = getSubCommand(args[0]);
 		if (subCommand == null || !canExecute(sender, subCommand)) {
 			help(sender);
 			return true;
@@ -58,6 +60,31 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		}
 		subCommand.execute(sender, args);
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+		if (args.length == 0) {
+			List<String> results = new ArrayList<>();
+			commands.forEach((name, command) -> {
+				if (canExecute(sender, command)) {
+					results.add(name);
+				}
+			});
+			return results;
+		}
+		SubCommand subCommand = getSubCommand(args[0]);
+		if (subCommand != null) {
+			return subCommand.onTab(sender, args);
+		}
+		String partial = args[0].toLowerCase();
+		List<String> results = new ArrayList<>();
+		commands.forEach((name, command) -> {
+			if (name.startsWith(partial) && canExecute(sender, command)) {
+				results.add(name);
+			}
+		});
+		return results;
 	}
 
 	protected boolean canExecute(CommandSender sender, SubCommand command) {
@@ -91,6 +118,10 @@ public class MainCommand<P extends Plugin> implements CommandExecutor {
 		return null;
 	}
 
+	private SubCommand getSubCommand(String name) {
+		return commands.get(name.toLowerCase());
+	}
+	
 	private void help(CommandSender sender) {
 		CommonsHelper.info(sender, help);
 	}
