@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.tristana</groupId>
   <artifactId>TristanaCommons</artifactId>
-  <version>7.7.0</version>
+  <version>7.8.3</version>
   <repositories>
     <!-- This adds the Spigot Maven repository to the build -->
     <repository>

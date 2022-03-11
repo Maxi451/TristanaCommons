@@ -14,7 +14,7 @@ public abstract class RegisterManager<T> {
 		entries = new ArrayList<>();
 	}
 	
-	public <U extends T> void register(Class<U> clazz) throws NoSuchMethodException {
+	public void register(Class<? extends T> clazz) throws NoSuchMethodException {
 		for (EntryConstructor<?> entry : entries) {
 			if (entry.clazz == clazz) {
 				return;

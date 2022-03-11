@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import it.tristana.commons.interfaces.arena.player.ArenaPlayer;
 import it.tristana.commons.interfaces.util.TickablesManager;
 
 /**
@@ -12,6 +13,7 @@ import it.tristana.commons.interfaces.util.TickablesManager;
  * ensuring no arena has the same name or world as another<br>
  * and to look for the first available arena for a player
  * @param <A> The {@link Arena} subclass that is used in this class
+ * @param <P> The {@link ArenaPlayer} subclass that is used in this class
  */
 public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 

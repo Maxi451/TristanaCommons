@@ -10,7 +10,6 @@ import it.tristana.commons.interfaces.gui.Gui;
 
 public abstract class BasicGui implements Gui {
 
-	protected Element[] elements;
 	protected String name;
 	
 	public BasicGui(String name) {
@@ -24,14 +23,13 @@ public abstract class BasicGui implements Gui {
 
 	@Override
 	public Element getById(int id) {
-		checkElements();
-		return elements[id];
+		Element[] elements = getElements(null);
+		return id >= 0 && id < elements.length ? elements[id] : null;
 	}
 	
 	@Override
 	public Element[] getElements() {
-		checkElements();
-		return elements;
+		return getElements(null);
 	}
 	
 	@Override
@@ -41,10 +39,12 @@ public abstract class BasicGui implements Gui {
 
 	@Override
 	public void onClick(Player player, int slot) {
-		checkElements();
+		Element[] elements = getElements(player);
 		elements[slot].onClick(player);
 		if (elements[slot].closesInventory(player)) {
 			close(player);
+		} else {
+			open(player);
 		}
 	}
 
@@ -60,7 +60,7 @@ public abstract class BasicGui implements Gui {
 
 	@Override
 	public Inventory getInventory(Player player) {
-		checkElements();
+		Element[] elements = getElements(player);
 		Inventory inventory = Bukkit.createInventory(null, CommonsHelper.getGuiSizeFromNumOfElements(elements), name);
 		for (int i = 0; i < elements.length; i ++) {
 			inventory.setItem(i, elements[i].getDisplayItem(player));
@@ -68,11 +68,5 @@ public abstract class BasicGui implements Gui {
 		return inventory;
 	}
 	
-	private void checkElements() {
-		if (elements == null) {
-			elements = createElements();
-		}
-	}
-	
-	protected abstract Element[] createElements();
+	protected abstract Element[] getElements(Player player);
 }
