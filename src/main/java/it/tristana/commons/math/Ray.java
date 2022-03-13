@@ -8,13 +8,17 @@ import org.bukkit.util.Vector;
 
 public class Ray {
 
+	private static final int X = 0;
+	private static final int Y = 1;
+	private static final int Z = 2;
+	
 	private Vector origin;
 	private Vector direction;
 
 	// Create a ray at the origin pointing in a direction.
 	public Ray(Vector origin, Vector direction) {
 		this.origin = origin.clone();
-		this.direction = direction.clone();
+		this.direction = direction.normalize().clone();
 	}
 
 	// Create a ray based on where the player is looking.
@@ -42,20 +46,20 @@ public class Ray {
 	}
 
 	public Vector getOrigin() {
-		return origin;
+		return origin.clone();
 	}
 
 	public Vector getDirection() {
-		return direction;
+		return direction.clone();
 	}
 
 	public double origin(int i) {
 		switch (i) {
-		case 0:
+		case X:
 			return origin.getX();
-		case 1:
+		case Y:
 			return origin.getY();
-		case 2:
+		case Z:
 			return origin.getZ();
 		default:
 			return 0;
@@ -64,11 +68,11 @@ public class Ray {
 
 	public double direction(int i) {
 		switch (i) {
-		case 0:
+		case X:
 			return direction.getX();
-		case 1:
+		case Y:
 			return direction.getY();
-		case 2:
+		case Z:
 			return direction.getZ();
 		default:
 			return 0;
@@ -78,7 +82,7 @@ public class Ray {
 	// Get a point x distance away from this ray.
 	// Can be used to get a point 2 blocks in front of a player's face.
 	public Vector getPoint(double distance) {
-		return direction.clone().normalize().multiply(distance).add(origin);
+		return direction.clone().multiply(distance).add(origin);
 	}
 
 	// Same as above, but no need to construct object.

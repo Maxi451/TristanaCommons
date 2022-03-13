@@ -12,8 +12,9 @@ public class AABB {
 	private static final double HALF_PLAYER_HEIGHT = PLAYER_HEIGHT / 2;
 	private static final double EYES_HEIGHT = 1.62;
 	private static final double HALF_HITBOX_WIDTH = 0.3;
-	
-	private Vector min, max; // min/max locations
+
+	private Vector min;
+	private Vector max;
 
 	// Create Bounding Box from min/max locations.
 	public AABB(Vector min, Vector max) {
@@ -34,7 +35,7 @@ public class AABB {
 	public Vector getMin() {
 		return min;
 	}
-	
+
 	private Vector getMin(Player player, double hitboxOffset, boolean useElytraHitboxes) {
 		double offset = -HALF_HITBOX_WIDTH - hitboxOffset;
 		Vector playerPos;
@@ -75,16 +76,16 @@ public class AABB {
 	public static Location getElytraPlayerEyesPos(Player player) {
 		return player.getLocation().getDirection().multiply(EYES_HEIGHT).toLocation(player.getWorld());
 	}
-	
+
 	// Create an AABB based on a player's hitbox
 	public static AABB from(Player player) {
 		return from(player, 0);
 	}
-	
+
 	public static AABB from(Player player, double hitboxOffset) {
 		return from(player, hitboxOffset, false);
 	}
-	
+
 	public static AABB from(Player player, double hitboxOffset, boolean useElytraHitboxes) {
 		return new AABB(player, hitboxOffset, useElytraHitboxes);
 	}
@@ -121,7 +122,7 @@ public class AABB {
 	// Example: If you wanted to see if the Ray collides anywhere from its
 	// origin to 5 units away, the values would be 0 and 5.
 	public boolean collides(Ray ray, double tmin, double tmax) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i ++) {
 			double d = 1 / ray.direction(i);
 			double t0 = (min(i) - ray.origin(i)) * d;
 			double t1 = (max(i) - ray.origin(i)) * d;
@@ -140,7 +141,7 @@ public class AABB {
 	// Same as other collides method, but returns the distance of the nearest
 	// point of collision of the ray and box, or -1 if no collision.
 	public double collidesD(Ray ray, double tmin, double tmax) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i ++) {
 			double d = 1 / ray.direction(i);
 			double t0 = (min(i) - ray.origin(i)) * d;
 			double t1 = (max(i) - ray.origin(i)) * d;

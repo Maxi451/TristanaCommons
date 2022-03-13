@@ -6,7 +6,7 @@ import org.bukkit.util.Vector;
 
 public final class CachedCircleEuclidean {
 
-	private static final int POINTS_MULTIPLIER = 8;
+	private static final int POINTS_MULTIPLIER = 4;
 	
 	private final Vector[] points;
 	private final Location center;
@@ -26,7 +26,7 @@ public final class CachedCircleEuclidean {
 		rays = new Ray[points.length / (POINTS_MULTIPLIER * 2)];
 		for (int i = 0; i < rays.length; i ++) {
 			int pointIndex = i * POINTS_MULTIPLIER;
-			rays[i] = new Ray(points[pointIndex], points[(pointIndex + points.length / 2) % points.length].clone().subtract(points[pointIndex]).normalize());
+			rays[i] = new Ray(points[pointIndex], points[(pointIndex + points.length / 2) % points.length].clone().subtract(points[pointIndex]));
 		}
 	}
 
@@ -48,7 +48,7 @@ public final class CachedCircleEuclidean {
 	
 	public boolean intersects(Player player, double hitboxOffset, boolean useElytraHitboxes) {
 		for (int i = 0; i < rays.length; i ++) {
-			if (RayTrace.canHit(player, hitboxOffset, useElytraHitboxes, rays[i], radius)) {
+			if (RayTrace.canHit(player, hitboxOffset, useElytraHitboxes, rays[i], radius * 2)) {
 				return true;
 			}
 		}
