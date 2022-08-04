@@ -1,5 +1,6 @@
 package it.tristana.commons.gui;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -14,9 +15,13 @@ public abstract class BasicElement implements Element {
 	protected List<String> lore;
 
 	public BasicElement(String name) {
-		this(name, null);
+		this(name, (List<String>) null);
 	}
 
+	public BasicElement(String name, String lore) {
+		this(name, Arrays.asList(lore));
+	}
+	
 	public BasicElement(String name, List<String> lore) {
 		this.name = name;
 		this.lore = lore;
