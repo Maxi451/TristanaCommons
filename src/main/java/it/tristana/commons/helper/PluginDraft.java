@@ -19,6 +19,7 @@ import it.tristana.commons.config.SettingsDefaultCommands;
 public class PluginDraft extends JavaPlugin {
 
 	protected static final String ERRORS_FILE = "errors.txt";
+	private static SettingsDefaultCommands settingsDefaultCommands;
 	
 	public File getFolder() {
 		File folder = getDataFolder();
@@ -71,7 +72,10 @@ public class PluginDraft extends JavaPlugin {
 	
 	protected <T extends Plugin> void registerCommand(T main, Class<? extends MainCommand<T>> commandClass, String label) {
 		try {
-			Bukkit.getPluginCommand(label).setExecutor(commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder()), label));
+			if (settingsDefaultCommands == null) {
+				settingsDefaultCommands = new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder());
+			}
+			Bukkit.getPluginCommand(label).setExecutor(commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, settingsDefaultCommands, label));
 		} catch (Exception e) {
 			writeThrowableOnErrorsFile(e);
 			throw new IllegalArgumentException("The constructor requires exactly the parameters of the MainCommand class constructor, in that specific order");

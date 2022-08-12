@@ -86,6 +86,8 @@ public class MainCommand<P extends Plugin> implements TabExecutor {
 		});
 		return results;
 	}
+	
+	public void registerSubCommands() {}
 
 	protected boolean canExecute(CommandSender sender, SubCommand command) {
 		if (!hasPermission(sender, command)) {
