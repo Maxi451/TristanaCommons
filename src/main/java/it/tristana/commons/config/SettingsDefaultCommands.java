@@ -1,5 +1,7 @@
 package it.tristana.commons.config;
 
+import java.io.File;
+
 public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	
 	private String generalHelp;
@@ -38,12 +40,12 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	private String commandPartyJoinHelp;
 	private String commandPartyListHelp;
 	
-	public SettingsDefaultCommands(ConfigDefaultCommands config) {
-		super(config);
+	public SettingsDefaultCommands(File folder) {
+		super(folder, ConfigDefaultCommands.class);
 	}
 	
 	@Override
-	public void reload() {
+	protected void reload(ConfigDefaultCommands config) {
 		generalHelp = config.getString(ConfigDefaultCommands.GENERAL_HELP);
 		andWord = config.getString(ConfigDefaultCommands.AND_WORD);
 		nobodyWord = config.getString(ConfigDefaultCommands.NOBODY_WORD);

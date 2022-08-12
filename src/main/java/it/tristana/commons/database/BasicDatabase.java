@@ -27,12 +27,11 @@ public abstract class BasicDatabase implements Database {
 	}
 
 	@Override
-	public synchronized void openConnection() throws SQLException, ClassNotFoundException {
+	public synchronized void openConnection() throws SQLException {
 		if (connection != null && !connection.isClosed()) {
 			return;
 		}
 		String url = "jdbc:mysql://"+ host + ":" + port + "?tcpKeepAlive=true&autoReconnect=true&useSSL=false&useJDBCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-		Class.forName("com.mysql.jdbc.Driver");
 		connection = DriverManager.getConnection(url, username, password);
 		connection.setCatalog(database);
 		createTables();

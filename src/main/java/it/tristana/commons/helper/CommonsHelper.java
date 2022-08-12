@@ -267,6 +267,16 @@ public class CommonsHelper {
 		}
 		return result;
 	}
+	
+	public static long parseLongOrGetDefault(String value, long defaultValue) {
+		long result;
+		try {
+			result = Long.parseLong(value);
+		} catch (NumberFormatException e) {
+			result = defaultValue;
+		}
+		return result;
+	}
 
 	public static double parseDoubleOrGetDefault(String value, double defaultValue) {
 		double result;

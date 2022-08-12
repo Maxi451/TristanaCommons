@@ -2,10 +2,6 @@ package it.tristana.commons.config;
 
 import java.io.File;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
-import it.tristana.commons.Main;
-
 public class ConfigDefaultCommands extends Config {
 
 	public static final String GENERAL_HELP = "general-help";
@@ -52,8 +48,8 @@ public class ConfigDefaultCommands extends Config {
 	public static final String COMMAND_PARTY_JOIN_HELP = COMMAND_PARTY + "join-help";
 	public static final String COMMAND_PARTY_LIST_HELP = COMMAND_PARTY + "list-help";
 	
-	public ConfigDefaultCommands() {
-		super(new File(JavaPlugin.getPlugin(Main.class).getFolder(), "commands-language.yml"));
+	public ConfigDefaultCommands(File folder) {
+		super(new File(folder, "commands-language.yml"));
 	}
 
 	@Override

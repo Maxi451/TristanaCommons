@@ -1,5 +1,7 @@
 package it.tristana.commons.config;
 
+import java.io.File;
+
 public class SettingsTeams extends Settings<ConfigTeams> {
 
 	private String redName;
@@ -29,12 +31,12 @@ public class SettingsTeams extends Settings<ConfigTeams> {
 	private String[] teams;
 	private String[] colors;
 	
-	public SettingsTeams(ConfigTeams config) {
-		super(config);
+	public SettingsTeams(File folder) {
+		super(folder, ConfigTeams.class);
 	}
 
 	@Override
-	public void reload() {
+	protected void reload(ConfigTeams config) {
 		redName = config.getString(ConfigTeams.RED_NAME);
 		redColor = config.getString(ConfigTeams.RED_COLOR);
 		

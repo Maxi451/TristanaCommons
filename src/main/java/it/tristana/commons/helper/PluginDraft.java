@@ -9,7 +9,12 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import it.tristana.commons.Main;
+import it.tristana.commons.command.MainCommand;
+import it.tristana.commons.config.SettingsDefaultCommands;
 
 public class PluginDraft extends JavaPlugin {
 
@@ -21,10 +26,6 @@ public class PluginDraft extends JavaPlugin {
 			folder.mkdirs();
 		}
 		return folder;
-	}
-	
-	protected void register(Listener listener) {
-		Bukkit.getPluginManager().registerEvents(listener, this);
 	}
 	
 	public void writeThrowableOnErrorsFile(final Throwable t) {
@@ -60,6 +61,20 @@ public class PluginDraft extends JavaPlugin {
 			t.printStackTrace();
 			CommonsHelper.consoleInfo("&cReason why it couldn't be saved:");
 			e2.printStackTrace();
+		}
+	}
+	
+	protected void register(Listener listener) {
+		Bukkit.getPluginManager().registerEvents(listener, this);
+	}
+	
+	
+	protected <T extends Plugin> void registerCommand(T main, Class<? extends MainCommand<T>> commandClass, String label) {
+		try {
+			Bukkit.getPluginCommand(label).setExecutor(commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder()), label));
+		} catch (Exception e) {
+			writeThrowableOnErrorsFile(e);
+			throw new IllegalArgumentException("The constructor requires exactly the parameters of the MainCommand class constructor, in that specific order");
 		}
 	}
 }
