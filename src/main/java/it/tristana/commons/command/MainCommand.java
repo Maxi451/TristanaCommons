@@ -1,9 +1,9 @@
 package it.tristana.commons.command;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,7 +28,7 @@ public class MainCommand<P extends Plugin> implements TabExecutor {
 	public MainCommand(P plugin, SettingsDefaultCommands settings, String command) {
 		this.plugin = plugin;
 		this.command = command;
-		commands = new HashMap<String, SubCommand>();
+		commands = new TreeMap<String, SubCommand>();
 		help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
 		registerSubCommand(new CommandHelp(this, settings));
 		registerSubCommand(new CommandVersion<P>(this, plugin, "version", settings));

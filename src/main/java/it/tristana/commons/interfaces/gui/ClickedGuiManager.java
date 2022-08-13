@@ -25,9 +25,10 @@ public interface ClickedGuiManager {
 
 	/**
 	 * Removes this gui from the registered guis
-	 * @param gui The gui to unregister
+	 * @param <G> The gui that will be removed
+	 * @param guiClass The exact class of the gui that will be removed
 	 */
-	void unregisterGui(Gui gui);
+	<G extends Gui> void unregisterGui(Class<G> guiClass);
 	
 	/**
 	 * Removes all the registered guis
@@ -38,7 +39,7 @@ public interface ClickedGuiManager {
 	 * Gets the Gui that has the same instance class as the given one
 	 * @param <G> The Gui class type
 	 * @param clazz The Gui class
-	 * @return The Gui that has this class, or {@code null} if no gui was found
+	 * @return The Gui that has this exacta class, or {@code null} if no gui was found
 	 */
 	<G extends Gui> G getGui(Class<G> clazz);
 	

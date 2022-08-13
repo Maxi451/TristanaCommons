@@ -36,7 +36,11 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 	}
 
 	@Override
-	public void unregisterGui(Gui gui) {
+	public <G extends Gui> void unregisterGui(Class<G> guiClass) {
+		G gui = getGui(guiClass);
+		if (gui == null) {
+			return;
+		}
 		unregisterGui(gui.getName());
 	}
 

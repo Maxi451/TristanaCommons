@@ -34,11 +34,11 @@ public class PluginDraft extends JavaPlugin {
 		try {
 			List<String> lines;
 			final String newLine = System.getProperty("line.separator");
-			if (!errorsFile.exists()) {
+			if (errorsFile.exists()) {
+				lines = CommonsHelper.getLinesFromFile(errorsFile.getAbsolutePath());
+			} else {
 				errorsFile.createNewFile();
 				lines = new ArrayList<String>();
-			} else {
-				lines = CommonsHelper.getLinesFromFile(errorsFile.getAbsolutePath());
 			}
 			for (int i = 0; i < lines.size(); i ++) {
 				final String line = lines.get(i);
@@ -71,10 +71,10 @@ public class PluginDraft extends JavaPlugin {
 	
 	
 	protected <T extends Plugin> void registerCommand(T main, Class<? extends MainCommand<T>> commandClass, String label) {
+		if (settingsDefaultCommands == null) {
+			settingsDefaultCommands = new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder());
+		}
 		try {
-			if (settingsDefaultCommands == null) {
-				settingsDefaultCommands = new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder());
-			}
 			Bukkit.getPluginCommand(label).setExecutor(commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, settingsDefaultCommands, label));
 		} catch (Exception e) {
 			writeThrowableOnErrorsFile(e);
