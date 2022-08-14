@@ -63,7 +63,9 @@ public abstract class BasicGui implements Gui {
 		Element[] elements = getElements(player);
 		Inventory inventory = Bukkit.createInventory(null, CommonsHelper.getGuiSizeFromNumOfElements(elements), name);
 		for (int i = 0; i < elements.length; i ++) {
-			inventory.setItem(i, elements[i].getDisplayItem(player));
+			if (elements[i] != null) {
+				inventory.setItem(i, elements[i].getDisplayItem(player));
+			}
 		}
 		return inventory;
 	}
