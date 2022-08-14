@@ -1,19 +1,19 @@
 package it.tristana.commons.database;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import it.tristana.commons.interfaces.database.User;
 
 public class BasicUser implements User {
 
-	protected Player player;
+	protected OfflinePlayer player;
 	
-	public BasicUser(Player player) {
+	public BasicUser(OfflinePlayer player) {
 		this.player = player;
 	}
 
 	@Override
-	public Player getPlayer() {
+	public OfflinePlayer getPlayer() {
 		return player;
 	}
 }
