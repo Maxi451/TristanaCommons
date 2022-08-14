@@ -16,7 +16,7 @@ public class BasicCombatManager implements CombatManager {
 
 	private Map<CtUser, LinkedList<CtUser>> combatTag;
 	private SettingsCombat<?> settings;
-	
+
 	public BasicCombatManager(SettingsCombat<?> settings) {
 		combatTag = new HashMap<>();
 		this.settings = settings;
@@ -33,7 +33,7 @@ public class BasicCombatManager implements CombatManager {
 		});
 		updateHitters();
 	}
-	
+
 	@Override
 	public void onCt(Player attacker, Player target) {
 		CtUser attackerCtUser = getCtUser(attacker);
@@ -42,14 +42,14 @@ public class BasicCombatManager implements CombatManager {
 		} else {
 			attackerCtUser.onHit();
 		}
-		
+
 		CtUser targetCtUser = getCtUser(target);
 		if (targetCtUser == null) {
 			targetCtUser = createCtUser(target);
 		} else {
 			targetCtUser.onHit();
 		}
-		
+
 		combatTag.get(targetCtUser).add(attackerCtUser);
 	}
 
@@ -62,7 +62,7 @@ public class BasicCombatManager implements CombatManager {
 	public long getMillisToExitCt(Player player) {
 		return getMillisToExitCt(getCtUser(player));
 	}
-	
+
 	@Override
 	public boolean isInCt(Player player) {
 		CtUser ctUser = getCtUser(player);
@@ -71,7 +71,7 @@ public class BasicCombatManager implements CombatManager {
 		}
 		return isInCt(ctUser);
 	}
-	
+
 	@Override
 	public Collection<Player> getAssistPlayers(Player player) {
 		Collection<Player> result = new HashSet<>();
@@ -109,34 +109,30 @@ public class BasicCombatManager implements CombatManager {
 		combatTag.remove(tmp);
 		combatTag.values().forEach(list -> list.remove(tmp));
 	}
-	
+
 	private boolean isInCt(CtUser ctUser) {
 		return getMillisToExitCt(ctUser) > 0;
 	}
-	
+
 	private long getMillisToExitCt(CtUser ctUser) {
 		if (ctUser == null) {
 			return 0;
 		}
-		long millis = getCtMillis(ctUser);
-		if (millis <= 0) {
-			combatTag.remove(ctUser);
-		}
-		return millis;
+		return getCtMillis(ctUser);
 	}
-	
+
 	private long getCtMillis(CtUser ctUser) {
 		return getCtMillis(ctUser, settings.getCombatTagDuration());
 	}
-	
+
 	private long getCtMillis(CtUser ctUser, long timeout) {
 		return Math.max(ctUser.getLastHitMillis() + timeout - System.currentTimeMillis(), 0);
 	}
-	
+
 	private void updateHitters() {
 		combatTag.keySet().forEach(ctUser -> updateHitters(ctUser));
 	}
-	
+
 	private void updateHitters(CtUser ctUser) {
 		LinkedList<CtUser> attackers = combatTag.get(ctUser);
 		while (attackers.size() > 1) {
@@ -146,13 +142,13 @@ public class BasicCombatManager implements CombatManager {
 			attackers.removeFirst();
 		}
 	}
-	
+
 	private CtUser createCtUser(Player player) {
 		CtUser ctUser = new CtUser(player);
 		combatTag.put(ctUser, new LinkedList<>());
 		return ctUser;
 	}
-	
+
 	private CtUser getCtUser(Player player) {
 		for (CtUser ctPlayer : combatTag.keySet()) {
 			if (ctPlayer.getPlayer() == player) {
