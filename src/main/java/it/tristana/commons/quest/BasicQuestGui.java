@@ -17,7 +17,7 @@ public class BasicQuestGui<P extends ArenaPlayer<?>> extends BasicGui {
 	}
 
 	@Override
-	protected Element[] getElements(Player player) {
+	public Element[] getElements(Player player) {
 		Element[] elements = new Element[quests.length];
 		for (int i = 0; i < quests.length; i ++) {
 			elements[i] = new BasicQuestElement<>(quests[i]);

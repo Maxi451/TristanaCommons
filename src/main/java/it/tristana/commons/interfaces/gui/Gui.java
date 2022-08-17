@@ -38,18 +38,19 @@ public interface Gui {
 	
 	/**
 	 * Retrieves the {@link Element} in the specified gui's slot
+	 * @param player The player associated to the gui
 	 * @param id The gui's slot
 	 * @return The Element in the specified id, or {@code null}<br>
 	 * if this id id lower than {@code 0} or greater than<br>
 	 * {@link #getElements()}{@code .length - 1}
 	 */
-	Element getById(int id);
+	Element getById(Player player, int id);
 	
 	/**
 	 * Retrieves a copy of the elements that this gui displays
 	 * @return The elements array
 	 */
-	Element[] getElements();
+	Element[] getElements(Player player);
 	
 	/**
 	 * Creates an {@link Inventory} for the given<br>

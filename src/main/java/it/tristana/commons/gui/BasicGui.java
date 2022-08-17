@@ -22,14 +22,9 @@ public abstract class BasicGui implements Gui {
 	}
 
 	@Override
-	public Element getById(int id) {
+	public Element getById(Player player, int id) {
 		Element[] elements = getElements(null);
 		return id >= 0 && id < elements.length ? elements[id] : null;
-	}
-	
-	@Override
-	public Element[] getElements() {
-		return getElements(null);
 	}
 	
 	@Override
@@ -40,6 +35,9 @@ public abstract class BasicGui implements Gui {
 	@Override
 	public void onClick(Player player, int slot) {
 		Element[] elements = getElements(player);
+		if (slot < 0 || slot >= elements.length || elements[slot] == null) {
+			return;
+		}
 		elements[slot].onClick(player);
 		if (elements[slot].closesInventory(player)) {
 			close(player);
@@ -69,6 +67,4 @@ public abstract class BasicGui implements Gui {
 		}
 		return inventory;
 	}
-	
-	protected abstract Element[] getElements(Player player);
 }
