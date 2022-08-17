@@ -23,7 +23,7 @@ public abstract class BasicGui implements Gui {
 
 	@Override
 	public Element getById(Player player, int id) {
-		Element[] elements = getElements(null);
+		Element[] elements = getElements(player);
 		return id >= 0 && id < elements.length ? elements[id] : null;
 	}
 	
