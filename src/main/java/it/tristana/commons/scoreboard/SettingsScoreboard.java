@@ -10,7 +10,7 @@ public class SettingsScoreboard<C extends ConfigScoreboard> extends Settings<C> 
 	protected String name;
 	protected List<String> lines;
 	
-	public SettingsScoreboard(File folder, String fileName, Class<C> configClass) {
+	public SettingsScoreboard(File folder, Class<C> configClass) {
 		super(folder, configClass);
 	}
 
