@@ -39,6 +39,9 @@ public abstract class BasicGui implements Gui {
 			return;
 		}
 		elements[slot].onClick(player);
+		if (elements[slot].getNextMenu(player) != null) {
+			return;
+		}
 		if (elements[slot].closesInventory(player)) {
 			close(player);
 		} else {

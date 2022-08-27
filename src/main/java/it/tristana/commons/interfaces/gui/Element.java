@@ -29,4 +29,14 @@ public interface Element {
 	 * @return True if this element should close the gui, false otherwise
 	 */
 	boolean closesInventory(Player player);
+	
+	/**
+	 * Get the next menu that this element will open once clicked. May return<br>
+	 * null, which means this element does not open another gui. This element<br>
+	 * itself must take care to handle the next gui opening
+	 * @param player The player who will see the next gui opened
+	 * @return The class of the gui that will be displayed, or {@code null} if<br>
+	 * this element does not open another gui for the specified player when clicked
+	 */
+	Class<? extends Gui> getNextMenu(Player player);
 }

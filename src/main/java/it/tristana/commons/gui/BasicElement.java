@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import it.tristana.commons.interfaces.gui.Element;
+import it.tristana.commons.interfaces.gui.Gui;
 
 public abstract class BasicElement implements Element {
 
@@ -34,6 +35,11 @@ public abstract class BasicElement implements Element {
 		return item;
 	}
 
+	@Override
+	public Class<? extends Gui> getNextMenu(Player player) {
+		return null;
+	}
+	
 	protected static void editItem(ItemStack displayItem, String name, List<String> lore) {
 		ItemMeta itemMeta = displayItem.getItemMeta();
 		itemMeta.setDisplayName(name);
