@@ -50,7 +50,10 @@ public class BasicCombatManager implements CombatManager {
 			targetCtUser.onHit();
 		}
 
-		combatTag.get(targetCtUser).add(attackerCtUser);
+		LinkedList<CtUser> list = combatTag.get(targetCtUser);
+		if (!list.contains(attackerCtUser)) {
+			list.add(attackerCtUser);
+		}
 	}
 
 	@Override
@@ -84,6 +87,10 @@ public class BasicCombatManager implements CombatManager {
 			return result;
 		}
 		ListIterator<CtUser> assistingPlayers = list.listIterator(list.size() - 1);
+		if (assistingPlayers.hasPrevious()) {
+			Player previous = assistingPlayers.previous().getPlayer();
+			result.add(previous);
+		}
 		while (assistingPlayers.hasPrevious()) {
 			result.add(assistingPlayers.previous().getPlayer());
 		}

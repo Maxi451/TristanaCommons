@@ -36,8 +36,12 @@ public class CommonsHelper {
 	}
 
 	public static void broadcast(String msg) {
-		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
+		playerBroadcast(msg);
 		consoleInfo(msg);
+	}
+	
+	public static void playerBroadcast(String msg) {
+		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
 	}
 
 	public static String replaceFirst(String line, String lookingFor, String replacement) {
