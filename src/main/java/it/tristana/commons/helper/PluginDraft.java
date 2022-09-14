@@ -70,15 +70,18 @@ public class PluginDraft extends JavaPlugin {
 	}
 	
 	
-	protected <T extends Plugin> void registerCommand(T main, Class<? extends MainCommand<T>> commandClass, String label) {
+	protected <P extends Plugin, C extends MainCommand<P>> C registerCommand(P main, Class<C> commandClass, String label) {
 		if (settingsDefaultCommands == null) {
 			settingsDefaultCommands = new SettingsDefaultCommands(JavaPlugin.getPlugin(Main.class).getFolder());
 		}
+		C command = null;
 		try {
-			Bukkit.getPluginCommand(label).setExecutor(commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, settingsDefaultCommands, label));
+			command = commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, settingsDefaultCommands, label);
+			Bukkit.getPluginCommand(label).setExecutor(command);
 		} catch (Exception e) {
 			writeThrowableOnErrorsFile(e);
 			throw new IllegalArgumentException("The constructor requires exactly the parameters of the MainCommand class constructor, in that specific order");
 		}
+		return command;
 	}
 }

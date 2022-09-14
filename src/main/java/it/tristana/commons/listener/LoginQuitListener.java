@@ -44,9 +44,9 @@ public final class LoginQuitListener<U extends User> implements Listener {
 		if (user == null) {
 			return;
 		}
-		userRetriever.saveUser(user);
 		if (quitConsumer != null) {
 			quitConsumer.accept(event, user);
 		}
+		userRetriever.saveUser(user);
 	}
 }

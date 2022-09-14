@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class CommonsHelper {
 
@@ -215,6 +216,25 @@ public class CommonsHelper {
 		} catch (Exception e) {
 			consoleInfo("&cCan't write file " + filePath + "!");
 			throw new RuntimeException(e);
+		}
+	}
+	
+	public static void correctExtremities(Vector lowerPos, Vector upperPos) {
+		double tmp;
+		if (lowerPos.getX() > upperPos.getX()) {
+			tmp = lowerPos.getX();
+			lowerPos.setX(upperPos.getX());
+			upperPos.setX(tmp);
+		}
+		if (lowerPos.getY() > upperPos.getY()) {
+			tmp = lowerPos.getY();
+			lowerPos.setY(upperPos.getY());
+			upperPos.setY(tmp);
+		}
+		if (lowerPos.getZ() > upperPos.getZ()) {
+			tmp = lowerPos.getZ();
+			lowerPos.setZ(upperPos.getZ());
+			upperPos.setZ(tmp);
 		}
 	}
 
