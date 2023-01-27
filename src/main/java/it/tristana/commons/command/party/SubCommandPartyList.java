@@ -26,7 +26,7 @@ public class SubCommandPartyList extends SubCommandParty {
 			CommonsHelper.info(player, settings.getCommandPartyNotInAParty());
 			return;
 		}
-		CommonsHelper.info(player, CommonsHelper.playerListToString(CommonsHelper.playerListToPlayerNames(party.getPlayers()), settings.getNobodyWord(), settings.getAndWord()));
+		CommonsHelper.info(player, CommonsHelper.playerListToString(CommonsHelper.playerListToPlayerNames(new ArrayList<>(party.getPlayers())), settings.getNobodyWord(), settings.getAndWord()));
 	}
 
 	@Override

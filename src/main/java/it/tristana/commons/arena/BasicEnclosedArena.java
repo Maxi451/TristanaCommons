@@ -9,7 +9,7 @@ import it.tristana.commons.interfaces.arena.player.PartiesManager;
 import it.tristana.commons.interfaces.arena.player.Team;
 import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
 
-public abstract class BasicEnclosedArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> extends BasicArena<T, P> implements EnclosedArena<P> {
+public abstract class BasicEnclosedArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> extends BasicTeamableArena<T, P> implements EnclosedArena<P> {
 	
 	protected Vector lowerPos;
 	protected Vector upperPos;

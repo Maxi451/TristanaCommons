@@ -3,23 +3,23 @@ package it.tristana.commons.config;
 import java.io.File;
 
 public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
-	
+
 	private String generalHelp;
 	private String andWord;
 	private String nobodyWord;
-	
+
 	private String commandQueryExecuted;
 	private String commandQuerySqlError;
 	private String commandQueryHelp;
-	
+
 	private String commandHelpHelp;
-	
+
 	private String commandReloadReloaded;
 	private String commandReloadHelp;
-	
+
 	private String commandVersionMessage;
 	private String commandVersionHelp;
-	
+
 	private String commandPartyHelp;
 	private String commandPartyNotLeader;
 	private String commandPartyAlreadyInAParty;
@@ -39,17 +39,20 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	private String commandPartyKickHelp;
 	private String commandPartyJoinHelp;
 	private String commandPartyListHelp;
-	
+
+	private String commandMainLobbySet;
+	private String commandMainLobbyHelp;
+
 	public SettingsDefaultCommands(File folder) {
 		super(folder, ConfigDefaultCommands.class);
 	}
-	
+
 	@Override
 	protected void reload(ConfigDefaultCommands config) {
 		generalHelp = config.getString(ConfigDefaultCommands.GENERAL_HELP);
 		andWord = config.getString(ConfigDefaultCommands.AND_WORD);
 		nobodyWord = config.getString(ConfigDefaultCommands.NOBODY_WORD);
-		
+
 		commandQueryExecuted = config.getString(ConfigDefaultCommands.COMMAND_QUERY_EXECUTED);
 		commandQuerySqlError = config.getString(ConfigDefaultCommands.COMMAND_QUERY_SQL_ERROR);
 		commandQueryHelp = config.getString(ConfigDefaultCommands.COMMAND_QUERY_HELP);
@@ -61,7 +64,7 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 
 		commandVersionMessage = config.getString(ConfigDefaultCommands.COMMAND_VERSION_MESSAGE);
 		commandVersionHelp = config.getString(ConfigDefaultCommands.COMMAND_VERSION_HELP);
-		
+
 		commandPartyHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_HELP);
 		commandPartyNotLeader = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_LEADER);
 		commandPartyAlreadyInAParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_ALREADY_IN_A_PARTY);
@@ -81,6 +84,17 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 		commandPartyKickHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_KICK_HELP);
 		commandPartyJoinHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_JOIN_HELP);
 		commandPartyListHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LIST_HELP);
+
+		commandMainLobbySet = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_SET);
+		commandMainLobbyHelp = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_HELP);
+	}
+
+	public String getCommandMainLobbySet() {
+		return commandMainLobbySet;
+	}
+
+	public String getCommandMainLobbyHelp() {
+		return commandMainLobbyHelp;
 	}
 
 	public String getCommandPartyListHelp() {
@@ -170,7 +184,7 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	public String getGeneralHelp() {
 		return generalHelp;
 	}
-	
+
 	public String getCommandQueryExecuted() {
 		return commandQueryExecuted;
 	}

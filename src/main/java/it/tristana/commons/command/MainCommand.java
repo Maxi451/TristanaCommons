@@ -9,15 +9,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 import it.tristana.commons.interfaces.DatabaseHolder;
+import it.tristana.commons.interfaces.MainLobbyHolder;
 import it.tristana.commons.interfaces.PartiesHolder;
 import it.tristana.commons.interfaces.Reloadable;
 
-public class MainCommand<P extends Plugin> implements TabExecutor {
+public class MainCommand<P extends JavaPlugin> implements TabExecutor {
 
 	protected P plugin;
 
@@ -29,17 +30,21 @@ public class MainCommand<P extends Plugin> implements TabExecutor {
 		this.plugin = plugin;
 		this.command = command;
 		commands = new TreeMap<String, SubCommand>();
+		String adminPerms = getAdminPerms();
 		help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
 		registerSubCommand(new CommandHelp(this, settings));
 		registerSubCommand(new CommandVersion<P>(this, plugin, "version", settings));
 		if (plugin instanceof Reloadable) {
-			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", getAdminPerms(), settings));
+			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", adminPerms, settings));
 		}
 		if (plugin instanceof DatabaseHolder) {
-			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", getAdminPerms(), settings));
+			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", adminPerms, settings));
 		}
 		if (plugin instanceof PartiesHolder) {
 			registerSubCommand(new CommandParty(this, (PartiesHolder) plugin, "party", null, settings));
+		}
+		if (plugin instanceof MainLobbyHolder) {
+			registerSubCommand(new CommandMainLobby(this, (MainLobbyHolder) plugin, "mainlobby", adminPerms, settings));
 		}
 	}
 

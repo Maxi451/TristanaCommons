@@ -9,7 +9,7 @@ public abstract class Settings<C extends Config> implements Reloadable {
 
 	private Constructor<C> constructor;
 	protected File folder;
-	
+
 	public Settings(File folder, Class<C> configClass) {
 		try {
 			constructor = configClass.getConstructor(File.class);
@@ -20,19 +20,19 @@ public abstract class Settings<C extends Config> implements Reloadable {
 		this.folder = folder;
 		reload();
 	}
-	
+
 	@Override
 	public final void reload() {
 		try {
 			reload(constructor.newInstance(getConfigFileParameter()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
-	
+
+	protected abstract void reload(C config);
+
 	protected File getConfigFileParameter() {
 		return folder;
 	}
-	
-	protected abstract void reload(C config);
 }

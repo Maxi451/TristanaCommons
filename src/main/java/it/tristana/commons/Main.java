@@ -1,7 +1,8 @@
 package it.tristana.commons;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import it.tristana.commons.helper.CommonsHelper;
-import it.tristana.commons.helper.PluginDraft;
 
 /**
  * The main class of this library. It only logs that the plugins is enabled/disabled, nothing more
@@ -9,7 +10,7 @@ import it.tristana.commons.helper.PluginDraft;
  * @since 21/02/2022
  */
 
-public final class Main extends PluginDraft {
+public final class Main extends JavaPlugin {
 
 	/**
 	 * The current version of this plugin

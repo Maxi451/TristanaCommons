@@ -6,10 +6,10 @@ import java.util.List;
 import it.tristana.commons.config.Settings;
 
 public class SettingsScoreboard<C extends ConfigScoreboard> extends Settings<C> {
-	
+
 	protected String name;
 	protected List<String> lines;
-	
+
 	public SettingsScoreboard(File folder, Class<C> configClass) {
 		super(folder, configClass);
 	}

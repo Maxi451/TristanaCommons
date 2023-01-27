@@ -1,7 +1,7 @@
 package it.tristana.commons.arena.player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.bukkit.entity.Player;
 
@@ -9,19 +9,19 @@ import it.tristana.commons.interfaces.arena.player.Party;
 
 public class BasicParty implements Party {
 	
-	private Player leader;
-	private List<Player> players;
-	private List<String> invites;
+	protected Player leader;
+	protected Collection<Player> players;
+	protected Collection<String> invites;
 
 	public BasicParty(Player leader) {
 		this.leader = leader;
-		players = new ArrayList<>();
-		invites = new ArrayList<>();
+		players = new HashSet<>();
+		invites = new HashSet<>();
 	}
 
 	@Override
-	public void addPlayer(Player player) {
-		players.add(player);
+	public boolean addPlayer(Player player) {
+		return players.add(player);
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class BasicParty implements Party {
 	}
 
 	@Override
-	public List<String> getInvites() {
+	public Collection<String> getInvites() {
 		return invites;
 	}
 
@@ -50,7 +50,7 @@ public class BasicParty implements Party {
 	}
 
 	@Override
-	public List<Player> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return players;
 	}
 

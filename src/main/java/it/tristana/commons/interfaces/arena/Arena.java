@@ -33,7 +33,7 @@ public interface Arena<P extends ArenaPlayer<?>> extends Tickable {
 	 * @param player The player that tries to join
 	 * @return True if the player successfully<br>
 	 * joined and was added to the underlying<br>
-	 * collection of players; false otherwhise
+	 * collection of players; false otherwise
 	 */
 	boolean onPlayerJoin(Player player);
 	
@@ -53,7 +53,7 @@ public interface Arena<P extends ArenaPlayer<?>> extends Tickable {
 	 * @param player The player that tries to spectate
 	 * @return True if the status of the current game is<br>
 	 * {@link Status#PLAYING} and the player is allowed<br>
-	 * to spectate games, false otherwhise
+	 * to spectate games, false otherwise
 	 */
 	boolean onSpectator(Player player);
 	

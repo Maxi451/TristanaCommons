@@ -7,26 +7,26 @@ public class ConfigDefaultCommands extends Config {
 	public static final String GENERAL_HELP = "general-help";
 	public static final String AND_WORD = "and-word";
 	public static final String NOBODY_WORD = "nobody-word";
-	
+
 	private static final String COMMANDS = "commands.";
 	private static final String HELP = "help-message";
-	
+
 	private static final String COMMAND_QUERY = COMMANDS + "database.";
 	public static final String COMMAND_QUERY_EXECUTED = COMMAND_QUERY + "query-executed";
 	public static final String COMMAND_QUERY_SQL_ERROR = COMMAND_QUERY + "query-error";
 	public static final String COMMAND_QUERY_HELP = COMMAND_QUERY + HELP;
-	
+
 	private static final String COMMAND_HELP = COMMANDS + "help.";
 	public static final String COMMAND_HELP_HELP = COMMAND_HELP + HELP;
-	
+
 	private static final String COMMAND_RELOAD = COMMANDS + "reload.";
 	public static final String COMMAND_RELOAD_RELOADED = COMMAND_RELOAD + "reloaded";
 	public static final String COMMAND_RELOAD_HELP = COMMAND_RELOAD + HELP;
-	
+
 	private static final String COMMAND_VERSION = COMMANDS + "version.";
 	public static final String COMMAND_VERSION_MESSAGE = COMMAND_VERSION + "message";
 	public static final String COMMAND_VERSION_HELP = COMMAND_VERSION + HELP;
-	
+
 	private static final String COMMAND_PARTY = COMMANDS + "party.";
 	public static final String COMMAND_PARTY_HELP = COMMAND_PARTY + HELP;
 	public static final String COMMAND_PARTY_NOT_LEADER = COMMAND_PARTY + "not-leader";
@@ -47,9 +47,13 @@ public class ConfigDefaultCommands extends Config {
 	public static final String COMMAND_PARTY_KICK_HELP = COMMAND_PARTY + "kick-help";
 	public static final String COMMAND_PARTY_JOIN_HELP = COMMAND_PARTY + "join-help";
 	public static final String COMMAND_PARTY_LIST_HELP = COMMAND_PARTY + "list-help";
-	
+
+	private static final String COMMAND_MAIN_LOBBY = COMMANDS + "main-lobby.";
+	public static final String COMMAND_MAIN_LOBBY_SET = COMMAND_MAIN_LOBBY + "set";
+	public static final String COMMAND_MAIN_LOBBY_HELP = COMMAND_MAIN_LOBBY + HELP;
+
 	public ConfigDefaultCommands(File folder) {
-		super(new File(folder, "commands-language.yml"));
+		super(new File(folder, "common-commands-language.yml"));
 	}
 
 	@Override
@@ -57,19 +61,19 @@ public class ConfigDefaultCommands extends Config {
 		set(GENERAL_HELP, "Type '&b/%s %s&f' to display a list of commands");
 		set(AND_WORD, "and");
 		set(NOBODY_WORD, "nobody");
-		
+
 		set(COMMAND_QUERY_EXECUTED, "Query executed");
 		set(COMMAND_QUERY_SQL_ERROR, "&cMySQL error %d, check the console and/or the errors file");
 		set(COMMAND_QUERY_HELP, "Executes SQL queries on the database (be careful!)");
-		
+
 		set(COMMAND_HELP_HELP, "Displays this guide");
-		
+
 		set(COMMAND_RELOAD_RELOADED, "&aPlugin reloaded!");
 		set(COMMAND_RELOAD_HELP, "Reloads this plugin");
-		
+
 		set(COMMAND_VERSION_MESSAGE, "Using version: &e%s");
 		set(COMMAND_VERSION_HELP, "Displays the current version of this plugin");
-		
+
 		set(COMMAND_PARTY_HELP, "Displays the available options");
 		set(COMMAND_PARTY_NOT_LEADER, "&cYou're not the party's leader");
 		set(COMMAND_PARTY_ALREADY_IN_A_PARTY, "&cYou're already in a party!");
@@ -89,5 +93,8 @@ public class ConfigDefaultCommands extends Config {
 		set(COMMAND_PARTY_KICK_HELP, "Kick a player from the party");
 		set(COMMAND_PARTY_JOIN_HELP, "Join a party");
 		set(COMMAND_PARTY_LIST_HELP, "List the players in the party");
+
+		set(COMMAND_MAIN_LOBBY_SET, "Main lobby set at your coordinates");
+		set(COMMAND_MAIN_LOBBY_HELP, "Sets the location where players will be teleported after exiting an arena");
 	}
 }

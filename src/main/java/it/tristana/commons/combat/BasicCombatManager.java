@@ -75,6 +75,10 @@ public class BasicCombatManager implements CombatManager {
 		return isInCt(ctUser);
 	}
 
+	private boolean isInCt(CtUser ctUser) {
+		return getMillisToExitCt(ctUser) > 0;
+	}
+
 	@Override
 	public Collection<Player> getAssistPlayers(Player player) {
 		Collection<Player> result = new HashSet<>();
@@ -115,10 +119,6 @@ public class BasicCombatManager implements CombatManager {
 		CtUser tmp = new CtUser(player);
 		combatTag.remove(tmp);
 		combatTag.values().forEach(list -> list.remove(tmp));
-	}
-
-	private boolean isInCt(CtUser ctUser) {
-		return getMillisToExitCt(ctUser) > 0;
 	}
 
 	private long getMillisToExitCt(CtUser ctUser) {

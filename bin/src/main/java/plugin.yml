@@ -1,0 +1,6 @@
+name: TristanaCommons
+version: 10.2.9
+main: it.tristana.commons.Main
+author: Massimiliano Micol
+api-version: 1.13
+description: Commons API for Tristana plugins

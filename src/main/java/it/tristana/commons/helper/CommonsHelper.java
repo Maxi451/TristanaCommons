@@ -1,16 +1,12 @@
 package it.tristana.commons.helper;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,7 +36,7 @@ public class CommonsHelper {
 		playerBroadcast(msg);
 		consoleInfo(msg);
 	}
-	
+
 	public static void playerBroadcast(String msg) {
 		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
 	}
@@ -136,7 +132,7 @@ public class CommonsHelper {
 	 */
 
 	public static String getNumberFromRight(final String line) {
-		StringBuilder result = new StringBuilder("");
+		StringBuilder result = new StringBuilder();
 		int i = line.length() - 1;
 		char c;
 		while (i != -1 && isDigit(c = line.charAt(i))) {
@@ -163,62 +159,6 @@ public class CommonsHelper {
 		return lines;
 	}
 
-	/**
-	 * Reads the content of a file
-	 * @param filePath The file path
-	 * @return The content of the file
-	 */
-
-	public static List<String> getLinesFromFile(final String filePath) {
-		final List<String> lines = new ArrayList<String>();
-		try {
-			final File file = new File(filePath);
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-				String line = null;
-				do {
-					line = br.readLine();
-					if (line != null) {
-						lines.add(line);
-					}
-				} while (line != null);
-			}
-		} catch (IOException e) {
-			consoleInfo("&cCan't read file " + filePath + "!");
-			throw new RuntimeException(e);
-		}
-		return lines;
-	}
-
-	/**
-	 * Saves a list of {@code String} into a file
-	 * @param lines The lines to save
-	 * @param filePath The file path
-	 */
-
-	public static void writeLinesOnFile(final List<String> lines, final String filePath) {
-		final File file = new File(filePath);
-		final StringBuilder names = new StringBuilder();
-		final String newLine = System.getProperty("line.separator");
-		try {
-			final int size = lines.size();
-			for (int i = 0; i < size - 1; i ++) {
-				names.append(lines.get(i)).append(newLine);
-			}
-			if (size > 0) {
-				names.append(lines.get(size - 1));
-			}
-			final BufferedWriter out = new BufferedWriter(new FileWriter(file));
-			out.write(names.toString());
-			out.close();
-		} catch (Exception e) {
-			consoleInfo("&cCan't write file " + filePath + "!");
-			throw new RuntimeException(e);
-		}
-	}
-	
 	public static void correctExtremities(Vector lowerPos, Vector upperPos) {
 		double tmp;
 		if (lowerPos.getX() > upperPos.getX()) {
@@ -281,7 +221,7 @@ public class CommonsHelper {
 	public static boolean parseBoolean(String value) {
 		return value.equalsIgnoreCase("true");
 	}
-	
+
 	public static int parseIntOrGetDefault(String value, int defaultValue) {
 		int result;
 		try {
@@ -291,7 +231,7 @@ public class CommonsHelper {
 		}
 		return result;
 	}
-	
+
 	public static long parseLongOrGetDefault(String value, long defaultValue) {
 		long result;
 		try {
@@ -352,47 +292,6 @@ public class CommonsHelper {
 		return CommonsHelper.toChatColors(CommonsHelper.parseUnicode(line));
 	}
 
-	public static char getChatColorFromBlockData(byte data) {
-		switch (data) {
-		case 0:
-			return 'f';
-		case 1:
-			return '6';
-		case 2:
-			return '5';
-		case 3:
-			return 'b';
-		case 4:
-			return 'e';
-		case 5:
-			return 'a';
-		case 6:
-			return 'd';
-		case 7:
-			return '8';
-		case 8:
-			return '7';
-		case 9:
-			return '3';
-		case 10:
-			return '3';
-		case 13:
-			return '2';
-		case 14:
-			return '4';
-		case 11:
-		case 12:
-		case 15:
-			return '0';
-		default:
-			throw new IllegalArgumentException("Block data color must be between 0 and 15 inclusive, but here arrived " + data);
-		}
-	}
-
-	public static <T> List<T> copyList(List<? extends T> list) {
-		return new ArrayList<>(list);
-	}
-
 	public static String playerListToString(List<String> players, String nobody, String andWord) {
 		int size = players.size();
 		if (size == 0) {
@@ -409,12 +308,8 @@ public class CommonsHelper {
 		return playerList.toString();
 	}
 
-	public static List<String> playerListToPlayerNames(List<Player> players) {
-		List<String> names = new ArrayList<String>();
-		for (Player player : players) {
-			names.add(player.getName());
-		}
-		return names;
+	public static List<String> playerListToPlayerNames(Collection<Player> players) {
+		return players.stream().map(Player::getName).collect(Collectors.toList());
 	}
 
 	public static <T> void shuffle(List<T> list) {

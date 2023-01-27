@@ -9,7 +9,7 @@ public class ConfigScoreboard extends Config {
 
 	public static final String NAME = "name";
 	public static final String LINES = "lines";
-	
+
 	public ConfigScoreboard(File file) {
 		super(file);
 	}

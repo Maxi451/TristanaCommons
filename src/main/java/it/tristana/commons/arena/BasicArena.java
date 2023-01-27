@@ -1,167 +1,57 @@
 package it.tristana.commons.arena;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import it.tristana.commons.helper.TeamsBuilder;
+import it.tristana.commons.interfaces.MainLobbyHolder;
 import it.tristana.commons.interfaces.arena.Arena;
 import it.tristana.commons.interfaces.arena.Status;
-import it.tristana.commons.interfaces.arena.player.PartiesManager;
-import it.tristana.commons.interfaces.arena.player.Team;
-import it.tristana.commons.interfaces.arena.player.Teamable;
-import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
+import it.tristana.commons.interfaces.arena.player.ArenaPlayer;
 
-public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> implements Arena<P>, Teamable<T, P> {
+public abstract class BasicArena<A extends ArenaPlayer<?>> implements Arena<A> {
 
-	protected final World world;
+	protected MainLobbyHolder mainLobbyHolder;
+	protected World world;
 	protected String name;
+	protected Status status;
 	protected Location lobby;
 	
-	protected final PartiesManager partiesManager;
-	protected final List<Location> spawnpoints;
-	protected List<T> teams;
-	protected List<P> players;
-	protected List<Player> spectators;
-
-	protected Status status;
-	protected int maxPerTeam;
+	protected Collection<A> players;
+	protected Collection<Player> spectators;
 	protected int minPlayersToStart;
-	protected int ticksToStart;
-	protected int ticksToEnd;
 	
-	public BasicArena(World world, String name) {
-		this(world, name, null);
-	}
-	
-	public BasicArena(World world, String name, PartiesManager partiesManager) {
+	public BasicArena(MainLobbyHolder mainLobbyHolder, World world, String name, int minPlayersToStart) {
+		this.mainLobbyHolder = mainLobbyHolder;
 		this.world = world;
 		this.name = name;
-		this.partiesManager = partiesManager;
-		spawnpoints = new ArrayList<>();
-		minPlayersToStart = 2;
-		maxPerTeam = 4;
-		reset();
-	}
-
-	@Override
-	public World getWorld() {
-		return world;
-	}
-
-	@Override
-	public Status getStatus() {
-		return status;
-	}
-
-	@Override
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
-	@Override
-	public Collection<T> getTeams() {
-		return teams == null ? null : new ArrayList<>(teams);
-	}
-
-	@Override
-	public T getTeam(Player player) {
-		P arenaPlayer = getArenaPlayer(player);
-		T team = null;
-		if (arenaPlayer != null) {
-			team = arenaPlayer.getTeam();
-		}
-		return team;
-	}
-
-	@Override
-	public P getArenaPlayer(Player player) {
-		int index = getArenaPlayerIndex(player);
-		return index == -1 ? null : players.get(index);
-	}
-
-	@Override
-	public int getMaxPerTeam() {
-		return maxPerTeam;
-	}
-
-	@Override
-	public void setMaxPerTeam(int maxPerTeam) {
-		this.maxPerTeam = maxPerTeam;
-	}
-
-	@Override
-	public int getMaxPlayers() {
-		return spawnpoints.size() * maxPerTeam;
-	}
-
-	@Override
-	public void addTeam(T team) {
-		teams.add(team);
-	}
-
-	@Override
-	public int getMinPlayersToStart() {
-		return minPlayersToStart;
-	}
-
-	@Override
-	public void setMinPlayersToStart(int minPlayersToStart) {
 		this.minPlayersToStart = minPlayersToStart;
+		players = new HashSet<>();
+		spectators = new HashSet<>();
+		status = Status.WAITING;
 	}
 
 	@Override
-	public void startGame() {
-		createTeams();
-		teleportTeamsToSpawnpoints();
+	public Collection<A> getPlayers() {
+		return new HashSet<>(players);
 	}
 
 	@Override
-	public void closeArena() {
-		reset();
-	}
-
-	@Override
-	public boolean setSpawnpoint(Location location) {
-		return spawnpoints.add(location);
-	}
-
-	@Override
-	public boolean areInSameTeam(Player p1, Player p2) {
-		return getTeam(p1) == getTeam(p2);
-	}
-	
-	@Override
-	public void onPlayerLeave(Player player) {
-		players.remove(getArenaPlayer(player));
-	}
-
-	@Override
-	public boolean onSpectator(Player player) {
-		boolean result = status == Status.PLAYING;
-		if (result) {
-			spectators.add(player);
-		}
-		return result;
-	}
-
-	@Override
-	public Collection<P> getPlayers() {
-		return new ArrayList<>(players);
-	}
-
-	@Override
-	public void setName(String name) {
-		this.name = name;
+	public Collection<Player> getSpectators() {
+		return new HashSet<>(spectators);
 	}
 
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -176,136 +66,45 @@ public abstract class BasicArena<T extends Team<P, ?>, P extends TeamingPlayer<T
 
 	@Override
 	public void setLobby(Location lobby) {
+		World lobbyWorld = lobby.getWorld();
+		if (world != lobbyWorld) {
+			throw new IllegalArgumentException("Arena world '" + world.getName() + "' and lobby world '" + lobbyWorld + "' are different");
+		}
 		this.lobby = lobby;
 	}
 
 	@Override
-	public void runTick() {
-		switch (status) {
-		case WAITING:
-			waitingPhase();
-			break;
-		case STARTING:
-			startingPhase();
-			break;
-		case PLAYING:
-			playingPhase();
-			break;
-		case ENDING:
-			endingPhase();
-			break;
-		case DISABLED:
-			break;
-		}
+	public Status getStatus() {
+		return status;
 	}
 
 	@Override
-	public boolean onPlayerJoin(Player player) {
-		boolean result = testPlayerJoin(player);
-		if (result) {
-			player.teleport(lobby);
-			players.add(createArenaPlayer(player));
-		}
-		return result;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
-	
+
 	@Override
-	public boolean testPlayerJoin(Player player) {
-		return lobby != null && (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
-	}
-	
-	@Override
-	public Collection<Player> getSpectators() {
-		return new ArrayList<>(spectators);
-	}
-	
-	@Override
-	public List<Location> getSpawnpoints() {
-		return new ArrayList<>(spawnpoints);
-	}
-	
-	@Override
-	public boolean checkStartingConditions() {
-		return players.size() >= getMinPlayersToStart();
-	}
-	
-	protected int getTeamsForNumPlayers(int players) {
-		return spawnpoints.size();
-	}
-	
-	protected void createTeams() {
-		teams = new ArrayList<T>();
-		int size = getTeamsForNumPlayers(players.size());
-		for (int i = 0; i < size; i ++) {
-			T team = createTeam(i);
-			if (team != null) {
-				teams.add(team);
-			}
-			else {
-				break;
+	public A getArenaPlayer(Player player) {
+		for (A test : players) {
+			if (test.getPlayer() == player) {
+				return test;
 			}
 		}
-		TeamsBuilder.buildTeams(partiesManager, this, teams, players);
-	}
-	
-	protected void teleportTeamsToSpawnpoints() {
-		for (T team : teams) {
-			for (P player : team.getPlayers()) {
-				player.getPlayer().teleport(team.getSpawnpoint());
-			}
-		}
-	}
-	
-	protected int getArenaPlayerIndex(Player player) {
-		int index = -1;
-		int size = players.size();
-		for (int i = 0; i < size; i ++) {
-			if (players.get(i).getPlayer() == player) {
-				index = i;
-				break;
-			}
-		}
-		return index;
+		return null;
 	}
 
-	protected void waitingPhase() {
-		if (checkStartingConditions()) {
-			setStatus(Status.STARTING);
-		}
+	@Override
+	public int getMinPlayersToStart() {
+		return minPlayersToStart;
 	}
 
-	protected void startingPhase() {
-		if (players.size() < getMinPlayersToStart()) {
-			setStatus(Status.WAITING);
-		}
-		for (P player : players) {
-			player.getPlayer().setLevel(ticksToStart);
-		}
-		if (ticksToStart -- <= 0) {
-			launchGame();
-		}
+	@Override
+	public void setMinPlayersToStart(int minPlayersToStart) {
+		this.minPlayersToStart = minPlayersToStart;
 	}
 
-	protected void launchGame() {
-		setStatus(Status.PLAYING);
-		startGame();
+	@Override
+	public World getWorld() {
+		return world;
 	}
-
-	protected void endingPhase() {
-		if (ticksToEnd -- <= 0) {
-			closeArena();
-		}
-	}
-	
-	protected void reset() {
-		players = new ArrayList<>();
-		spectators = new ArrayList<>();
-		status = Status.WAITING;
-	}
-	
-	protected abstract void playingPhase();
-	
-	protected abstract P createArenaPlayer(Player player);
-	
-	protected abstract T createTeam(int index);
 }

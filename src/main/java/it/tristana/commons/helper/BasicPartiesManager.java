@@ -1,7 +1,7 @@
 package it.tristana.commons.helper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.bukkit.entity.Player;
 
@@ -11,10 +11,10 @@ import it.tristana.commons.interfaces.arena.player.Party;
 
 public class BasicPartiesManager implements PartiesManager {
 	
-	private List<Party> parties;
+	protected Collection<Party> parties;
 	
 	public BasicPartiesManager() {
-		parties = new ArrayList<Party>();
+		parties = new HashSet<Party>();
 	}
 	
 	@Override

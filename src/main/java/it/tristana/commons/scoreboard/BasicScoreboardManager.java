@@ -15,12 +15,12 @@ import org.bukkit.scoreboard.Scoreboard;
 import it.tristana.commons.interfaces.database.User;
 
 public abstract class BasicScoreboardManager<U extends User, S extends SettingsScoreboard<? extends ConfigScoreboard>> implements ScoreboardManager<U> {
-	
+
 	protected S settings;
-	
+
 	protected Map<U, Scoreboard> users;
 	protected Map<Objective, Score[]> objectivesScores;
-	
+
 	public BasicScoreboardManager(S settings) {
 		this.settings = settings;
 		users = new HashMap<>();
@@ -31,7 +31,7 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 	public void runTick() {
 		users.forEach(this::updateScoreboard);
 	}
-	
+
 	@Override
 	public void reload() {
 		Collection<U> savedUsers = new HashSet<>(users.keySet());
@@ -60,12 +60,12 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 		}
 	}
-	
+
 	@Override
 	public void updateScoreboard(U user, Scoreboard scoreboard) {
 		scoreboard.getObjectives().forEach(objective -> updateObjective(user, objective));
 	}
-	
+
 	@Override
 	public void updateObjective(U user, Objective objective) {
 		List<String> lines = settings.getLines();
@@ -84,7 +84,7 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 			objectivesScores.put(objective, scores);
 			return;
 		}
-		
+
 		Scoreboard scoreboard = objective.getScoreboard();
 		for (int i = 0; i < scores.length; i ++) {
 			String entry = scores[i].getEntry();
@@ -92,15 +92,14 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 				scoreboard.resetScores(entry);
 				scores[i] = registerScore(objective, newScoresEntries[i], size - i - 1);
 			}
-
 		}
 	}
-	
+
 	private Score registerScore(Objective objective, String name, int index) {
 		Score score = objective.getScore(name);
 		score.setScore(index);
 		return score;
 	}
-	
+
 	protected abstract String parseLine(U user, String line);
 }

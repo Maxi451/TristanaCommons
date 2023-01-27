@@ -1,6 +1,6 @@
 package it.tristana.commons.interfaces.arena.player;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
 
@@ -20,19 +20,20 @@ public interface Party {
 	Player getLeader();
 	
 	/**
-	 * The returned list is a copy, so it is safe<br>
+	 * The returned collection is a copy, so it is safe<br>
 	 * for modification and iteration
 	 * @return A copy of the list of the members<br>
 	 * of this party, with the leader in it
 	 */
-	List<Player> getPlayers();
+	Collection<Player> getPlayers();
 	
 	/**
 	 * Adds a player to this party. A player is expected<br>
 	 * to be found in at most one single party at a time
 	 * @param player The player to add
+	 * @return {@code true} if the player was added, {@code false} otherwise
 	 */
-	void addPlayer(Player player);
+	boolean addPlayer(Player player);
 	
 	/**
 	 * Removes the given player from the party. If the<br>
@@ -45,11 +46,11 @@ public interface Party {
 	/**
 	 * Returns a copy of the list of players invited<br>
 	 * in the party. If a player accepts the invite,<br>
-	 * he is removed from this list and put in the<br>
-	 * {@link #getPlayers()} list
+	 * he is removed from this collection and put in the<br>
+	 * {@link #getPlayers()} collection
 	 * @return
 	 */
-	List<String> getInvites();
+	Collection<String> getInvites();
 	
 	/**
 	 * Checks if the given player is invited to join this party

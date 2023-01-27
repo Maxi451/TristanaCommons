@@ -1,15 +1,15 @@
 package it.tristana.commons.command;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.config.SettingsDefaultCommands;
 import it.tristana.commons.helper.CommonsHelper;
 
-public class CommandVersion<P extends Plugin> extends DefaultSubCommand {
+public class CommandVersion<P extends JavaPlugin> extends DefaultSubCommand {
 
 	private P plugin;
-	
+
 	public CommandVersion(MainCommand<P> main, P plugin, String name, SettingsDefaultCommands settings) {
 		super(main, name, null, settings);
 		this.plugin = plugin;
