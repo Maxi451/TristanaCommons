@@ -66,6 +66,13 @@ public class BasicCombatManager implements CombatManager {
 		return getMillisToExitCt(getCtUser(player));
 	}
 
+	private long getMillisToExitCt(CtUser ctUser) {
+		if (ctUser == null) {
+			return 0;
+		}
+		return getCtMillis(ctUser);
+	}
+
 	@Override
 	public boolean isInCt(Player player) {
 		CtUser ctUser = getCtUser(player);
@@ -119,13 +126,6 @@ public class BasicCombatManager implements CombatManager {
 		CtUser tmp = new CtUser(player);
 		combatTag.remove(tmp);
 		combatTag.values().forEach(list -> list.remove(tmp));
-	}
-
-	private long getMillisToExitCt(CtUser ctUser) {
-		if (ctUser == null) {
-			return 0;
-		}
-		return getCtMillis(ctUser);
 	}
 
 	private long getCtMillis(CtUser ctUser) {

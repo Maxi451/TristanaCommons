@@ -18,11 +18,11 @@ import it.tristana.commons.interfaces.arena.Arena;
 import it.tristana.commons.interfaces.arena.ArenaLoader;
 
 public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoader<A> {
-	
+
 	protected final FileConfiguration fileConfiguration;
-	
+
 	private final File file;
-	
+
 	public BasicArenaLoader(File file) {
 		this.file = file;
 		if (!file.exists()) {
@@ -39,45 +39,46 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 	@Override
 	public void saveArenas(Collection<A> arenas) {
 		arenas.forEach(arena -> saveArena(arena));
-		for (A arena : arenas) {
-			saveArena(arena);
-		}
 		try {
 			fileConfiguration.save(file);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	@Override
 	public Collection<A> loadArenas() {
 		ConfigurationSection section = fileConfiguration.getConfigurationSection(ARENAS);
 		Set<A> arenas = new HashSet<>();
-		if (section != null) {
-			for (String key : section.getKeys(false)) {
-				A arena = loadArena(key);
-				if (arena != null) {
-					arenas.add(arena);
-				}
+
+		if (section == null) {
+			return arenas;
+		}
+
+		for (String key : section.getKeys(false)) {
+			A arena = loadArena(key);
+			if (arena != null) {
+				arenas.add(arena);
 			}
 		}
 		return arenas;
 	}
-	
+
 	@Override
 	public String getRoot(String name) {
 		return ARENAS + "." + name + ".";
 	}
-	
+
 	@Override
 	public void saveMainLobby(Location mainLobby) {
 		if (mainLobby == null) {
 			return;
 		}
+
 		setLocation(MAIN_LOBBY, mainLobby);
 		fileConfiguration.set(MAIN_LOBBY + "." + WORLD, mainLobby.getWorld().getName());
 	}
-	
+
 	@Override
 	public Location getMainLobby() {
 		String worldName = fileConfiguration.getString(MAIN_LOBBY + "." + WORLD);
@@ -91,7 +92,7 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 		}
 		return getLocation(MAIN_LOBBY, world);
 	}
-	
+
 	protected Location getLocation(String root, World world) {
 		root += ".";
 		double x = Double.parseDouble(fileConfiguration.getString(root + X));
@@ -108,7 +109,7 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 		}
 		return new Location(world, x, y, z, yaw, pitch);
 	}
-	
+
 	protected void setLocation(String root, Location location) {
 		if (!root.endsWith(".")) {
 			root += ".";
@@ -119,7 +120,7 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 		fileConfiguration.set(root + YAW, location.getYaw());
 		fileConfiguration.set(root + PITCH, location.getPitch());
 	}
-	
+
 	protected void set(String root, Object obj) {
 		fileConfiguration.set(root, obj);
 	}
