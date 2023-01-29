@@ -12,11 +12,11 @@ import it.tristana.commons.interfaces.database.User;
 
 public abstract class LoginAction<U extends User> extends Action implements BiConsumer<PlayerJoinEvent, U> {
 	
-	public LoginAction(Plugin plugin, ArenasManager<?> arenasManager) {
+	public LoginAction(Plugin plugin, ArenasManager<?, ?> arenasManager) {
 		this(plugin, arenasManager, null);
 	}
 	
-	public LoginAction(Plugin plugin, ArenasManager<?> arenasManager, Supplier<Location> mainLobbyProvider) {
+	public LoginAction(Plugin plugin, ArenasManager<?, ?> arenasManager, Supplier<Location> mainLobbyProvider) {
 		super(plugin, arenasManager, mainLobbyProvider);
 	}
 	

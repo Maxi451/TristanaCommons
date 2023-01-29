@@ -3,6 +3,7 @@ package it.tristana.commons.arena.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -17,13 +18,15 @@ public class BasicTeam<P extends TeamingPlayer<? extends Team<P, A>, A>, A exten
 	protected String name;
 	protected String colorCode;
 	protected Location spawnPoint;
+	protected Color color;
 
-	public BasicTeam(A arena, Location spawnpoint, String name, String colorCode) {
+	public BasicTeam(A arena, Location spawnpoint, String name, String colorCode, Color color) {
 		this.arena = arena;
 		this.name = name;
 		this.colorCode = colorCode;
 		this.players = new ArrayList<>();
 		this.spawnPoint = spawnpoint;
+		this.color = color;
 	}
 
 	@Override
@@ -76,5 +79,10 @@ public class BasicTeam<P extends TeamingPlayer<? extends Team<P, A>, A>, A exten
 	@Override
 	public A getArena() {
 		return arena;
+	}
+
+	@Override
+	public Color getColor() {
+		return color;
 	}
 }

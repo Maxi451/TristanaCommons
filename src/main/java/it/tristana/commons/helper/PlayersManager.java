@@ -9,10 +9,10 @@ import it.tristana.commons.interfaces.arena.Arena;
 import it.tristana.commons.interfaces.arena.ArenasManager;
 
 public abstract class PlayersManager {
-	
-	private ArenasManager<?> arenasManager;
 
-	public PlayersManager(ArenasManager<?> arenasManager) {
+	private ArenasManager<?, ?> arenasManager;
+
+	public PlayersManager(ArenasManager<?, ?> arenasManager) {
 		this.arenasManager = arenasManager;
 	}
 
@@ -37,16 +37,16 @@ public abstract class PlayersManager {
 		Arena<?> arena = arenasManager.getArenaWithPlayer(player);
 		if (arena == null) {
 			Bukkit.getOnlinePlayers().forEach(other -> showPlayer(player, other));
-			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> showPlayer(player, other.getPlayer())));
+			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> hidePlayer(player, other.getPlayer())));
 		} else {
 			Bukkit.getOnlinePlayers().forEach(other -> hidePlayer(player, other));
 			arena.getPlayers().forEach(other -> showPlayer(player, other.getPlayer()));
 		}
 	}
-	
+
 	protected abstract void heal(Player player);
 
 	protected abstract void hidePlayer(Player p1, Player p2);
-	
+
 	protected abstract void showPlayer(Player p1, Player p2);
 }

@@ -4,12 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
 public final class TeamsColors {
-	
+
 	public static final String DEFAULT_CODE = CommonsHelper.toChatColors("&6");
-	
+
 	private TeamsColors() {}
-	
-	public static final Color[] TEAMS_COLOR = new Color[] {
+
+	public static final Color[] TEAMS_COLORS = new Color[] {
 			Color.RED,
 			Color.BLUE,
 			Color.GREEN,
@@ -19,7 +19,7 @@ public final class TeamsColors {
 			Color.FUCHSIA,
 			Color.PURPLE
 	};
-	
+
 	public static final ChatColor[] CHAT_COLORS = new ChatColor[] {
 			ChatColor.RED,
 			ChatColor.BLUE,
@@ -30,38 +30,29 @@ public final class TeamsColors {
 			ChatColor.LIGHT_PURPLE,
 			ChatColor.DARK_PURPLE
 	};
-	
+
 	public static final String[] COLORS_CODES = new String[CHAT_COLORS.length];
 	static {
 		for (int i = 0; i < COLORS_CODES.length; i ++) {
 			COLORS_CODES[i] = CHAT_COLORS[i].toString();
 		}
 	}
-	/*
-	private static final ItemStack[] WOOLS = new ItemStack[] {
-			new ItemStack(Material.RED_WOOL),
-			new ItemStack(Material.BLUE_WOOL),
-			new ItemStack(Material.GREEN_WOOL),
-			new ItemStack(Material.YELLOW_WOOL),
-			new ItemStack(Material.WHITE_WOOL),
-			new ItemStack(Material.GRAY_WOOL),
-			new ItemStack(Material.RED_WOOL),
-			new ItemStack(Material.PURPLE_WOOL)
-	};
-	
-	
-	private static final ItemStack[] WOOLS = generateWools(new int[] { 14, 11, 5, 4, 9, 0, 6, 7 });
-	
-	private static ItemStack[] generateWools(int[] ids) {
-		ItemStack[] wools = new ItemStack[ids.length];
-		for (int i = 0; i < ids.length; i ++) {
-			wools[i] = new ItemStack(Material.WOOL, 1, (short) ids[i]);
+
+	public static ChatColor fromColor(Color color) {
+		for (int i = 0; i < TEAMS_COLORS.length; i ++) {
+			if (TEAMS_COLORS[i] == color) {
+				return CHAT_COLORS[i];
+			}
 		}
-		return wools;
+		return null;
 	}
-	
-	public static ItemStack getWoolForTeamIndex(int index) {
-		return WOOLS[index].clone();
+
+	public static Color fromChatColor(ChatColor color) {
+		for (int i = 0; i < CHAT_COLORS.length; i ++) {
+			if (CHAT_COLORS[i] == color) {
+				return TEAMS_COLORS[i];
+			}
+		}
+		return null;
 	}
-	*/
 }

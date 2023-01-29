@@ -14,7 +14,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import it.tristana.commons.interfaces.database.User;
 
-public abstract class BasicScoreboardManager<U extends User, S extends SettingsScoreboard<? extends ConfigScoreboard>> implements ScoreboardManager<U> {
+public abstract class BasicScoreboardManager<U extends User, S extends SettingsScoreboard<? extends ConfigScoreboard>> implements PersonalScoreboardManager<U> {
 
 	protected S settings;
 
@@ -79,7 +79,7 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 		if (scores == null) {
 			scores = new Score[size];
 			for (int i = 0; i < size; i ++) {
-				scores[i] = registerScore(objective, newScoresEntries[i], size - i - 1);
+				scores[i] = ScoreboardManager.registerScore(objective, newScoresEntries[i], size - i - 1);
 			}
 			objectivesScores.put(objective, scores);
 			return;
@@ -90,15 +90,9 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 			String entry = scores[i].getEntry();
 			if (!entry.equals(newScoresEntries[i])) {
 				scoreboard.resetScores(entry);
-				scores[i] = registerScore(objective, newScoresEntries[i], size - i - 1);
+				scores[i] = ScoreboardManager.registerScore(objective, newScoresEntries[i], size - i - 1);
 			}
 		}
-	}
-
-	private Score registerScore(Objective objective, String name, int index) {
-		Score score = objective.getScore(name);
-		score.setScore(index);
-		return score;
 	}
 
 	protected abstract String parseLine(U user, String line);

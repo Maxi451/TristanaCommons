@@ -44,9 +44,14 @@ public final class Clock implements Runnable {
 	}
 
 	public void schedule(Plugin plugin, long delay, long period) {
+		if (!plugin.isEnabled()) {
+			return;
+		}
+
 		if (task != NOT_SCHEDULED) {
 			throw new IllegalStateException("Task already scheduled! It has to be cancelled first");
 		}
+
 		task = scheduler.scheduleSyncRepeatingTask(plugin, this, delay, period);
 		if (task == NOT_SCHEDULED) {
 			throw new IllegalStateException("The task could not be scheduled");

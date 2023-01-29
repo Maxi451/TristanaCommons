@@ -7,6 +7,8 @@ public class ConfigTeams extends Config {
 	private static final String NAME = "name";
 	private static final String COLOR = "chat-color";
 	
+	public static final String DEFAULT_COLOR = "default-color";
+	
 	private static final String RED = "red.";
 	public static final String RED_NAME = RED + NAME;
 	public static final String RED_COLOR = RED + COLOR;
@@ -45,6 +47,8 @@ public class ConfigTeams extends Config {
 
 	@Override
 	protected void createDefault() {
+		set(DEFAULT_COLOR, "&6");
+		
 		set(RED_NAME, "Red");
 		set(RED_COLOR, "&c");
 		

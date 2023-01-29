@@ -17,9 +17,10 @@ public class VersionUtil {
 	public static final int v1_16 = 9;
 	public static final int v1_17 = 10;
 	public static final int v1_18 = 11;
-	
+	public static final int v1_19 = 12;
+
 	private VersionUtil() {}
-	
+
 	public static int getServerVersion() {
 		String version = Bukkit.getBukkitVersion().split("-")[0];
 		switch (version) {
@@ -47,6 +48,8 @@ public class VersionUtil {
 			return v1_17;
 		case "1.18":
 			return v1_18;
+		case "1.19":
+			return v1_19;
 		default:
 			return vOTHER;
 		}

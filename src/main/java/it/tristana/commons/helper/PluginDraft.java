@@ -69,9 +69,9 @@ public class PluginDraft extends JavaPlugin {
 	}
 
 
-	protected <P extends JavaPlugin, C extends MainCommand<P>> C registerCommand(P main, Class<C> commandClass, String label) {
+	protected <P extends JavaPlugin, C extends MainCommand<P>> C registerCommand(P main, Class<C> commandClass, String label, String defaultSettingsFileName) {
 		if (settingsDefaultCommands == null) {
-			settingsDefaultCommands = new SettingsDefaultCommands(getFolder());
+			settingsDefaultCommands = new SettingsDefaultCommands(new File(getFolder(), defaultSettingsFileName));
 		}
 		C command = null;
 		try {

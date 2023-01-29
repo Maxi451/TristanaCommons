@@ -9,7 +9,7 @@ import org.bukkit.util.Vector;
 public class SphereHelper {
 
 	private SphereHelper() {}
-	
+
 	private static List<Vector> makeSphere(double radiusX, double radiusY, double radiusZ, double dotsDistance, boolean filled) {
 		List<Vector> pos = new ArrayList<Vector>();
 
@@ -63,23 +63,45 @@ public class SphereHelper {
 		return pos;
 	}
 
+	private static List<Vector> makeSphere2(double radius, int samples, Vector offset) {
+		List<Vector> points = new ArrayList<>();
+		double phi = Math.PI * (3 - Math.sqrt(5));
+
+		for (int i = 0; i < samples; i ++) {
+			double y = 1 - (i / (double)(samples - 1)) * 2;
+			double yRadius = Math.sqrt(1 - y * y);
+
+			double theta = phi * i;
+
+			double x = Math.cos(theta) * yRadius;
+			double z = Math.sin(theta) * yRadius;
+
+			points.add(new Vector(x, y, z).multiply(radius).add(offset));
+		}
+		return points;
+	}
+
 	private static double lengthSq(double x, double y, double z) {
 		return (x * x) + (y * y) + (z * z);
 	}
-	
+
 	public static CachedSphere getSphere(Location center, double radius, double dotsDistance) {
 		return getSphere(center, radius, dotsDistance, true);
 	}
-	
+
 	public static CachedSphere getSphere(Location center, double radius, double dotsDistance, boolean filled) {
 		return new CachedSphere(getSphere(radius, dotsDistance, filled), center, radius);
 	}
-	
+
 	public static List<Vector> getSphere(double radius, double dotsDistance) {
 		return getSphere(radius, dotsDistance, true);
 	}
-	
+
 	public static List<Vector> getSphere(double radius, double dotsDistance, boolean filled) {
 		return makeSphere(radius, radius, radius, dotsDistance, filled);
+	}
+
+	public static CachedSphere getSphere2(Location center, double radius, int samples) {
+		return new CachedSphere(makeSphere2(radius, samples, center.toVector()), center, radius);
 	}
 }

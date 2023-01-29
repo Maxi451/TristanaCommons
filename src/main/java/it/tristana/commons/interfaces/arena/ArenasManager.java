@@ -15,7 +15,7 @@ import it.tristana.commons.interfaces.util.TickablesManager;
  * @param <A> The {@link Arena} subclass that is used in this class
  * @param <P> The {@link ArenaPlayer} subclass that is used in this class
  */
-public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
+public interface ArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> extends TickablesManager {
 
 	/**
 	 * Retrieves a copy of the arenas stored by<br>
@@ -24,7 +24,7 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * @return
 	 */
 	Collection<A> getArenas();
-	
+
 	/**
 	 * Looks for an arena with the given name<br>
 	 * and if found returns the (unique) result.<br>
@@ -35,7 +35,7 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * or {@code null} if no arena had this name
 	 */
 	A getArena(String name);
-	
+
 	/**
 	 * Tries to add an arena to this ArenasManager, that will be<br>
 	 * added if and only if it is not already contained, there is<br>
@@ -45,7 +45,7 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * @return True if the arena was successfully added, false otherwise
 	 */
 	boolean addArena(A arena);
-	
+
 	/**
 	 * Removes the first arena that is equal to the given one,<br>
 	 * returning a value according to {@link Collection#remove(Object)} call
@@ -53,7 +53,7 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * @return True if the arena was successfully removed, false otherwise
 	 */
 	boolean removeArena(A arena);
-	
+
 	/**
 	 * Iterates over the arena's collection performing on each one<br>
 	 * a {@link Arena#testPlayerJoin(Player)} call, returning the<br>
@@ -63,7 +63,7 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * returned true on its call, {@code null} otherwise
 	 */
 	A getFirstArenaAvailable(Player player);
-	
+
 	/**
 	 * Retrieves the (unique) arena that contains the given player
 	 * @param player The player to look for
@@ -71,14 +71,14 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * or {@code null} if no registered arena contains him
 	 */
 	A getArenaWithPlayer(Player player);
-	
+
 	/**
 	 * Retrieves the (unique) arena that is located in the given world
 	 * @param world The world that may contain an arena
 	 * @return The arena located in this world, or {@code null} if no arena is located this world
 	 */
 	A getArenaInWorld(World world);
-	
+
 	/**
 	 * Moves this arena to the end of the underlying
 	 * <br>collection, so that {@link #getFirstArenaAvailable(Player)}
@@ -86,4 +86,14 @@ public interface ArenasManager<A extends Arena<?>> extends TickablesManager {
 	 * @param arena The arena to move to the end of the underlying collection
 	 */
 	void cycleArena(A arena);
+
+	/**
+	 * Retrieves the ArenaPlayer associated with this Player
+	 * @param player The player to look for
+	 * @return An instance of {@link ArenaPlayer}, or {@code null} if the given Player is not in an {@link Arena}
+	 */
+	default P getArenaPlayer(Player player) {
+		A arena = getArenaWithPlayer(player);
+		return arena == null ? null : arena.getArenaPlayer(player);
+	}
 }

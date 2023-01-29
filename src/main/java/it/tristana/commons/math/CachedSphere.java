@@ -9,12 +9,12 @@ public class CachedSphere {
 
 	private List<Vector> points;
 	private Location center;
-	private double diameter;
+	private double radius;
 
-	public CachedSphere(List<Vector> points, Location center, double diameter) {
+	public CachedSphere(List<Vector> points, Location center, double radius) {
 		this.points = points;
 		this.center = center;
-		this.diameter = diameter;
+		this.radius = radius;
 	}
 
 	public List<Vector> getPoints() {
@@ -25,8 +25,8 @@ public class CachedSphere {
 		return center;
 	}
 
-	public double getDiameter() {
-		return diameter;
+	public double getRadius() {
+		return radius;
 	}
 
 	public double distance(Vector start, Vector end) {
@@ -77,7 +77,7 @@ public class CachedSphere {
 		double A = vx * vx + vy * vy + vz * vz;
 		double B = 2 * (px * vx + py * vy + pz * vz - vx * cx - vy * cy - vz * cz);
 		double C = px * px - 2 * px * cx + cx * cx + py * py - 2 * py * cy + cy * cy +
-				pz * pz - 2 * pz * cz + cz * cz - diameter * diameter;
+				pz * pz - 2 * pz * cz + cz * cz - radius * radius;
 		// discriminant
 		double discriminant = B * B - 4 * A * C;
 		if (discriminant < 0) {

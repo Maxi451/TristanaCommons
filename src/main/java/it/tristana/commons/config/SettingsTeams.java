@@ -4,63 +4,67 @@ import java.io.File;
 
 public class SettingsTeams extends Settings<ConfigTeams> {
 
+	private String defaultColor;
+
 	private String redName;
 	private String redColor;
-	
+
 	private String blueName;
 	private String blueColor;
-	
+
 	private String greenName;
 	private String greenColor;
-	
+
 	private String yellowName;
 	private String yellowColor;
-	
+
 	private String aquaName;
 	private String aquaColor;
-	
+
 	private String whiteName;
 	private String whiteColor;
-	
+
 	private String fuchsiaName;
 	private String fuchsiaColor;
-	
+
 	private String greyName;
 	private String greyColor;
-	
+
 	private String[] teams;
 	private String[] colors;
-	
+
 	public SettingsTeams(File folder) {
 		super(folder, ConfigTeams.class);
 	}
 
 	@Override
 	protected void reload(ConfigTeams config) {
+		defaultColor = config.getString(ConfigTeams.DEFAULT_COLOR);
+
 		redName = config.getString(ConfigTeams.RED_NAME);
 		redColor = config.getString(ConfigTeams.RED_COLOR);
-		
+
 		blueName = config.getString(ConfigTeams.BLUE_NAME);
 		blueColor = config.getString(ConfigTeams.BLUE_COLOR);
-		
+
 		greenName = config.getString(ConfigTeams.GREEN_NAME);
 		greenColor = config.getString(ConfigTeams.GREEN_COLOR);
-		
+
 		yellowName = config.getString(ConfigTeams.YELLOW_NAME);
 		yellowColor = config.getString(ConfigTeams.YELLOW_COLOR);
-		
+
 		aquaName = config.getString(ConfigTeams.AQUA_NAME);
 		aquaColor = config.getString(ConfigTeams.AQUA_COLOR);
-		
+
 		whiteName = config.getString(ConfigTeams.WHITE_NAME);
 		whiteColor = config.getString(ConfigTeams.WHITE_COLOR);
-		
+
 		fuchsiaName = config.getString(ConfigTeams.FUCHSIA_NAME);
 		fuchsiaColor = config.getString(ConfigTeams.FUCHSIA_COLOR);
-		
+
 		greyName = config.getString(ConfigTeams.GREY_NAME);
 		greyColor = config.getString(ConfigTeams.GREY_COLOR);
-		
+
 		teams = new String[] {
 				redName,
 				blueName,
@@ -82,7 +86,11 @@ public class SettingsTeams extends Settings<ConfigTeams> {
 				greyColor
 		};
 	}
-	
+
+	public String getDefaultColor() {
+		return defaultColor;
+	}
+
 	public String getRedName() {
 		return redName;
 	}
@@ -150,7 +158,7 @@ public class SettingsTeams extends Settings<ConfigTeams> {
 	public String[] getTeams() {
 		return teams;
 	}
-	
+
 	public String[] getColors() {
 		return colors;
 	}

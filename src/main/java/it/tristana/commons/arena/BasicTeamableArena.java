@@ -21,7 +21,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected final World world;
 	protected String name;
 	protected Location lobby;
-	
+
 	protected final PartiesManager partiesManager;
 	protected final List<Location> spawnpoints;
 	protected List<T> teams;
@@ -33,11 +33,11 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected int minPlayersToStart;
 	protected int ticksToStart;
 	protected int ticksToEnd;
-	
+
 	public BasicTeamableArena(World world, String name) {
 		this(world, name, null);
 	}
-	
+
 	public BasicTeamableArena(World world, String name, PartiesManager partiesManager) {
 		this.world = world;
 		this.name = name;
@@ -134,7 +134,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	public boolean areInSameTeam(Player p1, Player p2) {
 		return getTeam(p1) == getTeam(p2);
 	}
-	
+
 	@Override
 	public void onPlayerLeave(Player player) {
 		players.remove(getArenaPlayer(player));
@@ -208,31 +208,31 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 		}
 		return result;
 	}
-	
+
 	@Override
 	public boolean testPlayerJoin(Player player) {
 		return lobby != null && (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
 	}
-	
+
 	@Override
 	public Collection<Player> getSpectators() {
 		return new ArrayList<>(spectators);
 	}
-	
+
 	@Override
 	public List<Location> getSpawnpoints() {
 		return new ArrayList<>(spawnpoints);
 	}
-	
+
 	@Override
 	public boolean checkStartingConditions() {
 		return players.size() >= getMinPlayersToStart();
 	}
-	
+
 	protected int getTeamsForNumPlayers(int players) {
 		return spawnpoints.size();
 	}
-	
+
 	protected void createTeams() {
 		teams = new ArrayList<T>();
 		int size = getTeamsForNumPlayers(players.size());
@@ -247,7 +247,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 		}
 		TeamsBuilder.buildTeams(partiesManager, this, teams, players);
 	}
-	
+
 	protected void teleportTeamsToSpawnpoints() {
 		for (T team : teams) {
 			for (P player : team.getPlayers()) {
@@ -255,7 +255,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 			}
 		}
 	}
-	
+
 	protected int getArenaPlayerIndex(Player player) {
 		int index = -1;
 		int size = players.size();
@@ -296,16 +296,17 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 			closeArena();
 		}
 	}
-	
+
 	protected void reset() {
 		players = new ArrayList<>();
 		spectators = new ArrayList<>();
 		status = Status.WAITING;
+		ticksToStart = 30;
 	}
-	
+
 	protected abstract void playingPhase();
-	
+
 	protected abstract P createArenaPlayer(Player player);
-	
+
 	protected abstract T createTeam(int index);
 }

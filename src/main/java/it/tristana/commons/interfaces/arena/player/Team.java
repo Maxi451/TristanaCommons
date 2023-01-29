@@ -2,6 +2,7 @@ package it.tristana.commons.interfaces.arena.player;
 
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -56,6 +57,12 @@ public interface Team<P extends TeamingPlayer<?, A>, A extends Arena<P>> {
 	 * @return The chat color code for this team
 	 */
 	String getColorCode();
+	
+	/**
+	 * Retrieves the team's color
+	 * @return The team's color
+	 */
+	Color getColor();
 	
 	/**
 	 * Each team has a spawning location where its players may spawn

@@ -12,11 +12,11 @@ import it.tristana.commons.interfaces.database.User;
 
 public abstract class QuitAction<U extends User> extends Action implements BiConsumer<PlayerQuitEvent, U> {
 
-	public QuitAction(Plugin plugin, ArenasManager<?> arenasManager) {
+	public QuitAction(Plugin plugin, ArenasManager<?, ?> arenasManager) {
 		this(plugin, arenasManager, null);
 	}
 	
-	public QuitAction(Plugin plugin, ArenasManager<?> arenasManager, Supplier<Location> mainLobbyProvider) {
+	public QuitAction(Plugin plugin, ArenasManager<?, ?> arenasManager, Supplier<Location> mainLobbyProvider) {
 		super(plugin, arenasManager, mainLobbyProvider);
 	}
 	
