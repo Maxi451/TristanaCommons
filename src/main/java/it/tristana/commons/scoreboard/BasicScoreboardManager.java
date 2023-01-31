@@ -14,15 +14,12 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import it.tristana.commons.interfaces.database.User;
 
-public abstract class BasicScoreboardManager<U extends User, S extends SettingsScoreboard<? extends ConfigScoreboard>> implements PersonalScoreboardManager<U> {
-
-	protected S settings;
+public abstract class BasicScoreboardManager<U extends User> implements PersonalScoreboardManager<U> {
 
 	protected Map<U, Scoreboard> users;
 	protected Map<Objective, Score[]> objectivesScores;
 
-	public BasicScoreboardManager(S settings) {
-		this.settings = settings;
+	public BasicScoreboardManager() {
 		users = new HashMap<>();
 		objectivesScores = new HashMap<>();
 	}
@@ -46,6 +43,7 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 		if (player == null) {
 			throw new IllegalArgumentException("The given user does not have an online player associated");
 		}
+
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		createObjectives(user, scoreboard);
 		users.put(user, scoreboard);
@@ -57,7 +55,7 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 		users.remove(user);
 		Player player = user.getPlayer().getPlayer();
 		if (player != null) {
-			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+			player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		}
 	}
 
@@ -68,7 +66,9 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 
 	@Override
 	public void updateObjective(U user, Objective objective) {
-		List<String> lines = settings.getLines();
+		objective.setDisplayName(getScoreboardName());
+
+		List<String> lines = getScoreboardLines();
 		int size = lines.size();
 		String[] newScoresEntries = new String[size];
 		for (int i = 0; i < size; i ++) {
@@ -94,6 +94,15 @@ public abstract class BasicScoreboardManager<U extends User, S extends SettingsS
 			}
 		}
 	}
+
+	@Override
+	public Scoreboard getScoreboard(U user) {
+		return users.get(user);
+	}
+
+	protected abstract String getScoreboardName();
+
+	protected abstract List<String> getScoreboardLines();
 
 	protected abstract String parseLine(U user, String line);
 }
