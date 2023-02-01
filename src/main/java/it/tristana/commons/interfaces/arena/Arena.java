@@ -116,6 +116,13 @@ public interface Arena<P extends ArenaPlayer<?>> extends Tickable {
 	void setLobby(Location lobby);
 
 	/**
+	 * Retrieves the number of times per second that this<br>
+	 * arena's {@link #runTick() runTick} method is expected to be called
+	 * @return The number of TPS for this arena
+	 */
+	int getTps();
+	
+	/**
 	 * Retrieves the status of the current game. Players are only allowed to<br>
 	 * join if the status is either {@link Status#WAITING} or {@link Status#STARTING}
 	 * @return The current status

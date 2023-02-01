@@ -28,11 +28,13 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected List<P> players;
 	protected List<Player> spectators;
 
+	protected Runnable currentStatusAction;
 	protected Status status;
 	protected int maxPerTeam;
 	protected int minPlayersToStart;
 	protected int ticksToStart;
 	protected int ticksToEnd;
+	protected int currentTick;
 
 	public BasicTeamableArena(World world, String name) {
 		this(world, name, null);
@@ -60,6 +62,23 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public void setStatus(Status status) {
+		switch (status) {
+		case WAITING:
+			currentStatusAction = this::waitingPhase;
+			break;
+		case STARTING:
+			currentStatusAction = this::startingPhase;
+			break;
+		case PLAYING:
+			currentStatusAction = this::playingPhase;
+			break;
+		case ENDING:
+			currentStatusAction = this::endingPhase;
+			break;
+		case DISABLED:
+			currentStatusAction = () -> {};
+			break;
+		}
 		this.status = status;
 	}
 
@@ -181,22 +200,8 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public void runTick() {
-		switch (status) {
-		case WAITING:
-			waitingPhase();
-			break;
-		case STARTING:
-			startingPhase();
-			break;
-		case PLAYING:
-			playingPhase();
-			break;
-		case ENDING:
-			endingPhase();
-			break;
-		case DISABLED:
-			break;
-		}
+		currentTick ++;
+		currentStatusAction.run();
 	}
 
 	@Override
@@ -269,12 +274,16 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	}
 
 	protected void waitingPhase() {
-		if (checkStartingConditions()) {
+		if (isFullTick() && checkStartingConditions()) {
 			setStatus(Status.STARTING);
 		}
 	}
 
 	protected void startingPhase() {
+		if (!isFullTick()) {
+			return;
+		}
+
 		if (players.size() < getMinPlayersToStart()) {
 			setStatus(Status.WAITING);
 		}
@@ -292,7 +301,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	}
 
 	protected void endingPhase() {
-		if (ticksToEnd -- <= 0) {
+		if (isFullTick() && ticksToEnd -- <= 0) {
 			closeArena();
 		}
 	}
@@ -300,10 +309,16 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected void reset() {
 		players = new ArrayList<>();
 		spectators = new ArrayList<>();
-		status = Status.WAITING;
+		setStatus(Status.WAITING);
 		ticksToStart = 30;
+		ticksToEnd = 5;
+		currentTick = 0;
 	}
 
+	protected boolean isFullTick() {
+		return currentTick % getTps() == 0;
+	}
+	
 	protected abstract void playingPhase();
 
 	protected abstract P createArenaPlayer(Player player);
