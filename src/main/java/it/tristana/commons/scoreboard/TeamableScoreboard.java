@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -29,13 +30,12 @@ public abstract class TeamableScoreboard<U extends User, A extends Teamable<T, ?
 	protected Score[] scores;
 	protected int teamsIndex;
 
-	public TeamableScoreboard(A teamable) {
+	public TeamableScoreboard(A teamable, Supplier<String> objectiveName) {
 		this.users = new HashSet<>();
 		this.scoreboard = scoreboardManager.getNewScoreboard();
 		this.teamable = teamable;
-		this.objective = createObjective();
+		this.objective = createObjective(objectiveName.get());
 		this.scores = new Score[0];
-		reload();
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public abstract class TeamableScoreboard<U extends User, A extends Teamable<T, ?
 
 	protected abstract String parseLine(String line);
 
-	protected abstract Objective createObjective();
+	protected abstract Objective createObjective(String name);
 
 	protected abstract List<String> parseTeam(T team);
 }
