@@ -68,7 +68,7 @@ public class BasicArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> ex
 
 	@Override
 	public A getArenaInWorld(World world) {
-		return arenas.stream().findAny().orElse(null);
+		return arenas.stream().filter(arena -> arena.getWorld() == world).findAny().orElse(null);
 	}
 
 	@Override
