@@ -30,7 +30,9 @@ public class CommandDatabase extends DefaultSubCommand {
 		}
 		sql.append(args[args.length - 1]);
 		try {
-			databaseHolder.getStorage().executeSomething(sql.toString(), resultSet -> Database.showResults(sender, resultSet));
+			databaseHolder.getStorage().executeSomething(sql.toString(), resultSet -> {
+				Database.showResults(sender, resultSet);
+			});
 			CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 		} catch (SQLException e) {
 			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), e.getErrorCode()));
