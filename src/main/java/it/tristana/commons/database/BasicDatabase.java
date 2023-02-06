@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.function.Consumer;
 
 import it.tristana.commons.interfaces.database.Database;
 
@@ -43,31 +44,34 @@ public abstract class BasicDatabase implements Database {
 	}
 
 	@Override
-	public ResultSet executeQuery(String sql) throws SQLException {
-		return connection.createStatement().executeQuery(sql);
+	public void executeQuery(String sql, Consumer<? super ResultSet> action) throws SQLException {
+		openConnection();
+		action.accept(connection.createStatement().executeQuery(sql));
+		closeConnection();
 	}
 
 	@Override
 	public void executeUpdate(String sql) throws SQLException {
+		openConnection();
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(sql);
 		statement.close();
+		closeConnection();
 	}
 
 	@Override
-	public ResultSet executeSomething(String sql) throws SQLException {
-		ResultSet resultSet = null;
-		String[] words = sql.split(" ");
-		if (words.length > 0) {
-			words[0] = words[0].toLowerCase();
-			if (words[0].equals("select") || words[0].equals("show")) {
-				resultSet = executeQuery(sql);
-			} else {
-				executeUpdate(sql);
-			}
+	public void executeSomething(String sql, Consumer<? super ResultSet> action) throws SQLException {
+		if (sql.isEmpty()) {
+			return;
 		}
-		return resultSet;
+		String[] words = sql.split(" ");
+		words[0] = words[0].toLowerCase();
+		if (words[0].equals("select") || words[0].equals("show")) {
+			executeQuery(sql, action);
+		} else {
+			executeUpdate(sql);
+		}
 	}
-	
+
 	protected abstract void createTables() throws SQLException;
 }

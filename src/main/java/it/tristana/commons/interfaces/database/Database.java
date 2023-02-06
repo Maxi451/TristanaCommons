@@ -2,7 +2,7 @@ package it.tristana.commons.interfaces.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.function.Consumer;
 
 import org.bukkit.command.CommandSender;
 
@@ -28,12 +28,12 @@ public interface Database {
 	void closeConnection() throws SQLException;
 
 	/**
-	 * Executes a select query (such as with SELECT or SHOW) on the database and retrieves the results
+	 * Executes a select query (such as with SELECT or SHOW) on the database
 	 * @param query The query to execute on this database
-	 * @return The {@link ResultSet} result
+	 * @param action The action that will be executed on the ResultSet
 	 * @throws SQLException If a SQL error occurred
 	 */
-	ResultSet executeQuery(String query) throws SQLException;
+	void executeQuery(String query, Consumer<? super ResultSet> action) throws SQLException;
 
 	/**
 	 * Executes an update query (such as with INSERT, UPDATE or DELETE) on the database
@@ -45,10 +45,10 @@ public interface Database {
 	/**
 	 * Determines if the given query is a select or update and calls the appropriate method
 	 * @param query The query to execute on this database
-	 * @return A {@link ResultSet} if the query was a select, {@code null} otherwise
+	 * @param action The action that will be performed if the SQL is a selection action
 	 * @throws SQLException If a SQL error occurred
 	 */
-	ResultSet executeSomething(String query) throws SQLException;
+	public void executeSomething(String sql, Consumer<? super ResultSet> action) throws SQLException;
 
 	/**
 	 * Prints the given {@link ResultSet} to the given {@link CommandSender}
@@ -56,9 +56,6 @@ public interface Database {
 	 * @param resultSet The result of a select query
 	 */
 	static void showResults(CommandSender sender, ResultSet resultSet) {
-		List<String> lines = DBTablePrinter.printResultSet(resultSet);
-		for (String line : lines) {
-			sender.sendMessage(line);
-		}
+		DBTablePrinter.printResultSet(resultSet).forEach(sender::sendMessage);
 	}
 }

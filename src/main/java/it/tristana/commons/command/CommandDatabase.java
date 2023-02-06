@@ -1,6 +1,5 @@
 package it.tristana.commons.command;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ import it.tristana.commons.interfaces.database.Database;
 public class CommandDatabase extends DefaultSubCommand {
 
 	private DatabaseHolder databaseHolder;
-	
+
 	public CommandDatabase(MainCommand<? extends Plugin> main, DatabaseHolder databaseHolder, String name, String permission, SettingsDefaultCommands settings) {
 		super(main, name, permission, settings);
 		this.databaseHolder = databaseHolder;
@@ -31,12 +30,8 @@ public class CommandDatabase extends DefaultSubCommand {
 		}
 		sql.append(args[args.length - 1]);
 		try {
-			ResultSet resultSet = databaseHolder.getStorage().executeSomething(sql.toString());
-			if (resultSet == null) {
-				CommonsHelper.info(sender, settings.getCommandQueryExecuted());
-			} else {
-				Database.showResults(sender, resultSet);
-			}
+			databaseHolder.getStorage().executeSomething(sql.toString(), resultSet -> Database.showResults(sender, resultSet));
+			CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 		} catch (SQLException e) {
 			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), e.getErrorCode()));
 			Plugin plugin = main.getPlugin();
@@ -46,12 +41,12 @@ public class CommandDatabase extends DefaultSubCommand {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	protected List<String> onTab(CommandSender sender, String[] args) {
 		return new ArrayList<>();
 	}
-	
+
 	@Override
 	protected boolean requiresPlayer() {
 		return false;
@@ -61,12 +56,12 @@ public class CommandDatabase extends DefaultSubCommand {
 	protected String getHelp() {
 		return settings.getCommandQueryHelp();
 	}
-	
+
 	@Override
 	protected String getAdditionalHelpParameters() {
 		return "<sql>";
 	}
-	
+
 	@Override
 	protected int getMinRequiredParameters() {
 		return 1;
