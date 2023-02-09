@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -250,6 +251,11 @@ public class CommonsHelper {
 			result = defaultValue;
 		}
 		return result;
+	}
+	
+	public static Material parseMaterialOrGetDefault(String value, Material defaultValue) {
+		Material result = Material.matchMaterial(value);
+		return result == null ? defaultValue : result;
 	}
 
 	public static Location centerLocation(Location location) {
