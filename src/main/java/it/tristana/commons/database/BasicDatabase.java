@@ -11,8 +11,6 @@ import it.tristana.commons.interfaces.database.Database;
 
 public abstract class BasicDatabase implements Database {
 
-	protected Connection connection;
-
 	protected String host;
 	protected String database;
 	protected String username;
@@ -28,18 +26,15 @@ public abstract class BasicDatabase implements Database {
 	}
 
 	@Override
-	public synchronized void openConnection() throws SQLException {
-		if (connection != null && !connection.isClosed()) {
-			return;
-		}
+	public synchronized Connection openConnection() throws SQLException {
 		String url = "jdbc:mysql://"+ host + ":" + port + "?tcpKeepAlive=true&autoReconnect=true&useSSL=false&useJDBCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-		connection = DriverManager.getConnection(url, username, password);
+		Connection connection = DriverManager.getConnection(url, username, password);
 		connection.setCatalog(database);
-		createTables();
+		return connection;
 	}
 
 	@Override
-	public void closeConnection() throws SQLException {
+	public void closeConnection(Connection connection) throws SQLException {
 		connection.close();
 	}
 
@@ -48,19 +43,19 @@ public abstract class BasicDatabase implements Database {
 	 */
 	@Override
 	public <T> T executeQuery(String sql, Function<? super ResultSet, T> action) throws SQLException {
-		openConnection();
+		Connection connection = openConnection();
 		T result = action == null ? null : action.apply(connection.createStatement().executeQuery(sql));
-		closeConnection();
+		closeConnection(connection);
 		return result;
 	}
 
 	@Override
 	public void executeUpdate(String sql) throws SQLException {
-		openConnection();
+		Connection connection = openConnection();
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(sql);
 		statement.close();
-		closeConnection();
+		closeConnection(connection);
 	}
 
 	@Override
@@ -79,5 +74,5 @@ public abstract class BasicDatabase implements Database {
 		return null;
 	}
 
-	protected abstract void createTables() throws SQLException;
+	public abstract void createTables() throws SQLException;
 }

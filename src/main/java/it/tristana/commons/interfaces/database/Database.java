@@ -1,5 +1,6 @@
 package it.tristana.commons.interfaces.database;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Consumer;
@@ -20,13 +21,13 @@ public interface Database {
 	 * @throws SQLException If an error occurred while opening the connection
 	 * @throws ClassNotFoundException If the given JDBC adapter was not found
 	 */
-	void openConnection() throws SQLException, ClassNotFoundException;
+	Connection openConnection() throws SQLException, ClassNotFoundException;
 
 	/**
 	 * Closes the connection towards this database
 	 * @throws SQLException If an error occurred while closing the connection
 	 */
-	void closeConnection() throws SQLException;
+	void closeConnection(Connection connection) throws SQLException;
 
 	/**
 	 * Executes a select query (such as with SELECT or SHOW) on the database
