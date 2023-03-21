@@ -4,9 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -18,6 +15,8 @@ import it.tristana.commons.config.SettingsDefaultCommands;
 public class PluginDraft extends JavaPlugin {
 
 	protected static final String ERRORS_FILE = "errors.txt";
+	private static final String NEW_LINE = System.getProperty("line.separator");
+	
 	private SettingsDefaultCommands settingsDefaultCommands;
 
 	public File getFolder() {
@@ -27,40 +26,27 @@ public class PluginDraft extends JavaPlugin {
 		}
 		return folder;
 	}
-
-	public void writeThrowableOnErrorsFile(final Throwable t) {
+	
+	public void writeThrowableOnErrorsFile(final Throwable throwable) {
 		File errorsFile = new File(getFolder(), ERRORS_FILE);
 		try {
-			List<String> lines;
-			final String newLine = System.getProperty("line.separator");
 			if (errorsFile.exists()) {
-				lines = Files.readAllLines(errorsFile.toPath());
-			} else {
 				errorsFile.createNewFile();
-				lines = new ArrayList<String>();
 			}
-			for (int i = 0; i < lines.size(); i ++) {
-				final String line = lines.get(i);
-				lines.remove(i);
-				lines.add(i, line + newLine);
+
+			BufferedWriter bw = new BufferedWriter(new FileWriter(errorsFile, true));
+			bw.write("In date " + CommonsHelper.getFormattedDate(System.currentTimeMillis()) + " an exception caused by \"" + throwable + "\" has been generated! D:" + NEW_LINE + NEW_LINE);
+			bw.write("*** BEGIN EXCEPTION STACKTRACE ***" + NEW_LINE + NEW_LINE);
+			for (final String line : CommonsHelper.getLinesFromThrowable(throwable)) {
+				bw.write(line + NEW_LINE);
 			}
-			BufferedWriter bw = new BufferedWriter(new FileWriter(errorsFile));
-			List<String> exception = CommonsHelper.getLinesFromThrowable(t);
-			lines.add("In date " + CommonsHelper.getFormattedDate(System.currentTimeMillis()) + " an exception caused by \"" + t.toString() + "\" has been generated! D:" + newLine + newLine);
-			lines.add("*** BEGIN EXCEPTION STACKTRACE ***" + newLine + newLine);
-			for (final String line : exception) {
-				lines.add(line + newLine);
-			}
-			lines.add(newLine + "*** END EXCEPTION STACKTRACE ***" + newLine + newLine);
-			for (final String  line : lines) {
-				bw.write(line);
-			}
+			bw.write(NEW_LINE + "*** END EXCEPTION STACKTRACE ***" + NEW_LINE + NEW_LINE);
 			bw.close();
-		} catch (IOException e2) {
+		} catch (IOException e) {
 			CommonsHelper.consoleInfo("&cCan't report the plugin throwable! Here is shown:");
-			t.printStackTrace();
+			throwable.printStackTrace();
 			CommonsHelper.consoleInfo("&cReason why it couldn't be saved:");
-			e2.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

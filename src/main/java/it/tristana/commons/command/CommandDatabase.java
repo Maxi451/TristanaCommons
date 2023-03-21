@@ -1,6 +1,5 @@
 package it.tristana.commons.command;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,19 +28,18 @@ public class CommandDatabase extends DefaultSubCommand {
 			sql.append(args[i]).append(' ');
 		}
 		sql.append(args[args.length - 1]);
-		try {
-			databaseHolder.getStorage().executeSomething(sql.toString(), resultSet -> {
-				Database.showResults(sender, resultSet);
-			});
-			CommonsHelper.info(sender, settings.getCommandQueryExecuted());
-		} catch (SQLException e) {
-			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), e.getErrorCode()));
+
+		databaseHolder.getStorage().executeSomethingAsync(sql.toString(), resultSet -> {
+			Database.showResults(sender, resultSet);
+		}, exception -> {
+			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), exception.getErrorCode()));
 			Plugin plugin = main.getPlugin();
 			if (plugin instanceof PluginDraft) {
-				((PluginDraft) plugin).writeThrowableOnErrorsFile(e);
+				((PluginDraft) plugin).writeThrowableOnErrorsFile(exception);
 			}
-			e.printStackTrace();
-		}
+			exception.printStackTrace();
+		});
+		CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 	}
 
 	@Override

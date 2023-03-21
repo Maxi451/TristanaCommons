@@ -15,7 +15,7 @@ public interface User {
 	 * if there is not an online counterpart for the offline player
 	 */
 	OfflinePlayer getPlayer();
-	
+
 	/**
 	 * Returns the online Player associated to this OfflinePlayer.<br>
 	 * This may return a player not actually connected to the server
@@ -24,4 +24,16 @@ public interface User {
 	default Player getOnlinePlayer() {
 		return getPlayer().getPlayer();
 	}
+
+	/**
+	 * Called once the user's data have been loaded. After<br>
+	 * this call, {@link #isLoaded()} will <u>always</u> return {@code true}
+	 */
+	void onLoad();
+
+	/**
+	 * Retrieves the status of this user's data
+	 * @return {@code True} if the data have already been retrieved, {@code false} otherwise
+	 */
+	boolean isLoaded();
 }

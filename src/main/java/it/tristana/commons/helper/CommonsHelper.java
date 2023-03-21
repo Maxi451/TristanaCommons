@@ -21,8 +21,6 @@ public class CommonsHelper {
 
 	private static final ConsoleCommandSender console = Bukkit.getConsoleSender();
 
-	private static final int CHARS_AFTER_UNICODE_ESCAPE = 5;
-
 	private CommonsHelper() {}
 
 	public static void info(CommandSender sender, String msg) {
@@ -40,14 +38,6 @@ public class CommonsHelper {
 
 	public static void playerBroadcast(String msg) {
 		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
-	}
-
-	public static String replaceFirst(String line, String lookingFor, String replacement) {
-		int index = line.indexOf(lookingFor);
-		if (index >= 0) {
-			line = line.substring(0, index) + replacement + line.substring(index + lookingFor.length());
-		}
-		return line;
 	}
 
 	public static String replaceAll(String line, String lookingFor, String replacement) {
@@ -84,34 +74,12 @@ public class CommonsHelper {
 		return line;
 	}
 
-	public static boolean isColorCode(Character previous, char c) {
-		if (c >= 'A' && c <= 'Z') {
-			c -= 0x20;
-		}
-		return previous != null && previous.charValue() == '&' && c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'k' && c <= 'o' || c == 'r';
-	}
-
 	public static String toChatColors(String line) {
 		return ChatColor.translateAlternateColorCodes('&', line);
 	}
 
 	public static int getGuiSizeFromNumOfElements(Object[] objects) {
 		return (objects.length / 9 + (objects.length % 9 != 0 ? 1 : 0)) * 9;
-	}
-
-	public static String parseUnicode(final String line) {
-		final StringBuilder builder = new StringBuilder();
-		int i;
-		for (i = 0; i < line.length() - CHARS_AFTER_UNICODE_ESCAPE; i ++) {
-			if (line.charAt(i) == '\\' && line.charAt(i + 1) == 'u' && (i == 0 || line.charAt(i - 1) != '\\') && isXDigit(line.charAt(i + 2)) && isXDigit(line.charAt(i + 3)) && isXDigit(line.charAt(i + 4)) && isXDigit(line.charAt(i + 5))) {
-				builder.append((char) Integer.parseInt(line.substring(i + 2, i + CHARS_AFTER_UNICODE_ESCAPE + 1), 16));
-				i += CHARS_AFTER_UNICODE_ESCAPE;
-			} else {
-				builder.append(line.charAt(i));
-			}
-		}
-		builder.append(line.substring(i));
-		return builder.toString();
 	}
 
 	public static boolean isDigit(final char c) {
@@ -252,7 +220,7 @@ public class CommonsHelper {
 		}
 		return result;
 	}
-	
+
 	public static Material parseMaterialOrGetDefault(String value, Material defaultValue) {
 		Material result = Material.matchMaterial(value);
 		return result == null ? defaultValue : result;
@@ -295,7 +263,7 @@ public class CommonsHelper {
 	}
 
 	public static String format(String line) {
-		return CommonsHelper.toChatColors(CommonsHelper.parseUnicode(line));
+		return CommonsHelper.toChatColors(line);
 	}
 
 	public static String playerListToString(List<String> players, String nobody, String andWord) {

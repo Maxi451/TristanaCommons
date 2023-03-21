@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import it.tristana.commons.interfaces.database.Database;
 
@@ -38,15 +38,13 @@ public abstract class BasicDatabase implements Database {
 		connection.close();
 	}
 
-	/**
-	 * Must manually close the connection after the query
-	 */
 	@Override
-	public <T> T executeQuery(String sql, Function<? super ResultSet, T> action) throws SQLException {
+	public void executeQuery(String sql, Consumer<? super ResultSet> action) throws SQLException {
 		Connection connection = openConnection();
-		T result = action == null ? null : action.apply(connection.createStatement().executeQuery(sql));
+		if (action != null) {
+			action.accept(connection.createStatement().executeQuery(sql));
+		}
 		closeConnection(connection);
-		return result;
 	}
 
 	@Override
@@ -56,22 +54,6 @@ public abstract class BasicDatabase implements Database {
 		statement.executeUpdate(sql);
 		statement.close();
 		closeConnection(connection);
-	}
-
-	@Override
-	public <T> T executeSomething(String sql, Function<? super ResultSet, T> action) throws SQLException {
-		if (sql.isEmpty()) {
-			return null;
-		}
-
-		String[] words = sql.split(" ");
-		words[0] = words[0].toLowerCase();
-		if (words[0].equals("select") || words[0].equals("show")) {
-			return executeQuery(sql, action);
-		}
-
-		executeUpdate(sql);
-		return null;
 	}
 
 	public abstract void createTables() throws SQLException;
