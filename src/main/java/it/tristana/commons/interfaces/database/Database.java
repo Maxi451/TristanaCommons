@@ -30,10 +30,6 @@ public interface Database {
 
 	void executeQuery(String sql, Consumer<? super ResultSet> action) throws SQLException;
 
-	default void executeQueryAsync(String sql, Consumer<? super SQLException> onError) {
-		executeQueryAsync(sql, null, onError);
-	}
-
 	default void executeQueryAsync(String sql, Consumer<? super ResultSet> action, Consumer<? super SQLException> onError) {
 		new Thread(() -> {
 			try {
