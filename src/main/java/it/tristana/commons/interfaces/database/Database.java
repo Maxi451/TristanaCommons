@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 import org.bukkit.command.CommandSender;
 
 import it.tristana.commons.database.DBTablePrinter;
+import it.tristana.commons.database.SqlAction;
+import it.tristana.commons.database.SqlConsumer;
 
 /**
  * A Database is an organized collection of data<br>
@@ -28,9 +30,9 @@ public interface Database {
 	 */
 	void closeConnection(Connection connection) throws SQLException;
 
-	void executeQuery(String sql, Consumer<? super ResultSet> action) throws SQLException;
+	void executeQuery(String sql, SqlConsumer action) throws SQLException;
 
-	default void executeQueryAsync(String sql, Consumer<? super ResultSet> action, Consumer<? super SQLException> onError) {
+	default void executeQueryAsync(String sql, SqlConsumer action, Consumer<? super SQLException> onError) {
 		new Thread(() -> {
 			try {
 				executeQuery(sql, action);
@@ -48,7 +50,7 @@ public interface Database {
 		executeUpdateAsync(sql, null, onError);
 	}
 
-	default void executeUpdateAsync(String sql, Runnable action, Consumer<? super SQLException> onError) {
+	default void executeUpdateAsync(String sql, SqlAction action, Consumer<? super SQLException> onError) {
 		new Thread(() -> {
 			try {
 				executeUpdate(sql);
@@ -63,7 +65,7 @@ public interface Database {
 		});
 	}
 
-	default void executeSomething(String sql, Consumer<? super ResultSet> action) throws SQLException {
+	default void executeSomething(String sql, SqlConsumer action) throws SQLException {
 		String[] words = sql.split(" ");
 		words[0] = words[0].toLowerCase();
 		if (words[0].equals("select") || words[0].equals("show")) {
@@ -76,7 +78,7 @@ public interface Database {
 		}
 	}
 
-	default void executeSomethingAsync(String sql, Consumer<? super ResultSet> action, Consumer<? super SQLException> onError) {
+	default void executeSomethingAsync(String sql, SqlConsumer action, Consumer<? super SQLException> onError) {
 		new Thread(() -> {
 			try {
 				executeSomething(sql, action);

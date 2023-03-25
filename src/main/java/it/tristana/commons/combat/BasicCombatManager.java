@@ -137,7 +137,7 @@ public class BasicCombatManager implements CombatManager {
 	}
 
 	private void updateHitters() {
-		combatTag.keySet().forEach(ctUser -> updateHitters(ctUser));
+		combatTag.keySet().forEach(this::updateHitters);
 	}
 
 	private void updateHitters(CtUser ctUser) {

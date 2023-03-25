@@ -2,10 +2,8 @@ package it.tristana.commons.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.function.Consumer;
 
 import it.tristana.commons.interfaces.database.Database;
 
@@ -39,7 +37,7 @@ public abstract class BasicDatabase implements Database {
 	}
 
 	@Override
-	public void executeQuery(String sql, Consumer<? super ResultSet> action) throws SQLException {
+	public void executeQuery(String sql, SqlConsumer action) throws SQLException {
 		Connection connection = openConnection();
 		if (action != null) {
 			action.accept(connection.createStatement().executeQuery(sql));
