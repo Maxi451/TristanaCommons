@@ -14,12 +14,12 @@ public class BasicUsersManager<U extends User> implements UsersManager<U> {
 
 	protected UserRetriever<U> userRetriever;
 	protected Set<U> users;
-	
+
 	public BasicUsersManager(UserRetriever<U> userRetriever) {
 		this.userRetriever = userRetriever;
 		users = new HashSet<>();
 	}
-	
+
 	@Override
 	public U getUser(Player player) {
 		for (U user : users) {
@@ -27,6 +27,7 @@ public class BasicUsersManager<U extends User> implements UsersManager<U> {
 				return user;
 			}
 		}
+
 		return null;
 	}
 
@@ -52,6 +53,7 @@ public class BasicUsersManager<U extends User> implements UsersManager<U> {
 		if (user == null) {
 			return;
 		}
+
 		users.remove(user);
 	}
 
@@ -62,6 +64,6 @@ public class BasicUsersManager<U extends User> implements UsersManager<U> {
 
 	@Override
 	public void saveOnlineUsers() {
-		users.forEach(user -> userRetriever.saveUser(user));
+		users.forEach(userRetriever::saveUser);
 	}
 }
