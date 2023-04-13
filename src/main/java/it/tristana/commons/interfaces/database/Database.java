@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import it.tristana.commons.database.DBTablePrinter;
 import it.tristana.commons.database.SqlAction;
 import it.tristana.commons.database.SqlConsumer;
+import it.tristana.commons.database.SqlRetriever;
 
 /**
  * A Database is an organized collection of data<br>
@@ -31,6 +32,8 @@ public interface Database {
 	void closeConnection(Connection connection) throws SQLException;
 
 	void executeQuery(String sql, SqlConsumer action) throws SQLException;
+	
+	<T> T executeQuery(String sql, SqlRetriever<T> action) throws SQLException;
 
 	default void executeQueryAsync(String sql, SqlConsumer action, Consumer<? super SQLException> onError) {
 		new Thread(() -> {

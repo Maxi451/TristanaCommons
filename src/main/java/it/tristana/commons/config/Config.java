@@ -8,29 +8,26 @@ import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import it.tristana.commons.helper.CommonsHelper;
 
 public abstract class Config {
-	
+
 	protected FileConfiguration fileConfiguration;
 	private final File file;
+	JavaPlugin plugin;
 
 	public Config(final File file) {
+		this(file, null);
+	}
+
+	Config(final File file, final JavaPlugin plugin) {
+		// I have no idea why it works but
+		// it does, I won't touch this
 		this.file = file;
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-				fileConfiguration = YamlConfiguration.loadConfiguration(file);
-				createDefault();
-				fileConfiguration.save(file);
-			} catch (IOException e) {
-				CommonsHelper.consoleInfo("&cCan't save configuration file \"" + file.getPath() + "\"!");
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		}
-		else {
+		this.plugin = plugin;
+		if (file.exists()) {
 			FileConfiguration tmp = YamlConfiguration.loadConfiguration(file);
 			fileConfiguration = YamlConfiguration.loadConfiguration(file);
 			createDefault();
@@ -38,9 +35,21 @@ public abstract class Config {
 				updateConfig(fileConfiguration, tmp);
 			}
 			fileConfiguration = YamlConfiguration.loadConfiguration(file);
+			return;
+		}
+
+		try {
+			file.createNewFile();
+			fileConfiguration = YamlConfiguration.loadConfiguration(file);
+			createDefault();
+			fileConfiguration.save(file);
+		} catch (IOException e) {
+			CommonsHelper.consoleInfo("&cCan't save configuration file \"" + file.getPath() + "\"!");
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
-	
+
 	private void updateConfig(FileConfiguration defaultConfig, FileConfiguration old) {
 		Map<String, Object> defaultMap = defaultConfig.getValues(true);
 		Set<String> defaultKeySet = defaultMap.keySet();
@@ -74,11 +83,11 @@ public abstract class Config {
 			}
 		}
 	}
-	
+
 	protected boolean shouldUpdateConfig() {
 		return true;
 	}
-	
+
 	public final String getString(String key) {
 		String result = fileConfiguration.getString(key);
 		if (result != null) {
@@ -98,10 +107,10 @@ public abstract class Config {
 	public final void set(String key, Object obj) {
 		fileConfiguration.set(key, obj);
 	}
-	
+
 	public final void save() throws IOException {
 		fileConfiguration.save(file);
 	}
-	
+
 	protected abstract void createDefault();
 }

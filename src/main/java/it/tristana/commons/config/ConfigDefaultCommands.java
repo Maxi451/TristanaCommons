@@ -2,6 +2,13 @@ package it.tristana.commons.config;
 
 import java.io.File;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
+import it.tristana.commons.interfaces.DatabaseHolder;
+import it.tristana.commons.interfaces.MainLobbyHolder;
+import it.tristana.commons.interfaces.PartiesHolder;
+import it.tristana.commons.interfaces.Reloadable;
+
 public class ConfigDefaultCommands extends Config {
 
 	public static final String GENERAL_HELP = "general-help";
@@ -52,8 +59,8 @@ public class ConfigDefaultCommands extends Config {
 	public static final String COMMAND_MAIN_LOBBY_SET = COMMAND_MAIN_LOBBY + "set";
 	public static final String COMMAND_MAIN_LOBBY_HELP = COMMAND_MAIN_LOBBY + HELP;
 
-	public ConfigDefaultCommands(File file) {
-		super(file);
+	public ConfigDefaultCommands(JavaPlugin plugin, File file) {
+		super(file, plugin);
 	}
 
 	@Override
@@ -62,39 +69,47 @@ public class ConfigDefaultCommands extends Config {
 		set(AND_WORD, "and");
 		set(NOBODY_WORD, "nobody");
 
-		set(COMMAND_QUERY_EXECUTED, "Query executed");
-		set(COMMAND_QUERY_SQL_ERROR, "&cMySQL error %d, check the console and/or the errors file");
-		set(COMMAND_QUERY_HELP, "Executes SQL queries on the database (be careful!)");
-
-		set(COMMAND_HELP_HELP, "Displays this guide");
-
-		set(COMMAND_RELOAD_RELOADED, "&aPlugin reloaded!");
-		set(COMMAND_RELOAD_HELP, "Reloads this plugin");
-
 		set(COMMAND_VERSION_MESSAGE, "Using version: &e%s");
 		set(COMMAND_VERSION_HELP, "Displays the current version of this plugin");
 
-		set(COMMAND_PARTY_HELP, "Displays the available options");
-		set(COMMAND_PARTY_NOT_LEADER, "&cYou're not the party's leader");
-		set(COMMAND_PARTY_ALREADY_IN_A_PARTY, "&cYou're already in a party!");
-		set(COMMAND_PARTY_NOT_IN_A_PARTY, "&cYou're not in a party");
-		set(COMMAND_PARTY_NOT_INVITED, "&cYou're not invited");
-		set(COMMAND_PARTY_DISBANDED, "&cYour party was disbanded");
-		set(COMMAND_PARTY_PLAYER_JOINED, "&a{player} joined the party");
-		set(COMMAND_PARTY_LEAVE_PLAYER_LEFT, "&c{player} left the party");
-		set(COMMAND_PARTY_NOT_ONLINE, "&cThe player {player} is not online!");
-		set(COMMAND_PARTY_INVITE_TARGET_IN_OTHER_PARTY, "&cThat player is already in another party!");
-		set(COMMAND_PARTY_INVITE_ALREADY_INVITED, "&cThat player is already invited");
-		set(COMMAND_PARTY_INVITE_PLAYER_INVITED, "&a{leader} invited {target} to join the party");
-		set(COMMAND_PARTY_INVITE_INVITED, "You are invited to join {leader}'s party! Use \"&b/party join {leader}&f\" to accept");
-		set(COMMAND_PARTY_MEMBER_KICKED, "&c{target} has been kicked from the party!");
-		set(COMMAND_PARTY_LEAVE_HELP, "Leave your current party");
-		set(COMMAND_PARTY_INVITE_HELP, "Invite a player in the party");
-		set(COMMAND_PARTY_KICK_HELP, "Kick a player from the party");
-		set(COMMAND_PARTY_JOIN_HELP, "Join a party");
-		set(COMMAND_PARTY_LIST_HELP, "List the players in the party");
+		set(COMMAND_HELP_HELP, "Displays this guide");
 
-		set(COMMAND_MAIN_LOBBY_SET, "Main lobby set at your coordinates");
-		set(COMMAND_MAIN_LOBBY_HELP, "Sets the location where players will be teleported after exiting an arena");
+		if (plugin instanceof DatabaseHolder) {
+			set(COMMAND_QUERY_EXECUTED, "Query executed");
+			set(COMMAND_QUERY_SQL_ERROR, "&cMySQL error %d, check the console and/or the errors file");
+			set(COMMAND_QUERY_HELP, "Executes SQL queries on the database (be careful!)");
+		}
+
+		if (plugin instanceof Reloadable) {
+			set(COMMAND_RELOAD_RELOADED, "&aPlugin reloaded!");
+			set(COMMAND_RELOAD_HELP, "Reloads this plugin");
+		}
+
+		if (plugin instanceof PartiesHolder) {
+			set(COMMAND_PARTY_HELP, "Displays the available options");
+			set(COMMAND_PARTY_NOT_LEADER, "&cYou're not the party's leader");
+			set(COMMAND_PARTY_ALREADY_IN_A_PARTY, "&cYou're already in a party!");
+			set(COMMAND_PARTY_NOT_IN_A_PARTY, "&cYou're not in a party");
+			set(COMMAND_PARTY_NOT_INVITED, "&cYou're not invited");
+			set(COMMAND_PARTY_DISBANDED, "&cYour party was disbanded");
+			set(COMMAND_PARTY_PLAYER_JOINED, "&a{player} joined the party");
+			set(COMMAND_PARTY_LEAVE_PLAYER_LEFT, "&c{player} left the party");
+			set(COMMAND_PARTY_NOT_ONLINE, "&cThe player {player} is not online!");
+			set(COMMAND_PARTY_INVITE_TARGET_IN_OTHER_PARTY, "&cThat player is already in another party!");
+			set(COMMAND_PARTY_INVITE_ALREADY_INVITED, "&cThat player is already invited");
+			set(COMMAND_PARTY_INVITE_PLAYER_INVITED, "&a{leader} invited {target} to join the party");
+			set(COMMAND_PARTY_INVITE_INVITED, "You are invited to join {leader}'s party! Use \"&b/party join {leader}&f\" to accept");
+			set(COMMAND_PARTY_MEMBER_KICKED, "&c{target} has been kicked from the party!");
+			set(COMMAND_PARTY_LEAVE_HELP, "Leave your current party");
+			set(COMMAND_PARTY_INVITE_HELP, "Invite a player in the party");
+			set(COMMAND_PARTY_KICK_HELP, "Kick a player from the party");
+			set(COMMAND_PARTY_JOIN_HELP, "Join a party");
+			set(COMMAND_PARTY_LIST_HELP, "List the players in the party");
+		}
+
+		if (plugin instanceof MainLobbyHolder) {
+			set(COMMAND_MAIN_LOBBY_SET, "Main lobby set at your coordinates");
+			set(COMMAND_MAIN_LOBBY_HELP, "Sets the location where players will be teleported after exiting an arena");
+		}
 	}
 }

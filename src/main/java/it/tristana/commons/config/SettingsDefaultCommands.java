@@ -2,7 +2,16 @@ package it.tristana.commons.config;
 
 import java.io.File;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
+import it.tristana.commons.interfaces.DatabaseHolder;
+import it.tristana.commons.interfaces.MainLobbyHolder;
+import it.tristana.commons.interfaces.PartiesHolder;
+import it.tristana.commons.interfaces.Reloadable;
+
 public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
+
+	private final JavaPlugin plugin;
 
 	private String generalHelp;
 	private String andWord;
@@ -43,8 +52,9 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	private String commandMainLobbySet;
 	private String commandMainLobbyHelp;
 
-	public SettingsDefaultCommands(File folder) {
+	public SettingsDefaultCommands(JavaPlugin plugin, File folder) {
 		super(folder, ConfigDefaultCommands.class);
+		this.plugin = plugin;
 	}
 
 	@Override
@@ -53,40 +63,48 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 		andWord = config.getString(ConfigDefaultCommands.AND_WORD);
 		nobodyWord = config.getString(ConfigDefaultCommands.NOBODY_WORD);
 
-		commandQueryExecuted = config.getString(ConfigDefaultCommands.COMMAND_QUERY_EXECUTED);
-		commandQuerySqlError = config.getString(ConfigDefaultCommands.COMMAND_QUERY_SQL_ERROR);
-		commandQueryHelp = config.getString(ConfigDefaultCommands.COMMAND_QUERY_HELP);
-
-		commandHelpHelp = config.getString(ConfigDefaultCommands.COMMAND_HELP_HELP);
-
-		commandReloadReloaded = config.getString(ConfigDefaultCommands.COMMAND_RELOAD_RELOADED);
-		commandReloadHelp = config.getString(ConfigDefaultCommands.COMMAND_RELOAD_HELP);
-
 		commandVersionMessage = config.getString(ConfigDefaultCommands.COMMAND_VERSION_MESSAGE);
 		commandVersionHelp = config.getString(ConfigDefaultCommands.COMMAND_VERSION_HELP);
 
-		commandPartyHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_HELP);
-		commandPartyNotLeader = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_LEADER);
-		commandPartyAlreadyInAParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_ALREADY_IN_A_PARTY);
-		commandPartyNotInAParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_IN_A_PARTY);
-		commandPartyNotInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_INVITED);
-		commandPartyDisbanded = config.getString(ConfigDefaultCommands.COMMAND_PARTY_DISBANDED);
-		commandPartyPlayerJoined = config.getString(ConfigDefaultCommands.COMMAND_PARTY_PLAYER_JOINED);
-		commandPartyLeavePlayerLeft = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LEAVE_PLAYER_LEFT);
-		commandPartyLeaveHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LEAVE_HELP);
-		commandPartyNotOnline = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_ONLINE);
-		commandPartyInviteTargetInOtherParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_TARGET_IN_OTHER_PARTY);
-		commandPartyInviteTargetAlreadyInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_ALREADY_INVITED);
-		commandPartyInvitePlayerInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_PLAYER_INVITED);
-		commandPartyInviteInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_INVITED);
-		commandPartyInviteHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_HELP);
-		commandPartyMemberKicked = config.getString(ConfigDefaultCommands.COMMAND_PARTY_MEMBER_KICKED);
-		commandPartyKickHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_KICK_HELP);
-		commandPartyJoinHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_JOIN_HELP);
-		commandPartyListHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LIST_HELP);
+		commandHelpHelp = config.getString(ConfigDefaultCommands.COMMAND_HELP_HELP);
 
-		commandMainLobbySet = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_SET);
-		commandMainLobbyHelp = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_HELP);
+		if (plugin instanceof DatabaseHolder) {
+			commandQueryExecuted = config.getString(ConfigDefaultCommands.COMMAND_QUERY_EXECUTED);
+			commandQuerySqlError = config.getString(ConfigDefaultCommands.COMMAND_QUERY_SQL_ERROR);
+			commandQueryHelp = config.getString(ConfigDefaultCommands.COMMAND_QUERY_HELP);
+		}
+
+		if (plugin instanceof Reloadable) {
+			commandReloadReloaded = config.getString(ConfigDefaultCommands.COMMAND_RELOAD_RELOADED);
+			commandReloadHelp = config.getString(ConfigDefaultCommands.COMMAND_RELOAD_HELP);
+		}
+
+		if (plugin instanceof PartiesHolder) {
+			commandPartyHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_HELP);
+			commandPartyNotLeader = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_LEADER);
+			commandPartyAlreadyInAParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_ALREADY_IN_A_PARTY);
+			commandPartyNotInAParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_IN_A_PARTY);
+			commandPartyNotInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_INVITED);
+			commandPartyDisbanded = config.getString(ConfigDefaultCommands.COMMAND_PARTY_DISBANDED);
+			commandPartyPlayerJoined = config.getString(ConfigDefaultCommands.COMMAND_PARTY_PLAYER_JOINED);
+			commandPartyLeavePlayerLeft = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LEAVE_PLAYER_LEFT);
+			commandPartyLeaveHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LEAVE_HELP);
+			commandPartyNotOnline = config.getString(ConfigDefaultCommands.COMMAND_PARTY_NOT_ONLINE);
+			commandPartyInviteTargetInOtherParty = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_TARGET_IN_OTHER_PARTY);
+			commandPartyInviteTargetAlreadyInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_ALREADY_INVITED);
+			commandPartyInvitePlayerInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_PLAYER_INVITED);
+			commandPartyInviteInvited = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_INVITED);
+			commandPartyInviteHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_INVITE_HELP);
+			commandPartyMemberKicked = config.getString(ConfigDefaultCommands.COMMAND_PARTY_MEMBER_KICKED);
+			commandPartyKickHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_KICK_HELP);
+			commandPartyJoinHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_JOIN_HELP);
+			commandPartyListHelp = config.getString(ConfigDefaultCommands.COMMAND_PARTY_LIST_HELP);
+		}
+
+		if (plugin instanceof MainLobbyHolder) {
+			commandMainLobbySet = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_SET);
+			commandMainLobbyHelp = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_HELP);
+		}
 	}
 
 	public String getCommandMainLobbySet() {

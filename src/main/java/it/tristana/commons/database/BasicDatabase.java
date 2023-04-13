@@ -46,6 +46,17 @@ public abstract class BasicDatabase implements Database {
 	}
 
 	@Override
+	public <T> T executeQuery(String sql, SqlRetriever<T> action) throws SQLException {
+		Connection connection = openConnection();
+		T result = null;
+		if (action != null) {
+			result = action.apply(connection.createStatement().executeQuery(sql));
+		}
+		closeConnection(connection);
+		return result;
+	}
+
+	@Override
 	public void executeUpdate(String sql) throws SQLException {
 		Connection connection = openConnection();
 		Statement statement = connection.createStatement();
