@@ -45,5 +45,4 @@ public class BasicTickablesManager implements TickablesManager {
 	public Collection<Tickable> getTickables() {
 		return clock.getTickables();
 	}
-
 }
