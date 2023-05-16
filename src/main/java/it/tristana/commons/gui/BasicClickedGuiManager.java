@@ -17,11 +17,11 @@ import it.tristana.commons.interfaces.gui.Gui;
 public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 
 	protected Map<String, Gui> registeredGuis;
-	
+
 	public BasicClickedGuiManager() {
 		registeredGuis = new HashMap<>();
 	}
-	
+
 	@Override
 	public void registerGui(Gui gui) {
 		String name = gui.getName();
@@ -32,7 +32,7 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 
 	@Override
 	public void unregisterGui(String name) {
-		registeredGuis.remove(name);	
+		registeredGuis.remove(name);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean processClick(InventoryClickEvent event) {
 		return processClick(event, true);
@@ -71,10 +71,12 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 		if (inventory.getType() == InventoryType.PLAYER) {
 			return false;
 		}
+
 		HumanEntity entity = event.getWhoClicked();
 		if (!(entity instanceof Player)) {
 			return false;
 		}
+
 		String name = getInventoryName(event);
 		for (Entry<String, Gui> entry : registeredGuis.entrySet()) {
 			if (entry.getKey().equals(name)) {
@@ -87,6 +89,6 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 		}
 		return false;
 	}
-	
+
 	protected abstract String getInventoryName(InventoryEvent event);
 }

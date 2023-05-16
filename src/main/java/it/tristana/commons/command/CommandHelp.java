@@ -12,7 +12,7 @@ public class CommandHelp extends DefaultSubCommand {
 	public static final String COMMAND = "help";
 
 	private final Collection<SubCommand> commands;
-	
+
 	public CommandHelp(MainCommand<?> main, SettingsDefaultCommands settings) {
 		super(main, COMMAND, null, settings);
 		commands = main.getCommands().values();
@@ -20,13 +20,13 @@ public class CommandHelp extends DefaultSubCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		for (SubCommand command : commands) {
+		commands.forEach(command -> {
 			if (main.canExecute(sender, command)) {
 				CommonsHelper.info(sender, command.getHelpMessage());
 			}
-		}
+		});
 	}
-	
+
 	@Override
 	public String getHelp() {
 		return settings.getCommandHelpHelp();
