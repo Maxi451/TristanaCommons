@@ -44,7 +44,7 @@ public interface Database {
 					onError.accept(e);
 				}
 			}
-		});
+		}).start();
 	}
 
 	void executeUpdate(String sql) throws SQLException;
@@ -65,7 +65,7 @@ public interface Database {
 					onError.accept(e);
 				}
 			}
-		});
+		}).start();
 	}
 
 	default void executeSomething(String sql, SqlConsumer action) throws SQLException {
