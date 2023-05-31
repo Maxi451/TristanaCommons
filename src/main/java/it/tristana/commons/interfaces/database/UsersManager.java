@@ -34,7 +34,7 @@ public interface UsersManager<U extends User> {
 	 * Removes the user represented by the given player from the manager
 	 * @param player The player to remove
 	 */
-	void removeUser(Player player);
+	U removeUser(Player player);
 	
 	/**
 	 * Removes the given user from the manager

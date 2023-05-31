@@ -44,8 +44,10 @@ public class BasicUsersManager<U extends User> implements UsersManager<U> {
 	}
 
 	@Override
-	public void removeUser(Player player) {
-		removeUser(getUser(player));
+	public U removeUser(Player player) {
+		U user = getUser(player);
+		removeUser(user);
+		return user;
 	}
 
 	@Override

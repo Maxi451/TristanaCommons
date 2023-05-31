@@ -46,7 +46,7 @@ public final class LoginQuitListener<U extends User> implements Listener {
 
 	@EventHandler
 	public void on(PlayerQuitEvent event) {
-		U user = usersManager.getUser(event.getPlayer());
+		U user = usersManager.removeUser(event.getPlayer());
 		if (user == null) {
 			return;
 		}
