@@ -58,7 +58,7 @@ public class MainCommand<P extends JavaPlugin> implements TabExecutor {
 
 		SubCommand subCommand = getSubCommand(args[0]);
 		if (subCommand == null || !canExecute(sender, subCommand)) {
-			help(sender);
+			onUnknownCommand(sender, args);
 			return true;
 		}
 
@@ -124,6 +124,10 @@ public class MainCommand<P extends JavaPlugin> implements TabExecutor {
 	}
 
 	public void registerSubCommands() {}
+	
+	protected void onUnknownCommand(CommandSender sender, String[] args) {
+		help(sender);
+	}
 
 	protected boolean canExecute(CommandSender sender, SubCommand command) {
 		if (!hasPermission(sender, command)) {
