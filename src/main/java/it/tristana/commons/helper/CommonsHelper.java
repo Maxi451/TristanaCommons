@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -266,19 +267,21 @@ public class CommonsHelper {
 		return CommonsHelper.toChatColors(line);
 	}
 
-	public static String playerListToString(List<String> players, String nobody, String andWord) {
+	public static String playerListToString(Collection<String> players, String nobody, String and) {
 		int size = players.size();
 		if (size == 0) {
 			return nobody;
 		}
+
+		Iterator<String> iterator = players.iterator();
 		StringBuilder playerList = new StringBuilder();
 		if (size > 1) {
 			for (int i = 0; i < size - 2; i ++) {
-				playerList.append(players.get(i)).append(", ");
+				playerList.append(iterator.next()).append(", ");
 			}
-			playerList.append(players.get(size - 2)).append(' ').append(andWord).append(' ');
+			playerList.append(iterator.next()).append(' ').append(and).append(' ');
 		}
-		playerList.append(players.get(size - 1));
+		playerList.append(iterator.next());
 		return playerList.toString();
 	}
 
