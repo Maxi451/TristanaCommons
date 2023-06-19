@@ -19,7 +19,7 @@ import it.tristana.commons.interfaces.MainLobbyHolder;
 import it.tristana.commons.interfaces.PartiesHolder;
 import it.tristana.commons.interfaces.Reloadable;
 
-public class MainCommand<P extends JavaPlugin> implements TabExecutor {
+public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 
 	protected P plugin;
 
@@ -34,7 +34,7 @@ public class MainCommand<P extends JavaPlugin> implements TabExecutor {
 		String adminPerms = getAdminPerms();
 		help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
 		registerSubCommand(new CommandHelp(this, settings));
-		registerSubCommand(new CommandVersion<P>(this, plugin, "version", settings));
+		registerSubCommand(new CommandVersion<>(this, plugin, "version", settings));
 		if (plugin instanceof Reloadable) {
 			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", adminPerms, settings));
 		}
@@ -122,8 +122,6 @@ public class MainCommand<P extends JavaPlugin> implements TabExecutor {
 		String perm = getAdminPerms();
 		return perm == null || permissible.hasPermission(perm);
 	}
-
-	public void registerSubCommands() {}
 	
 	protected void onUnknownCommand(CommandSender sender, String[] args) {
 		help(sender);
