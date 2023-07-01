@@ -1,6 +1,7 @@
 package it.tristana.commons.config;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -105,6 +106,16 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 			commandMainLobbySet = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_SET);
 			commandMainLobbyHelp = config.getString(ConfigDefaultCommands.COMMAND_MAIN_LOBBY_HELP);
 		}
+	}
+	
+	@Override
+	protected Constructor<ConfigDefaultCommands> getConstructor(Class<ConfigDefaultCommands> clazz) throws Exception {
+		return clazz.getConstructor(JavaPlugin.class, File.class);
+	}
+	
+	@Override
+	protected ConfigDefaultCommands getNewInstance() throws Exception {
+		return constructor.newInstance(plugin, getConfigFileParameter());
 	}
 
 	public String getCommandMainLobbySet() {
