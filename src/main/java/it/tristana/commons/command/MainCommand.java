@@ -30,9 +30,9 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 	public MainCommand(P plugin, SettingsDefaultCommands settings, String command) {
 		this.plugin = plugin;
 		this.command = command;
-		commands = new TreeMap<String, SubCommand>();
+		this.commands = new TreeMap<String, SubCommand>();
 		String adminPerms = getAdminPerms();
-		help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
+		this.help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
 		registerSubCommand(new CommandHelp(this, settings));
 		registerSubCommand(new CommandVersion<>(this, plugin, "version", settings));
 		if (plugin instanceof Reloadable) {
@@ -154,11 +154,11 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 		return null;
 	}
 
-	private SubCommand getSubCommand(String name) {
+	protected SubCommand getSubCommand(String name) {
 		return commands.get(name.toLowerCase());
 	}
 
-	private void help(CommandSender sender) {
+	protected void help(CommandSender sender) {
 		CommonsHelper.info(sender, help);
 	}
 }
