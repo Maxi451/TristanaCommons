@@ -16,7 +16,7 @@ public class PluginDraft extends JavaPlugin {
 
 	protected static final String ERRORS_FILE = "errors.txt";
 	private static final String NEW_LINE = System.getProperty("line.separator");
-	
+
 	private SettingsDefaultCommands settingsDefaultCommands;
 
 	public File getFolder() {
@@ -26,7 +26,7 @@ public class PluginDraft extends JavaPlugin {
 		}
 		return folder;
 	}
-	
+
 	public void writeThrowableOnErrorsFile(final Throwable throwable) {
 		File errorsFile = new File(getFolder(), ERRORS_FILE);
 		try {
@@ -59,6 +59,7 @@ public class PluginDraft extends JavaPlugin {
 		if (settingsDefaultCommands == null) {
 			settingsDefaultCommands = new SettingsDefaultCommands(main, new File(getFolder(), defaultSettingsFileName));
 		}
+
 		C command = null;
 		try {
 			command = commandClass.getConstructor(main.getClass(), SettingsDefaultCommands.class, String.class).newInstance(main, settingsDefaultCommands, label);

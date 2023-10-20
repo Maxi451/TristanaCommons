@@ -99,11 +99,7 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 	}
 
 	public void registerSubCommand(SubCommand command) {
-		registerSubCommand(command.getName(), command);
-	}
-
-	public void registerSubCommand(String name, SubCommand command) {
-		commands.put(name.toLowerCase(), command);
+		commands.put(command.getName().toLowerCase(), command);
 	}
 
 	public String getCommand() {
@@ -122,7 +118,7 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 		String perm = getAdminPerms();
 		return perm == null || permissible.hasPermission(perm);
 	}
-	
+
 	protected void onUnknownCommand(CommandSender sender, String[] args) {
 		help(sender);
 	}
@@ -131,9 +127,11 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 		if (!hasPermission(sender, command)) {
 			return false;
 		}
+
 		if (!command.requiresPlayer()) {
 			return true;
 		}
+
 		return sender instanceof Player;
 	}
 

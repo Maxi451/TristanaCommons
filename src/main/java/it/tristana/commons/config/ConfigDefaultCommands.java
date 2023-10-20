@@ -59,7 +59,7 @@ public class ConfigDefaultCommands extends Config {
 	public static final String COMMAND_MAIN_LOBBY_SET = COMMAND_MAIN_LOBBY + "set";
 	public static final String COMMAND_MAIN_LOBBY_HELP = COMMAND_MAIN_LOBBY + HELP;
 
-	public ConfigDefaultCommands(JavaPlugin plugin, File file) {
+	public ConfigDefaultCommands(File file, JavaPlugin plugin) {
 		super(file, plugin);
 	}
 

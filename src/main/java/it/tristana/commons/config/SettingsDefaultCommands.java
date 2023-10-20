@@ -56,6 +56,7 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	public SettingsDefaultCommands(JavaPlugin plugin, File folder) {
 		super(folder, ConfigDefaultCommands.class);
 		this.plugin = plugin;
+		reload();
 	}
 
 	@Override
@@ -110,12 +111,12 @@ public class SettingsDefaultCommands extends Settings<ConfigDefaultCommands> {
 	
 	@Override
 	protected Constructor<ConfigDefaultCommands> getConstructor(Class<ConfigDefaultCommands> clazz) throws Exception {
-		return clazz.getConstructor(JavaPlugin.class, File.class);
+		return clazz.getConstructor(File.class, JavaPlugin.class);
 	}
 	
 	@Override
 	protected ConfigDefaultCommands getNewInstance() throws Exception {
-		return constructor.newInstance(plugin, getConfigFileParameter());
+		return constructor.newInstance(getConfigFileParameter(), plugin);
 	}
 
 	public String getCommandMainLobbySet() {

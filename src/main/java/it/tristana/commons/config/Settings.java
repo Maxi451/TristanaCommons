@@ -20,7 +20,7 @@ public abstract class Settings<C extends Config> implements Reloadable {
 		this.folder = folder;
 		reload();
 	}
-
+	
 	@Override
 	public final void reload() {
 		try {
