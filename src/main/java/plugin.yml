@@ -1,7 +1,7 @@
 name: TristanaCommons
-version: 19.0.0
+version: 19.1.0
 main: it.tristana.commons.Main
 author: Massimiliano Micol
-api-version: 1.19
+api-version: 1.20
 description: Commons API for Tristana plugins
 softdepend: [PlaceholderAPI]
