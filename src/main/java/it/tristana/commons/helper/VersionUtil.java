@@ -18,6 +18,7 @@ public class VersionUtil {
 	public static final int v1_17 = 10;
 	public static final int v1_18 = 11;
 	public static final int v1_19 = 12;
+	public static final int v1_20 = 13;
 
 	private VersionUtil() {}
 
@@ -50,6 +51,8 @@ public class VersionUtil {
 			return v1_18;
 		case "1.19":
 			return v1_19;
+		case "1.20":
+			return v1_20;
 		default:
 			return vOTHER;
 		}

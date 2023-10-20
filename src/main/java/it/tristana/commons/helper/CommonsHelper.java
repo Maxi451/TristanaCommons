@@ -189,37 +189,55 @@ public class CommonsHelper {
 	}
 
 	public static boolean parseBoolean(String value) {
-		return value.equalsIgnoreCase("true");
+		return value == null ? false : value.equalsIgnoreCase("true");
+	}
+
+	public static byte parseByteOrGetDefault(String value, byte defaultValue) {
+		try {
+			return Byte.parseByte(value);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
+	public static short parseShortOrGetDefault(String value, short defaultValue) {
+		try {
+			return Short.parseShort(value);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
 	}
 
 	public static int parseIntOrGetDefault(String value, int defaultValue) {
-		int result;
 		try {
-			result = Integer.parseInt(value);
+			return Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			result = defaultValue;
+			return defaultValue;
 		}
-		return result;
 	}
 
 	public static long parseLongOrGetDefault(String value, long defaultValue) {
-		long result;
 		try {
-			result = Long.parseLong(value);
+			return Long.parseLong(value);
 		} catch (NumberFormatException e) {
-			result = defaultValue;
+			return defaultValue;
 		}
-		return result;
+	}
+
+	public static float parseFloatOrGetDefault(String value, float defaultValue) {
+		try {
+			return Float.parseFloat(value);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
 	}
 
 	public static double parseDoubleOrGetDefault(String value, double defaultValue) {
-		double result;
 		try {
-			result = Double.parseDouble(value);
+			return Double.parseDouble(value);
 		} catch (NumberFormatException e) {
-			result = defaultValue;
+			return defaultValue;
 		}
-		return result;
 	}
 
 	public static Material parseMaterialOrGetDefault(String value, Material defaultValue) {
