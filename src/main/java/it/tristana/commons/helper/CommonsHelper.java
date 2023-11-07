@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -73,6 +74,15 @@ public class CommonsHelper {
 			line = replaceAll(line, lookingFor[i], replacements[i]);
 		}
 		return line;
+	}
+
+	public static String getUuid(OfflinePlayer player) {
+		return player.getUniqueId().toString();
+	}
+
+	@SuppressWarnings("deprecation")
+	public static String getUuid(String name) {
+		return getUuid(Bukkit.getOfflinePlayer(name));
 	}
 
 	public static String toChatColors(String line) {
