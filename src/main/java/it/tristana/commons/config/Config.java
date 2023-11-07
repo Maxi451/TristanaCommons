@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,9 +23,9 @@ public abstract class Config {
 		this(file, null);
 	}
 
+	// I have no idea why this works
+	// but it does, I won't touch it
 	Config(final File file, final JavaPlugin plugin) {
-		// I have no idea why it works but
-		// it does, I won't touch this
 		this.file = file;
 		this.plugin = plugin;
 		if (file.exists()) {
@@ -102,6 +103,10 @@ public abstract class Config {
 			result.set(i, CommonsHelper.format(result.get(i)));
 		}
 		return result;
+	}
+	
+	public final ConfigurationSection getSection(String key) {
+		return fileConfiguration.getConfigurationSection(key);
 	}
 
 	public final void set(String key, Object obj) {
