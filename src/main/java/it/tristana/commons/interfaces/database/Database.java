@@ -32,7 +32,7 @@ public interface Database {
 	void closeConnection(Connection connection) throws SQLException;
 
 	void executeQuery(String sql, SqlConsumer action) throws SQLException;
-	
+
 	<T> T executeQuery(String sql, SqlRetriever<T> action) throws SQLException;
 
 	default void executeQueryAsync(String sql, SqlConsumer action, Consumer<? super SQLException> onError) {
@@ -73,6 +73,7 @@ public interface Database {
 		words[0] = words[0].toLowerCase();
 		if (words[0].equals("select") || words[0].equals("show")) {
 			executeQuery(sql, action);
+			return;
 		}
 
 		executeUpdate(sql);

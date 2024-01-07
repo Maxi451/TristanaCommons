@@ -2,11 +2,14 @@ package it.tristana.commons.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -14,9 +17,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 public class CommonsHelper {
@@ -87,6 +95,13 @@ public class CommonsHelper {
 
 	public static String toChatColors(String line) {
 		return ChatColor.translateAlternateColorCodes('&', line);
+	}
+
+	public static String[] toChatColors(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = toChatColors(array[i]);
+		}
+		return array;
 	}
 
 	public static int getGuiSizeFromNumOfElements(Object[] objects) {
@@ -324,6 +339,96 @@ public class CommonsHelper {
 	public static String locationToString(Location location) {
 		return String.format("x = %.2f y = %.2f z = %.2f yaw = %.2f pitch = %.2f @ %s", location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), location.getWorld().getName());
 	}
+
+	@SafeVarargs
+	public static <T> T extract(T... array) {
+		return array.length == 0 ? null : ((array.length == 1) ? array[0] : array[randomIndex(array.length)]);
+	}
+
+	public static <T> T extractAndRemove(List<T> list) {
+		return list.remove(randomIndex(list.size()));
+	}
+
+	public static int randomIndex(int size) {
+		return (int) (Math.random() * size);
+	}
+
+	public static void setDisplayName(ItemStack item, String name) {
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(toChatColors(name));
+		item.setItemMeta(meta);
+	}
+
+	public static void setLore(ItemStack item, String... lore) {
+		setLore(item, Arrays.asList(lore));
+	}
+
+	public static void setLore(ItemStack item, List<String> lore) {
+		ItemMeta meta = item.getItemMeta();
+		ListIterator<String> iterator = lore.listIterator();
+		while (iterator.hasNext()) {
+			iterator.set(toChatColors(iterator.next()));
+		}
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+	}
+
+	public static void giveOrDrop(Player player, ItemStack... items) {
+		Map<Integer, ItemStack> notGivenItems = player.getInventory().addItem(items);
+		if (notGivenItems.size() == 0) {
+			return;
+		}
+
+		World world = player.getWorld();
+		Location location = player.getLocation().add(0, 0.5, 0);
+		Iterator<Map.Entry<Integer, ItemStack>> iterator = notGivenItems.entrySet().iterator();
+		while (iterator.hasNext()) {
+			world.dropItemNaturally(location, iterator.next().getValue());
+		}
+	}
+
+	public static String getBetween(String line, String first, String second) {
+		String result = line;
+		int firstIndex = line.indexOf(first);
+		if (firstIndex >= 0) {
+			int secondIndex = line.indexOf(second);
+			if (secondIndex >= firstIndex + first.length()) {
+				result = line.substring(firstIndex + first.length(), secondIndex);
+			}
+		} 
+		return result;
+	}
+
+	public static void wearOrGive(Player player, ItemStack item, int slot) {
+		PlayerInventory inventory = player.getInventory();
+		ItemStack[] armor = inventory.getArmorContents();
+		if (armor[slot] == null) {
+			armor[slot] = item;
+			inventory.setArmorContents(armor);
+		} else {
+			giveOrDrop(player, item);
+		} 
+	}
+
+	public static List<Block> blocksInRadius(Location location, int radius) {
+		List<Block> blocks = new ArrayList<>();
+		World world = location.getWorld();
+		int x = location.getBlockX();
+		int y = location.getBlockY();
+		int z = location.getBlockZ();
+		for (int i = x - radius; i <= x + radius; i ++) {
+			for (int ii = y - radius; ii <= y + radius; ii ++) {
+				for (int iii = z - radius; iii <= z + radius; iii ++) {
+					Block block = world.getBlockAt(i, ii, iii);
+					if (Math.sqrt(Math.pow(x - i, 2) + Math.pow(y - ii, 2) + Math.pow(z - iii, 2)) <= radius) {
+						blocks.add(block);
+					}
+				} 
+			} 
+		} 
+		return blocks;
+	}
+
 	/*
 	public static void removeAi(LivingEntity entity) {
 		((CraftLivingEntity) entity).getHandle().getDataWatcher().watch(15, (byte) 1);
