@@ -108,6 +108,10 @@ public abstract class Config {
 	public final ConfigurationSection getSection(String key) {
 		return fileConfiguration.getConfigurationSection(key);
 	}
+	
+	public final ConfigurationSection getRoot() {
+		return fileConfiguration.getRoot();
+	}
 
 	public final void set(String key, Object obj) {
 		fileConfiguration.set(key, obj);

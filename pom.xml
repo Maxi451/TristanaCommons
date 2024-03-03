@@ -5,29 +5,29 @@
 	<groupId>it.tristana</groupId>
 	<artifactId>TristanaCommons</artifactId>
 	<version>19.4.1</version>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-	
+
 	<repositories>
-	<repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-		
+		<repository>
+			<id>bungeecord-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
-		
+
 		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -35,7 +35,7 @@
 			<version>1.8.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
@@ -50,14 +50,14 @@
 			<type>javadoc</type>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
-    <groupId>com.github.placeholderapi</groupId>
-    <artifactId>placeholderapi</artifactId>
-    <version>2.11.5</version>
-</dependency>
+			<groupId>com.github.placeholderapi</groupId>
+			<artifactId>placeholderapi</artifactId>
+			<version>2.11.5</version>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
