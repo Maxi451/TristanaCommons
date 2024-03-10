@@ -1,5 +1,5 @@
 name: TristanaCommons
-version: 19.4.1
+version: 20.0.0
 main: it.tristana.commons.BungeeMain
 author: Massimiliano Micol
 description: Commons API for Tristana plugins

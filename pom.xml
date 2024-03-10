@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.tristana</groupId>
 	<artifactId>TristanaCommons</artifactId>
-	<version>19.4.1</version>
+	<version>20.0.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
