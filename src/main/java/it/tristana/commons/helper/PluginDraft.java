@@ -17,7 +17,7 @@ public class PluginDraft extends JavaPlugin {
 	protected static final String ERRORS_FILE = "errors.txt";
 	private static final String NEW_LINE = System.getProperty("line.separator");
 
-	private SettingsDefaultCommands settingsDefaultCommands;
+	protected SettingsDefaultCommands settingsDefaultCommands;
 
 	public File getFolder() {
 		File folder = getDataFolder();
@@ -27,7 +27,12 @@ public class PluginDraft extends JavaPlugin {
 		return folder;
 	}
 
-	public void writeThrowableOnErrorsFile(final Throwable throwable) {
+	public void reportAndPrint(Throwable throwable) {
+		writeThrowableOnErrorsFile(throwable);
+		throwable.printStackTrace();
+	}
+	
+	public void writeThrowableOnErrorsFile(Throwable throwable) {
 		File errorsFile = new File(getFolder(), ERRORS_FILE);
 		try {
 			if (errorsFile.exists()) {
@@ -37,9 +42,15 @@ public class PluginDraft extends JavaPlugin {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(errorsFile, true));
 			bw.write("In date " + CommonsHelper.getFormattedDate(System.currentTimeMillis()) + " an exception caused by \"" + throwable + "\" has been generated! D:" + NEW_LINE + NEW_LINE);
 			bw.write("*** BEGIN EXCEPTION STACKTRACE ***" + NEW_LINE + NEW_LINE);
-			for (final String line : CommonsHelper.getLinesFromThrowable(throwable)) {
-				bw.write(line + NEW_LINE);
-			}
+			do {
+				for (final String line : CommonsHelper.getLinesFromThrowable(throwable)) {
+					bw.write(line + NEW_LINE);
+				}
+				throwable = throwable.getCause();
+				if (throwable != null) {
+					bw.write("> Caused by: \"" + throwable + "\"" + NEW_LINE);
+				}
+			} while (throwable != null);
 			bw.write(NEW_LINE + "*** END EXCEPTION STACKTRACE ***" + NEW_LINE + NEW_LINE);
 			bw.close();
 		} catch (IOException e) {
@@ -66,7 +77,7 @@ public class PluginDraft extends JavaPlugin {
 			Bukkit.getPluginCommand(label).setExecutor(command);
 		} catch (Exception e) {
 			writeThrowableOnErrorsFile(e);
-			throw new IllegalArgumentException("The constructor requires exactly the parameters of the it.tristana.commons.command.MainCommand class constructor, in that specific order");
+			throw new IllegalArgumentException("The constructor requires exactly the parameters of the it.tristana.commons.command.MainCommand class constructor, in that specific order", e);
 		}
 		return command;
 	}

@@ -32,7 +32,7 @@ public abstract class Config {
 			FileConfiguration tmp = YamlConfiguration.loadConfiguration(file);
 			fileConfiguration = YamlConfiguration.loadConfiguration(file);
 			createDefault();
-			if (shouldUpdateConfig()) {
+			if (shouldUpdateConfig(tmp)) {
 				updateConfig(fileConfiguration, tmp);
 			}
 			fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -85,7 +85,7 @@ public abstract class Config {
 		}
 	}
 
-	protected boolean shouldUpdateConfig() {
+	protected boolean shouldUpdateConfig(FileConfiguration fileConfig) {
 		return true;
 	}
 
