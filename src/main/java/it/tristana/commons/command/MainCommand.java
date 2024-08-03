@@ -39,7 +39,7 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 			registerSubCommand(new CommandReload(this, reloadable, "reload", adminPerms, settings));
 		}
 		if (plugin instanceof DatabaseHolder databaseHolder) {
-			registerSubCommand(new CommandDatabase(this, databaseHolder, "sql", adminPerms, settings));
+			registerSubCommand(new CommandSql(this, databaseHolder, "sql", adminPerms, settings));
 		}
 		if (plugin instanceof PartiesHolder partiesHolder) {
 			registerSubCommand(new CommandParty(this, partiesHolder, "party", null, settings));

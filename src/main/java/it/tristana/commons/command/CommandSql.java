@@ -12,11 +12,11 @@ import it.tristana.commons.helper.PluginDraft;
 import it.tristana.commons.interfaces.DatabaseHolder;
 import it.tristana.commons.interfaces.database.Database;
 
-public class CommandDatabase extends DefaultSubCommand {
+public class CommandSql extends DefaultSubCommand {
 
 	private DatabaseHolder databaseHolder;
 
-	public CommandDatabase(MainCommand<? extends Plugin> main, DatabaseHolder databaseHolder, String name, String permission, SettingsDefaultCommands settings) {
+	public CommandSql(MainCommand<? extends Plugin> main, DatabaseHolder databaseHolder, String name, String permission, SettingsDefaultCommands settings) {
 		super(main, name, permission, settings);
 		this.databaseHolder = databaseHolder;
 	}
@@ -30,7 +30,10 @@ public class CommandDatabase extends DefaultSubCommand {
 		sql.append(args[args.length - 1]);
 
 		databaseHolder.getStorage().executeSomethingAsync(sql.toString(), resultSet -> {
-			Database.showResults(sender, resultSet);
+			if (resultSet != null) {
+				Database.showResults(sender, resultSet);
+			}
+			CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 		}, exception -> {
 			CommonsHelper.info(sender, String.format(settings.getCommandQuerySqlError(), exception.getErrorCode()));
 			Plugin plugin = main.getPlugin();
@@ -39,7 +42,6 @@ public class CommandDatabase extends DefaultSubCommand {
 			}
 			exception.printStackTrace();
 		});
-		CommonsHelper.info(sender, settings.getCommandQueryExecuted());
 	}
 
 	@Override
