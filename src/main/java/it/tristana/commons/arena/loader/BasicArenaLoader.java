@@ -94,6 +94,10 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 	}
 
 	protected Location getLocation(String root, World world) {
+		if (fileConfiguration.getConfigurationSection(root) == null) {
+			return null;
+		}
+		
 		root += ".";
 		double x = Double.parseDouble(fileConfiguration.getString(root + X));
 		double y = Double.parseDouble(fileConfiguration.getString(root + Y));
