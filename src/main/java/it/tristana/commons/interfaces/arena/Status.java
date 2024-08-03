@@ -6,12 +6,12 @@ package it.tristana.commons.interfaces.arena;
 public enum Status {
 
 	/**
-	 * The arena does not have enaugh players to start
+	 * The arena does not have enough players to start
 	 */
 	WAITING,
 	
 	/**
-	 * The arena has enaugh players to start and is counting down to start
+	 * The arena has enough players to start and is counting down to start
 	 */
 	STARTING,
 	

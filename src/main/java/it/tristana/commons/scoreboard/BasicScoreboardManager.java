@@ -12,9 +12,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import it.tristana.commons.interfaces.database.User;
-
-public abstract class BasicScoreboardManager<U extends User> implements PersonalScoreboardManager<U> {
+public abstract class BasicScoreboardManager<U> implements PersonalScoreboardManager<U> {
 
 	protected Map<U, Scoreboard> users;
 	protected Map<Objective, Score[]> objectivesScores;
@@ -39,7 +37,7 @@ public abstract class BasicScoreboardManager<U extends User> implements Personal
 
 	@Override
 	public void addUser(U user) {
-		Player player = user.getPlayer().getPlayer();
+		Player player = toPlayer(user);
 		if (player == null) {
 			throw new IllegalArgumentException("The given user does not have an online player associated");
 		}
@@ -53,7 +51,7 @@ public abstract class BasicScoreboardManager<U extends User> implements Personal
 	@Override
 	public void removeUser(U user) {
 		users.remove(user);
-		Player player = user.getPlayer().getPlayer();
+		Player player = toPlayer(user);
 		if (player != null) {
 			player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		}
@@ -96,8 +94,8 @@ public abstract class BasicScoreboardManager<U extends User> implements Personal
 	}
 
 	@Override
-	public Scoreboard getScoreboard(U user) {
-		return users.get(user);
+	public Scoreboard getScoreboard(U player) {
+		return users.get(player);
 	}
 
 	protected abstract String getScoreboardName();

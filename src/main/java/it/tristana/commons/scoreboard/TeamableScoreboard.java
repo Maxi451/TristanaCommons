@@ -15,9 +15,8 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import it.tristana.commons.interfaces.arena.player.Team;
 import it.tristana.commons.interfaces.arena.player.Teamable;
-import it.tristana.commons.interfaces.database.User;
 
-public abstract class TeamableScoreboard<U extends User, A extends Teamable<T, ?>, T extends Team<?, ?>> implements ScoreboardManager<U> {
+public abstract class TeamableScoreboard<U, A extends Teamable<T, ?>, T extends Team<?, ?>> implements ScoreboardManager<U> {
 
 	protected static final org.bukkit.scoreboard.ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
 	private static final int NO_TEAMS_INDEX = -1;
@@ -75,7 +74,7 @@ public abstract class TeamableScoreboard<U extends User, A extends Teamable<T, ?
 	@Override
 	public void addUser(U user) {
 		users.add(user);
-		Player player = user.getOnlinePlayer();
+		Player player = toPlayer(user);
 		T team = teamable.getTeam(player);
 		if (team != null) {
 			getVanillaTeam(team).addEntry(player.getName());
@@ -86,12 +85,12 @@ public abstract class TeamableScoreboard<U extends User, A extends Teamable<T, ?
 	@Override
 	public void removeUser(U user) {
 		users.remove(user);
-		Player player = user.getOnlinePlayer();
+		Player player = toPlayer(user);
 		T team = teamable.getTeam(player);
 		if (team != null) {
 			getVanillaTeam(team).removeEntry(player.getName());
 		}
-		user.getOnlinePlayer().setScoreboard(scoreboardManager.getMainScoreboard());
+		player.setScoreboard(scoreboardManager.getMainScoreboard());
 	}
 
 	@Override

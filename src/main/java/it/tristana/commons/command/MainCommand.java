@@ -30,22 +30,22 @@ public abstract class MainCommand<P extends JavaPlugin> implements TabExecutor {
 	public MainCommand(P plugin, SettingsDefaultCommands settings, String command) {
 		this.plugin = plugin;
 		this.command = command;
-		this.commands = new TreeMap<String, SubCommand>();
+		this.commands = new TreeMap<>();
 		String adminPerms = getAdminPerms();
 		this.help = CommonsHelper.toChatColors(String.format(settings.getGeneralHelp(), command, CommandHelp.COMMAND));
 		registerSubCommand(new CommandHelp(this, settings));
 		registerSubCommand(new CommandVersion<>(this, plugin, "version", settings));
-		if (plugin instanceof Reloadable) {
-			registerSubCommand(new CommandReload(this, (Reloadable) plugin, "reload", adminPerms, settings));
+		if (plugin instanceof Reloadable reloadable) {
+			registerSubCommand(new CommandReload(this, reloadable, "reload", adminPerms, settings));
 		}
-		if (plugin instanceof DatabaseHolder) {
-			registerSubCommand(new CommandDatabase(this, (DatabaseHolder) plugin, "sql", adminPerms, settings));
+		if (plugin instanceof DatabaseHolder databaseHolder) {
+			registerSubCommand(new CommandDatabase(this, databaseHolder, "sql", adminPerms, settings));
 		}
-		if (plugin instanceof PartiesHolder) {
-			registerSubCommand(new CommandParty(this, (PartiesHolder) plugin, "party", null, settings));
+		if (plugin instanceof PartiesHolder partiesHolder) {
+			registerSubCommand(new CommandParty(this, partiesHolder, "party", null, settings));
 		}
-		if (plugin instanceof MainLobbyHolder) {
-			registerSubCommand(new CommandMainLobby(this, (MainLobbyHolder) plugin, "mainlobby", adminPerms, settings));
+		if (plugin instanceof MainLobbyHolder mainLobbyHolder) {
+			registerSubCommand(new CommandMainLobby(this, mainLobbyHolder, "mainlobby", adminPerms, settings));
 		}
 	}
 
