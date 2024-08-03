@@ -62,8 +62,12 @@ public class BasicArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> ex
 
 	@Override
 	public A getArenaWithPlayer(Player player) {
-		P arenaPlayer = getArenaPlayer(player);
-		return arenaPlayer == null ? null : arenaPlayer.getArena();
+		for (A arena : arenas) {
+			if (arena.hasPlayer(player)) {
+				return arena;
+			}
+		}
+		return null;
 	}
 
 	@Override

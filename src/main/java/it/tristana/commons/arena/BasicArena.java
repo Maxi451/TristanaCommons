@@ -56,7 +56,7 @@ public abstract class BasicArena<A extends ArenaPlayer<?>> implements Arena<A> {
 
 	@Override
 	public boolean hasPlayer(Player player) {
-		return getArenaPlayer(player) != null;
+		return getArenaPlayer(player) != null || spectators.contains(player);
 	}
 
 	@Override
