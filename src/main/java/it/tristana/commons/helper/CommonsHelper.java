@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -354,17 +355,25 @@ public class CommonsHelper {
 	}
 
 	public static <T> T random(Collection<T> collection) {
+		return random(collection, e -> 1);
+	}
+
+	public static <T> T random(Collection<T> collection, ToIntFunction<T> weightFunction) {
 		int size = collection.size();
 		if (size == 0) {
 			return null;
 		}
 
+		int sum = 0;
+		for (T t : collection) {
+			sum += weightFunction.applyAsInt(t);
+		}
+
 		int idx = 0;
-		int extracted = CommonsHelper.randomIndex(size);
+		int extracted = CommonsHelper.randomIndex(sum);
 		Iterator<T> iterator = collection.iterator();
 		while (idx < extracted) {
-			iterator.next();
-			idx ++;
+			idx += weightFunction.applyAsInt(iterator.next());
 		}
 		return iterator.next();
 	}
