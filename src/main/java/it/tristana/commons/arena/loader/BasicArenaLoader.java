@@ -115,7 +115,14 @@ public abstract class BasicArenaLoader<A extends Arena<?>> implements ArenaLoade
 	}
 
 	protected void setLocation(String root, Location location) {
-		
+		if (!root.endsWith(".")) {
+			root += ".";
+		}
+		fileConfiguration.set(root + X, location.getX());
+		fileConfiguration.set(root + Y, location.getY());
+		fileConfiguration.set(root + Z, location.getZ());
+		fileConfiguration.set(root + YAW, location.getYaw());
+		fileConfiguration.set(root + PITCH, location.getPitch());
 	}
 
 	protected void set(String root, Object obj) {
