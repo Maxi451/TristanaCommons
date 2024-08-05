@@ -353,6 +353,18 @@ public class CommonsHelper {
 		return (int) (Math.random() * size);
 	}
 
+	public static <T> T random(Collection<T> collection) {
+		int size = collection.size();
+		int idx = 0;
+		int extracted = CommonsHelper.randomIndex(size);
+		Iterator<T> iterator = collection.iterator();
+		while (idx < extracted) {
+			iterator.next();
+			idx ++;
+		}
+		return iterator.next();
+	}
+
 	public static void setDisplayName(ItemStack item, String name) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(toChatColors(name));

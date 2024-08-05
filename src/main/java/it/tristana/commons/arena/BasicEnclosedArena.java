@@ -10,18 +10,18 @@ import it.tristana.commons.interfaces.arena.player.Team;
 import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
 
 public abstract class BasicEnclosedArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> extends BasicTeamableArena<T, P> implements EnclosedArena<P> {
-	
+
 	protected Vector lowerPos;
 	protected Vector upperPos;
 
 	public BasicEnclosedArena(World world, String name) {
 		this(world, name, null);
 	}
-	
+
 	public BasicEnclosedArena(World world, String name, PartiesManager partiesManager) {
 		super(world, name, partiesManager);
 	}
-	
+
 	protected static void correctExtremities(Vector lowerPos, Vector upperPos) {
 		double tmp;
 		if (lowerPos.getX() > upperPos.getX()) {

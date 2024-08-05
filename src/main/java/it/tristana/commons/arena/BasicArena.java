@@ -19,11 +19,11 @@ public abstract class BasicArena<A extends ArenaPlayer<?>> implements Arena<A> {
 	protected String name;
 	protected Status status;
 	protected Location lobby;
-	
+
 	protected Collection<A> players;
 	protected Collection<Player> spectators;
 	protected int minPlayersToStart;
-	
+
 	public BasicArena(MainLobbyHolder mainLobbyHolder, World world, String name, int minPlayersToStart) {
 		this.mainLobbyHolder = mainLobbyHolder;
 		this.world = world;
