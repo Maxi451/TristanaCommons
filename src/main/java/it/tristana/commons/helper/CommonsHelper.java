@@ -355,6 +355,10 @@ public class CommonsHelper {
 
 	public static <T> T random(Collection<T> collection) {
 		int size = collection.size();
+		if (size == 0) {
+			return null;
+		}
+
 		int idx = 0;
 		int extracted = CommonsHelper.randomIndex(size);
 		Iterator<T> iterator = collection.iterator();

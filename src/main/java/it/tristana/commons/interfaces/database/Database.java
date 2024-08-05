@@ -11,7 +11,6 @@ import it.tristana.commons.database.DBTablePrinter;
 import it.tristana.commons.database.SqlAction;
 import it.tristana.commons.database.SqlConsumer;
 import it.tristana.commons.database.SqlRetriever;
-import it.tristana.commons.helper.CommonsHelper;
 
 /**
  * A Database is an organized collection of data<br>
