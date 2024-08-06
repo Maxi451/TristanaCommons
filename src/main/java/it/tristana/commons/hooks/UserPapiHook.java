@@ -18,7 +18,7 @@ public abstract class UserPapiHook<U extends User> extends BasicPapiHook {
 	@Override
 	public String onPlaceholderRequest(final Player player, String identifier) {
 		if (player == null) {
-			return "*** PLAYER OFFLINE ***";
+			return "<Unknown>";
 		}
 
 		return parsePlaceholder(usersManager.getUser(player), identifier.toLowerCase());
