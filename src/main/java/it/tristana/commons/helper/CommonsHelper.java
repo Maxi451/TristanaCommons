@@ -370,7 +370,7 @@ public class CommonsHelper {
 		}
 
 		int idx = 0;
-		int extracted = CommonsHelper.randomIndex(sum + 1);
+		int extracted = CommonsHelper.randomIndex(sum) + 1;
 		Iterator<T> iterator = collection.iterator();
 		T next = null;
 		do {
