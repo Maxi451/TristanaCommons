@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.tristana</groupId>
 	<artifactId>TristanaCommons</artifactId>
-	<version>23.2.1</version>
+	<version>23.2.2</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,6 +64,7 @@
 				<directory>src/main/java</directory>
 				<includes>
 					<include>plugin.yml</include>
+					<include>bungee.yml</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>
