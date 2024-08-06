@@ -372,10 +372,12 @@ public class CommonsHelper {
 		int idx = 0;
 		int extracted = CommonsHelper.randomIndex(sum);
 		Iterator<T> iterator = collection.iterator();
-		while (idx < extracted) {
-			idx += weightFunction.applyAsInt(iterator.next());
-		}
-		return iterator.next();
+		T next = null;
+		do {
+			next = iterator.next();
+			idx += weightFunction.applyAsInt(next);
+		} while (idx < extracted);
+		return next;
 	}
 
 	public static void setDisplayName(ItemStack item, String name) {
