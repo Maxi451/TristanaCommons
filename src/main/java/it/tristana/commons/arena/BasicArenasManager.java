@@ -40,6 +40,7 @@ public class BasicArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> ex
 		if (getArenaInWorld(arena.getWorld()) != null) {
 			return false;
 		}
+
 		registerTickable(arena);
 		return arenas.add(arena);
 	}
@@ -73,6 +74,20 @@ public class BasicArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> ex
 	@Override
 	public A getArenaInWorld(World world) {
 		return arenas.stream().filter(arena -> arena.getWorld() == world).findAny().orElse(null);
+	}
+
+	@Override
+	public A getAvailableArenaWithMostPlayers(Player player) {
+		int most = 0;
+		A arena = null;
+		for (A test : arenas) {
+			int size;
+			if (test.testPlayerJoin(player) && (size = test.getPlayers().size()) > most) {
+				most = size;
+				arena = test;
+			}
+		}
+		return arena;
 	}
 
 	@Override

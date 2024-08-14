@@ -78,6 +78,13 @@ public interface ArenasManager<A extends Arena<P>, P extends ArenaPlayer<A>> ext
 	 * @return The arena located in this world, or {@code null} if no arena is located this world
 	 */
 	A getArenaInWorld(World world);
+	
+	/**
+	 * Retrieves the joinable arena with the highest number of players
+	 * @param The player that will try to join the arena
+	 * @return The arena as specified
+	 */
+	A getAvailableArenaWithMostPlayers(Player player);
 
 	/**
 	 * Moves this arena to the end of the underlying
