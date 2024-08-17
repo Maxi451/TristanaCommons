@@ -2,6 +2,8 @@ package it.tristana.commons.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -111,6 +113,20 @@ public abstract class Config {
 	
 	public final ConfigurationSection getRoot() {
 		return fileConfiguration.getRoot();
+	}
+	
+	public final List<Map<String, String>> getMapList(String key, boolean colorValues) {
+		List<Map<String, String>> result = new ArrayList<>();
+		fileConfiguration.getMapList(key).forEach(map -> {
+			Map<String, String> resultMap = new HashMap<>();
+			map.entrySet().forEach(entry -> {
+				if (entry.getKey() instanceof String mapKey && entry.getValue() instanceof String mapValue) {
+					resultMap.put(mapKey, colorValues ? CommonsHelper.format(mapValue) : mapValue);
+				}
+			});
+			result.add(resultMap);
+		});
+		return result;
 	}
 
 	public final void set(String key, Object obj) {

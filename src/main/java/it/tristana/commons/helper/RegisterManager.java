@@ -6,12 +6,10 @@ import java.util.List;
 
 public abstract class RegisterManager<T> {
 	
-	protected PluginDraft plugin;
 	protected List<EntryConstructor<? extends T>> entries;
 	
-	public RegisterManager(PluginDraft plugin) {
-		this.plugin = plugin;
-		entries = new ArrayList<>();
+	public RegisterManager() {
+		this.entries = new ArrayList<>();
 	}
 	
 	public void register(Class<? extends T> clazz) throws NoSuchMethodException {
@@ -28,9 +26,8 @@ public abstract class RegisterManager<T> {
 		try {
 			return constructor == null ? null : constructor.newInstance(getConstructorArgs());
 		} catch (Exception e) {
-			plugin.writeThrowableOnErrorsFile(e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 	
 	public T getRandom() {
