@@ -50,14 +50,14 @@ public final class LoginQuitListener<U extends User> implements Listener {
 				}, 1);
 				return;
 			}
-			
+
 			joinConsumer.accept(event, user);
 		}
 	}
 
 	@EventHandler
 	public void on(PlayerQuitEvent event) {
-		U user = usersManager.removeUser(event.getPlayer());
+		U user = usersManager.getUser(event.getPlayer());
 		if (user == null) {
 			return;
 		}
@@ -67,5 +67,6 @@ public final class LoginQuitListener<U extends User> implements Listener {
 		}
 
 		userRetriever.saveUser(user);
+		usersManager.removeUser(user);
 	}
 }
