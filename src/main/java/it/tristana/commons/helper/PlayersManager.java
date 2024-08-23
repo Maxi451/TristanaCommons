@@ -16,11 +16,11 @@ public abstract class PlayersManager {
 		this.arenasManager = arenasManager;
 	}
 
-	public void resetPlayer(Player player) {
-		resetPlayer(player, null);
+	public void resetPlayer(Player player, boolean isQuitting) {
+		resetPlayer(player, null, isQuitting);
 	}
 
-	public void resetPlayer(Player player, Location mainLobby) {
+	public void resetPlayer(Player player, Location mainLobby, boolean isQuitting) {
 		if (mainLobby != null) {
 			player.teleport(mainLobby);
 		}

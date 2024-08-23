@@ -22,6 +22,6 @@ public abstract class LoginAction<U extends User> extends Action implements BiCo
 	
 	@Override
 	public void accept(PlayerJoinEvent event, U user) {
-		resetPlayer(event.getPlayer());
+		resetPlayer(event.getPlayer(), false);
 	}
 }

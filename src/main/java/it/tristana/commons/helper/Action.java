@@ -29,8 +29,8 @@ abstract class Action {
 		return playersManager;
 	}
 	
-	protected void resetPlayer(Player player) {
-		getManager(plugin, arenasManager).resetPlayer(player, mainLobbyProvider == null ? null : mainLobbyProvider.get());
+	protected void resetPlayer(Player player, boolean isQuitting) {
+		getManager(plugin, arenasManager).resetPlayer(player, mainLobbyProvider == null ? null : mainLobbyProvider.get(), isQuitting);
 	}
 	
 	protected abstract PlayersManager getPlayersManager(Plugin plugin, ArenasManager<?, ?> arenasManager);

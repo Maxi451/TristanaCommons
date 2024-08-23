@@ -22,6 +22,6 @@ public abstract class QuitAction<U extends User> extends Action implements BiCon
 	
 	@Override
 	public void accept(PlayerQuitEvent event, U user) {
-		resetPlayer(event.getPlayer());
+		resetPlayer(event.getPlayer(), true);
 	}
 }
