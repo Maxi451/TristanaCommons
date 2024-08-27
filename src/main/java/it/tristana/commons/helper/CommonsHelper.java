@@ -329,7 +329,7 @@ public class CommonsHelper {
 		return playerList.toString();
 	}
 
-	public static List<String> playerListToPlayerNames(Collection<Player> players) {
+	public static List<String> playerListToPlayerNames(Collection<? extends Player> players) {
 		return players.stream().map(Player::getName).collect(Collectors.toList());
 	}
 
