@@ -221,7 +221,7 @@ public class CommonsHelper {
 	public static byte parseByteOrGetDefault(String value, byte defaultValue) {
 		try {
 			return Byte.parseByte(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
@@ -229,7 +229,7 @@ public class CommonsHelper {
 	public static short parseShortOrGetDefault(String value, short defaultValue) {
 		try {
 			return Short.parseShort(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
@@ -237,7 +237,7 @@ public class CommonsHelper {
 	public static int parseIntOrGetDefault(String value, int defaultValue) {
 		try {
 			return Integer.parseInt(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
@@ -245,7 +245,7 @@ public class CommonsHelper {
 	public static long parseLongOrGetDefault(String value, long defaultValue) {
 		try {
 			return Long.parseLong(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
@@ -253,7 +253,7 @@ public class CommonsHelper {
 	public static float parseFloatOrGetDefault(String value, float defaultValue) {
 		try {
 			return Float.parseFloat(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
@@ -261,7 +261,7 @@ public class CommonsHelper {
 	public static double parseDoubleOrGetDefault(String value, double defaultValue) {
 		try {
 			return Double.parseDouble(value);
-		} catch (NumberFormatException e) {
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
