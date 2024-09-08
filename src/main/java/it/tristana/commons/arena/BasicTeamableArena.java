@@ -2,7 +2,10 @@ package it.tristana.commons.arena;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,9 +21,11 @@ import it.tristana.commons.interfaces.arena.player.TeamingPlayer;
 
 public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends TeamingPlayer<T, ?>> implements Arena<P>, Teamable<T, P> {
 
+	protected final Supplier<? extends Location> mainLobbySupplier;
 	protected final World world;
 	protected String name;
 	protected Location lobby;
+	protected Map<Status, Runnable> actions;
 
 	protected final PartiesManager partiesManager;
 	protected final List<Location> spawnpoints;
@@ -28,7 +33,6 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected List<P> players;
 	protected List<Player> spectators;
 
-	protected Runnable currentStatusAction;
 	protected Status status;
 	protected int maxPerTeam;
 	protected int minPlayersToStart;
@@ -36,17 +40,23 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	protected int ticksToEnd;
 	protected int currentTick;
 
-	public BasicTeamableArena(World world, String name) {
-		this(world, name, null);
+	public BasicTeamableArena(Supplier<? extends Location> mainLobbySupplier, World world, String name, int minPlayersToStart, int maxPerTeam) {
+		this(mainLobbySupplier, world, name, null, minPlayersToStart, maxPerTeam);
 	}
 
-	public BasicTeamableArena(World world, String name, PartiesManager partiesManager) {
+	public BasicTeamableArena(Supplier<? extends Location> mainLobbySupplier, World world, String name, PartiesManager partiesManager, int minPlayersToStart, int maxPerTeam) {
+		this.mainLobbySupplier = mainLobbySupplier;
 		this.world = world;
 		this.name = name;
 		this.partiesManager = partiesManager;
-		spawnpoints = new ArrayList<>();
-		minPlayersToStart = 2;
-		maxPerTeam = 4;
+		this.minPlayersToStart = minPlayersToStart;
+		this.maxPerTeam = maxPerTeam;
+		this.actions = new HashMap<>();
+		this.actions.put(Status.WAITING, this::onWaiting);
+		this.actions.put(Status.STARTING, this::onStarting);
+		this.actions.put(Status.PLAYING, this::onPlaying);
+		this.actions.put(Status.ENDING, this::onEnding);
+		this.spawnpoints = new ArrayList<>();
 		reset();
 	}
 
@@ -62,23 +72,6 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public void setStatus(Status status) {
-		switch (status) {
-		case WAITING:
-			currentStatusAction = this::waitingPhase;
-			break;
-		case STARTING:
-			currentStatusAction = this::startingPhase;
-			break;
-		case PLAYING:
-			currentStatusAction = this::playingPhase;
-			break;
-		case ENDING:
-			currentStatusAction = this::endingPhase;
-			break;
-		case DISABLED:
-			currentStatusAction = () -> {};
-			break;
-		}
 		this.status = status;
 	}
 
@@ -155,11 +148,6 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 	}
 
 	@Override
-	public void onPlayerLeave(Player player) {
-		players.remove(getArenaPlayer(player));
-	}
-
-	@Override
 	public boolean onSpectator(Player player) {
 		boolean result = status == Status.PLAYING;
 		if (result) {
@@ -170,7 +158,7 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public Collection<P> getPlayers() {
-		return new ArrayList<>(players);
+		return players;
 	}
 
 	@Override
@@ -200,8 +188,11 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public void runTick() {
-		currentTick ++;
-		currentStatusAction.run();
+		if (status == Status.DISABLED) {
+			return;
+		}
+
+		actions.get(status).run();
 	}
 
 	@Override
@@ -216,17 +207,17 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 
 	@Override
 	public boolean testPlayerJoin(Player player) {
-		return lobby != null && (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
+		return lobby != null && mainLobbySupplier.get() != null && (status == Status.WAITING || status == Status.STARTING) && spawnpoints.size() >= 2 && players.size() < getMaxPlayers();
 	}
 
 	@Override
 	public Collection<Player> getSpectators() {
-		return new ArrayList<>(spectators);
+		return spectators;
 	}
 
 	@Override
 	public List<Location> getSpawnpoints() {
-		return new ArrayList<>(spawnpoints);
+		return spawnpoints;
 	}
 
 	@Override
@@ -273,30 +264,33 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 		return index;
 	}
 
-	protected void waitingPhase() {
+	protected void onWaiting() {
 		if (checkStartingConditions()) {
 			setStatus(Status.STARTING);
 		}
 	}
 
-	protected void startingPhase() {
+	protected void onStarting() {
 		if (players.size() < getMinPlayersToStart()) {
 			setStatus(Status.WAITING);
+			return;
 		}
-		for (P player : players) {
-			player.getPlayer().setLevel(ticksToStart);
+
+		for (P arenaPlayer : players) {
+			Player player = arenaPlayer.getPlayer();
+			player.setLevel(ticksToStart);
 		}
+
 		if (ticksToStart -- <= 0) {
-			launchGame();
+			setStatus(Status.PLAYING);
 		}
 	}
-
-	protected void launchGame() {
-		setStatus(Status.PLAYING);
-		startGame();
+	
+	protected void onPlaying() {
+		currentTick ++;
 	}
 
-	protected void endingPhase() {
+	protected void onEnding() {
 		if (ticksToEnd -- <= 0) {
 			closeArena();
 		}
@@ -307,12 +301,14 @@ public abstract class BasicTeamableArena<T extends Team<P, ?>, P extends Teaming
 		players = new ArrayList<>();
 		spectators = new ArrayList<>();
 		setStatus(Status.WAITING);
-		ticksToStart = 30;
-		ticksToEnd = 5;
+		ticksToStart = getConfigTicksToStart();
+		ticksToEnd = getConfigTicksToEnd();
 		currentTick = 0;
 	}
 
-	protected abstract void playingPhase();
+	protected abstract int getConfigTicksToStart();
+	
+	protected abstract int getConfigTicksToEnd();
 
 	protected abstract P createArenaPlayer(Player player);
 

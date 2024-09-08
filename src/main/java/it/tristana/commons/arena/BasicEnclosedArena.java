@@ -1,5 +1,7 @@
 package it.tristana.commons.arena;
 
+import java.util.function.Supplier;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
@@ -14,12 +16,12 @@ public abstract class BasicEnclosedArena<T extends Team<P, ?>, P extends Teaming
 	protected Vector lowerPos;
 	protected Vector upperPos;
 
-	public BasicEnclosedArena(World world, String name) {
-		this(world, name, null);
+	public BasicEnclosedArena(Supplier<? extends Location> mainLobbySupplier, World world, String name, int minPlayersToStart, int maxPerTeam) {
+		this(mainLobbySupplier, world, name, null, minPlayersToStart, maxPerTeam);
 	}
 
-	public BasicEnclosedArena(World world, String name, PartiesManager partiesManager) {
-		super(world, name, partiesManager);
+	public BasicEnclosedArena(Supplier<? extends Location> mainLobbySupplier, World world, String name, PartiesManager partiesManager, int minPlayersToStart, int maxPerTeam) {
+		super(mainLobbySupplier, world, name, partiesManager, minPlayersToStart, maxPerTeam);
 	}
 
 	protected static void correctExtremities(Vector lowerPos, Vector upperPos) {
@@ -68,13 +70,13 @@ public abstract class BasicEnclosedArena<T extends Team<P, ?>, P extends Teaming
 	}
 
 	protected boolean isInsideBorders(Location location) {
-		boolean result = location.getWorld() == world;
-		if (result) {
-			double x = location.getX();
-			double y = location.getY();
-			double z = location.getZ();
-			result = x >= lowerPos.getX() && x <= upperPos.getX() && y >= lowerPos.getY() && y <= upperPos.getY() && z >= lowerPos.getZ() && z <= upperPos.getZ();
+		if (location.getWorld() != world) {
+			return false;
 		}
-		return result;
+
+		double x = location.getX();
+		double y = location.getY();
+		double z = location.getZ();
+		return x >= lowerPos.getX() && x <= upperPos.getX() && y >= lowerPos.getY() && y <= upperPos.getY() && z >= lowerPos.getZ() && z <= upperPos.getZ();
 	}
 }
