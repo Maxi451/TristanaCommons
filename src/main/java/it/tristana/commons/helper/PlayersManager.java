@@ -57,11 +57,11 @@ public abstract class PlayersManager {
 				hidePlayer(player, other);
 				hidePlayer(other, player);
 			});
-			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> {
+			arena.getPlayers().forEach(other -> {
 				Player otherPlayer = other.getPlayer();
 				showPlayer(player, otherPlayer);
 				showPlayer(otherPlayer, player);
-			}));
+			});
 		}
 	}
 
