@@ -4,15 +4,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import it.tristana.commons.interfaces.arena.Arena;
 import it.tristana.commons.interfaces.arena.ArenasManager;
 
 public abstract class PlayersManager {
 
+	private Plugin plugin;
 	private ArenasManager<?, ?> arenasManager;
 
-	public PlayersManager(ArenasManager<?, ?> arenasManager) {
+	public PlayersManager(Plugin plugin, ArenasManager<?, ?> arenasManager) {
+		this.plugin = plugin;
 		this.arenasManager = arenasManager;
 	}
 
@@ -24,7 +27,7 @@ public abstract class PlayersManager {
 		if (mainLobby != null) {
 			player.teleport(mainLobby);
 		}
-		fixHiddenPlayers(player);
+		Bukkit.getScheduler().runTaskLater(plugin, () -> fixHiddenPlayers(player), 2);
 		heal(player);
 		player.setFoodLevel(20);
 		player.getInventory().clear();
@@ -34,13 +37,31 @@ public abstract class PlayersManager {
 	}
 
 	public void fixHiddenPlayers(Player player) {
+		if (!player.isOnline()) {
+			return;
+		}
+
 		Arena<?> arena = arenasManager.getArenaWithPlayer(player);
 		if (arena == null) {
-			Bukkit.getOnlinePlayers().forEach(other -> showPlayer(player, other));
-			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> hidePlayer(player, other.getPlayer())));
+			Bukkit.getOnlinePlayers().forEach(other -> {
+				showPlayer(player, other);
+				showPlayer(other, player);
+			});
+			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> {
+				Player otherPlayer = other.getPlayer();
+				hidePlayer(player, otherPlayer);
+				hidePlayer(otherPlayer, player);
+			}));
 		} else {
-			Bukkit.getOnlinePlayers().forEach(other -> hidePlayer(player, other));
-			arena.getPlayers().forEach(other -> showPlayer(player, other.getPlayer()));
+			Bukkit.getOnlinePlayers().forEach(other -> {
+				hidePlayer(player, other);
+				hidePlayer(other, player);
+			});
+			arenasManager.getArenas().forEach(currentArena -> currentArena.getPlayers().forEach(other -> {
+				Player otherPlayer = other.getPlayer();
+				showPlayer(player, otherPlayer);
+				showPlayer(otherPlayer, player);
+			}));
 		}
 	}
 

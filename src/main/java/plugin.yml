@@ -1,5 +1,5 @@
 name: TristanaCommons
-version: 27.0.0
+version: 28.0.0
 main: it.tristana.commons.Main
 author: Massimiliano Micol
 api-version: '1.21'
