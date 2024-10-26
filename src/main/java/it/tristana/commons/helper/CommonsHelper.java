@@ -54,15 +54,18 @@ public class CommonsHelper {
 	public static String replaceAll(String line, String lookingFor, String replacement) {
 		StringBuilder result = new StringBuilder();
 		int theLookingForLength = lookingFor.length();
-		if (line.length() < theLookingForLength) {
+		int lineLength = line.length();
+		if (lineLength < theLookingForLength) {
 			return line;
 		}
-		for (int i = 0; i < line.length(); i ++) {
+
+		for (int i = 0; i < lineLength; i ++) {
 			int inc = 0;
 			boolean found = false;
-			while (inc != theLookingForLength && lookingFor.charAt(inc) == line.charAt(i + inc)) {
+			while (inc != theLookingForLength && i + inc < lineLength && lookingFor.charAt(inc) == line.charAt(i + inc)) {
 				if (++ inc == theLookingForLength) {
 					found = true;
+					break;
 				}
 			}
 			if (found) {
@@ -71,7 +74,7 @@ public class CommonsHelper {
 			} else {
 				result.append(line.charAt(i));
 			}
-		}
+		};
 		return result.toString();
 	}
 
