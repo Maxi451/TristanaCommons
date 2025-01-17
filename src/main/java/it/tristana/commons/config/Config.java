@@ -87,16 +87,16 @@ public abstract class Config {
 		}
 	}
 
-	protected boolean shouldUpdateConfig(FileConfiguration fileConfig) {
-		return true;
-	}
-
 	public final String getString(String key) {
 		String result = fileConfiguration.getString(key);
 		if (result != null) {
 			result = CommonsHelper.format(result);
 		}
 		return result;
+	}
+
+	public final String getRawString(String key) {
+		return fileConfiguration.getString(key);
 	}
 
 	public final List<String> getList(String key) {
@@ -106,15 +106,19 @@ public abstract class Config {
 		}
 		return result;
 	}
-	
+
+	public final List<String> getRawList(String key) {
+		return fileConfiguration.getStringList(key);
+	}
+
 	public final ConfigurationSection getSection(String key) {
 		return fileConfiguration.getConfigurationSection(key);
 	}
-	
+
 	public final ConfigurationSection getRoot() {
 		return fileConfiguration.getRoot();
 	}
-	
+
 	public final List<Map<String, String>> getMapList(String key, boolean colorValues) {
 		List<Map<String, String>> result = new ArrayList<>();
 		fileConfiguration.getMapList(key).forEach(map -> {
@@ -135,6 +139,10 @@ public abstract class Config {
 
 	public final void save() throws IOException {
 		fileConfiguration.save(file);
+	}
+
+	protected boolean shouldUpdateConfig(FileConfiguration fileConfig) {
+		return true;
 	}
 
 	protected abstract void createDefault();
