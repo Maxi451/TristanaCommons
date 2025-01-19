@@ -1,6 +1,7 @@
 package it.tristana.commons.interfaces.gui;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -17,6 +18,17 @@ public interface Gui {
 	 * @param slot The slot's id that has been clicked
 	 */
 	void onClick(Player player, int slot);
+	
+	/**
+	 * Called when the given player clicks the specified slot.<br>
+	 * The slot number goes from {@code 0} to {@link #getElements()}{@code .length - 1}
+	 * @param player The player who clicked
+	 * @param slot The slot's id that has been clicked
+	 * @param event The triggering event
+	 */
+	default void onClick(Player player, int slot, InventoryClickEvent event) {
+		onClick(player, slot);
+	}
 	
 	/**
 	 * Displays this gui to the given player, opening an Inventory

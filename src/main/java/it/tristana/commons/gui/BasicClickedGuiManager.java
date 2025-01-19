@@ -83,7 +83,7 @@ public abstract class BasicClickedGuiManager implements ClickedGuiManager {
 				if (cancelEvent) {
 					event.setCancelled(true);
 				}
-				entry.getValue().onClick((Player) entity, event.getSlot());
+				entry.getValue().onClick((Player) entity, event.getSlot(), event);
 				return true;
 			}
 		}
