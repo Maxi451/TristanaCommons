@@ -1,6 +1,7 @@
 package it.tristana.commons.quest;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import it.tristana.commons.gui.BasicElement;
@@ -17,7 +18,7 @@ public class BasicQuestElement<P extends ArenaPlayer<?>> extends BasicElement {
 	}
 
 	@Override
-	public void onClick(Player player) {}
+	public void onClick(Player player, InventoryClickEvent event) {}
 
 	@Override
 	public boolean closesInventory(Player player) {

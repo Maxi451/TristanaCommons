@@ -2,6 +2,7 @@ package it.tristana.commons.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import it.tristana.commons.helper.CommonsHelper;
@@ -33,12 +34,13 @@ public abstract class BasicGui implements Gui {
 	}
 
 	@Override
-	public void onClick(Player player, int slot) {
+	public void onClick(Player player, InventoryClickEvent event) {
+		int slot = event.getSlot();
 		Element[] elements = getElements(player);
 		if (slot < 0 || slot >= elements.length || elements[slot] == null) {
 			return;
 		}
-		elements[slot].onClick(player);
+		elements[slot].onClick(player, event);
 		if (elements[slot].getNextMenu(player) != null) {
 			return;
 		}

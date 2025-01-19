@@ -10,25 +10,14 @@ import org.bukkit.inventory.Inventory;
  * available options and interact clicking its elements
  */
 public interface Gui {
-
-	/**
-	 * Called when the given player clicks the specified slot.<br>
-	 * The slot number goes from {@code 0} to {@link #getElements()}{@code .length - 1}
-	 * @param player The player who clicked
-	 * @param slot The slot's id that has been clicked
-	 */
-	void onClick(Player player, int slot);
 	
 	/**
 	 * Called when the given player clicks the specified slot.<br>
 	 * The slot number goes from {@code 0} to {@link #getElements()}{@code .length - 1}
 	 * @param player The player who clicked
-	 * @param slot The slot's id that has been clicked
 	 * @param event The triggering event
 	 */
-	default void onClick(Player player, int slot, InventoryClickEvent event) {
-		onClick(player, slot);
-	}
+	void onClick(Player player, InventoryClickEvent event);
 	
 	/**
 	 * Displays this gui to the given player, opening an Inventory

@@ -3,6 +3,7 @@ package it.tristana.commons.gui;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 public abstract class Placeholder extends BasicElement {
 	
@@ -18,7 +19,7 @@ public abstract class Placeholder extends BasicElement {
 	}
 
 	@Override
-	public void onClick(Player player) {}
+	public void onClick(Player player, InventoryClickEvent event) {}
 	
 	public final short getDamage() {
 		return damage;

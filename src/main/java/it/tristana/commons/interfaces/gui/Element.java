@@ -1,6 +1,7 @@
 package it.tristana.commons.interfaces.gui;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -16,20 +17,21 @@ public interface Element {
 	 * @return A copy of the ItemStack
 	 */
 	ItemStack getDisplayItem(Player player);
-	
+
 	/**
 	 * Called when the specified player clicks this Element
 	 * @param player The player who clicked
+	 * @param event The event that triggered this method
 	 */
-	void onClick(Player player);
-	
+	void onClick(Player player, InventoryClickEvent event);
+
 	/**
 	 * If this returns true, then the parent gui is closed when this element is clicked
 	 * @param player The player who clicked
 	 * @return True if this element should close the gui, false otherwise
 	 */
 	boolean closesInventory(Player player);
-	
+
 	/**
 	 * Get the next menu that this element will open once clicked. May return<br>
 	 * null, which means this element does not open another gui. This element<br>
