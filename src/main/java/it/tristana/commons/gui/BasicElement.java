@@ -29,7 +29,7 @@ public abstract class BasicElement implements Element {
 	}
 
 	@Override
-	public final ItemStack getDisplayItem(Player player) {
+	public ItemStack getDisplayItem(Player player) {
 		ItemStack item = getRawDisplayItem(player);
 		editItem(item, name, lore);
 		return item;
