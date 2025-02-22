@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,6 +35,15 @@ public class CommonsHelper {
 
 	private CommonsHelper() {}
 
+	public static void info(CommandSender sender, TextComponent msg) {
+		if (sender instanceof Player player) {
+			player.spigot().sendMessage(toChatColors(msg));
+			return;
+		}
+
+		sender.sendMessage(toChatColors(msg.getText()));
+	}
+
 	public static void info(CommandSender sender, String msg) {
 		sender.sendMessage(toChatColors(msg));
 	}
@@ -42,9 +52,18 @@ public class CommonsHelper {
 		info(console, msg);
 	}
 
+	public static void broadcast(TextComponent msg) {
+		playerBroadcast(msg);
+		consoleInfo(msg.getText());
+	}
+
 	public static void broadcast(String msg) {
 		playerBroadcast(msg);
 		consoleInfo(msg);
+	}
+
+	public static void playerBroadcast(TextComponent msg) {
+		Bukkit.getOnlinePlayers().forEach(player -> info(player, msg));
 	}
 
 	public static void playerBroadcast(String msg) {
@@ -95,6 +114,19 @@ public class CommonsHelper {
 	@SuppressWarnings("deprecation")
 	public static String getUuid(String name) {
 		return getUuid(Bukkit.getOfflinePlayer(name));
+	}
+
+	public static TextComponent toChatColors(TextComponent msg) {
+		msg.setText(ChatColor.translateAlternateColorCodes('&', msg.getText()));
+		return msg;
+	}
+
+	public static TextComponent[] toChatColors(TextComponent[] array) {
+		for (int i = 0; i < array.length; i++) {
+			array[i] = toChatColors(array[i]);
+		}
+
+		return array;
 	}
 
 	public static String toChatColors(String line) {
@@ -425,7 +457,7 @@ public class CommonsHelper {
 			if (secondIndex >= firstIndex + first.length()) {
 				result = line.substring(firstIndex + first.length(), secondIndex);
 			}
-		} 
+		}
 		return result;
 	}
 
@@ -437,7 +469,7 @@ public class CommonsHelper {
 			inventory.setArmorContents(armor);
 		} else {
 			giveOrDrop(player, item);
-		} 
+		}
 	}
 
 	public static List<Block> blocksInRadius(Location location, int radius) {
@@ -453,9 +485,9 @@ public class CommonsHelper {
 					if (Math.sqrt(Math.pow(x - i, 2) + Math.pow(y - ii, 2) + Math.pow(z - iii, 2)) <= radius) {
 						blocks.add(block);
 					}
-				} 
-			} 
-		} 
+				}
+			}
+		}
 		return blocks;
 	}
 
