@@ -44,9 +44,11 @@ public abstract class BasicElement implements Element {
 
 	protected static void editItem(ItemStack displayItem, String name, List<String> lore) {
 		ItemMeta itemMeta = displayItem.getItemMeta();
-		itemMeta.setDisplayName(name);
-		itemMeta.setLore(lore);
-		displayItem.setItemMeta(itemMeta);
+		if (itemMeta != null) {
+			itemMeta.setDisplayName(name);
+			itemMeta.setLore(lore);
+			displayItem.setItemMeta(itemMeta);
+		}
 	}
 
 	protected abstract ItemStack getRawDisplayItem(Player player);
