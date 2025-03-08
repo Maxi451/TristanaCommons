@@ -22,7 +22,7 @@ public abstract class BasicElement implements Element {
 	public BasicElement(String name, String lore) {
 		this(name, Arrays.asList(lore));
 	}
-	
+
 	public BasicElement(String name, List<String> lore) {
 		this.name = name;
 		this.lore = lore;
@@ -31,7 +31,9 @@ public abstract class BasicElement implements Element {
 	@Override
 	public ItemStack getDisplayItem(Player player) {
 		ItemStack item = getRawDisplayItem(player);
-		editItem(item, name, lore);
+		if (item != null) {
+			editItem(item, name, lore);
+		}
 		return item;
 	}
 
@@ -39,7 +41,7 @@ public abstract class BasicElement implements Element {
 	public Class<? extends Gui> getNextMenu(Player player) {
 		return null;
 	}
-	
+
 	protected static void editItem(ItemStack displayItem, String name, List<String> lore) {
 		ItemMeta itemMeta = displayItem.getItemMeta();
 		itemMeta.setDisplayName(name);

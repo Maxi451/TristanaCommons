@@ -606,9 +606,9 @@ public class DBTablePrinter {
 					line += (String.format(format, c.getValue(i)));
 				}
 
-				lines.add(line + "|");
+				lines.addAll(List.of((line + "|").split(lineSeparator)));
 				line = "";
-				lines.add(rowSeparator.toString());
+				lines.addAll(List.of(rowSeparator.toString().split(lineSeparator)));
 			}
 			lines.add("");
 
