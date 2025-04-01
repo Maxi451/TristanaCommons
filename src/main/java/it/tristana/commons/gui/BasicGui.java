@@ -52,8 +52,10 @@ public abstract class BasicGui implements Gui {
 	}
 
 	@Override
-	public void open(Player player) {
-		player.openInventory(getInventory(player));
+	public Inventory open(Player player) {
+		Inventory inventory = getInventory(player);
+		player.openInventory(inventory);
+		return inventory;
 	}
 	
 	@Override

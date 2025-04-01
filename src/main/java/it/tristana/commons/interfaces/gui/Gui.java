@@ -22,8 +22,9 @@ public interface Gui {
 	/**
 	 * Displays this gui to the given player, opening an Inventory
 	 * @param player The player that will see this gui
+	 * @return The opened inventory
 	 */
-	void open(Player player);
+	Inventory open(Player player);
 	
 	/**
 	 * Closes this gui for the given player
