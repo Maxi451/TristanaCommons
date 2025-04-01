@@ -140,8 +140,12 @@ public class CommonsHelper {
 		return array;
 	}
 
-	public static int getGuiSizeFromNumOfElements(Object[] objects) {
-		return (objects.length / 9 + (objects.length % 9 != 0 ? 1 : 0)) * 9;
+	public static <T> int getGuiSizeFromNumOfElements(T[] objects) {
+		return getGuiSizeFromNumOfElements(objects.length);
+	}
+
+	public static int getGuiSizeFromNumOfElements(int size) {
+		return (size / 9 + (size % 9 != 0 ? 1 : 0)) * 9;
 	}
 
 	public static boolean isDigit(final char c) {
